@@ -61,6 +61,7 @@ class HomePage extends StatelessWidget {
       ),
       tabBuilder: (context, index) {
         late final CupertinoTabView returnValue;
+        //TODO: Can you simplify this code to create one CupertinoTabView after the switch?
         switch (index) {
           case 0:
             returnValue = CupertinoTabView(builder: (context) {

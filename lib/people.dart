@@ -2,13 +2,22 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // defines Colors
 import 'package:flutter/widgets.dart';
 
+import './debug_border.dart';
+
 class PeoplePage extends StatelessWidget {
   const PeoplePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text("People"),
-    );
+    return Padding(
+        padding: const EdgeInsets.all(20),
+        child: DebugBorder(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: const [
+              Text("People"),
+              Text("second"),
+            ])));
   }
 }

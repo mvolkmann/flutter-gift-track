@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 
 import './debug_border.dart';
 
+// Change this to StatefulWidget to hold only array of people?
 class PeoplePage extends StatelessWidget {
   const PeoplePage({Key? key}) : super(key: key);
 

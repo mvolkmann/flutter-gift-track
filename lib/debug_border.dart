@@ -13,3 +13,9 @@ class DebugBorder extends StatelessWidget {
         child: child);
   }
 }
+
+extension DebugExtension on Widget {
+  Widget get debugBorder {
+    return DebugBorder(child: this);
+  }
+}

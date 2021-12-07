@@ -11,14 +11,15 @@ class PeoplePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(20),
-        child: DebugBorder(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: const [
-              Text("People"),
-              Text("second"),
-            ])));
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: const [
+          Text('People'),
+          Text('second'),
+        ],
+      ),
+    );
   }
 }

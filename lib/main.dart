@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // defines Colors
-import 'package:flutter/widgets.dart';
 
 import './about.dart';
 import './gifts.dart';
@@ -8,9 +7,7 @@ import './occasions.dart';
 import './people.dart';
 import './settings.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

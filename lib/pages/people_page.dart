@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // defines Colors
 import 'package:flutter/widgets.dart';
 
-import './debug_border.dart';
-
 // Change this to StatefulWidget to hold only array of people?
 class PeoplePage extends StatelessWidget {
   const PeoplePage({Key? key}) : super(key: key);
@@ -17,7 +15,6 @@ class PeoplePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: const [
           Text('People'),
-          Text('second'),
         ],
       ),
     );

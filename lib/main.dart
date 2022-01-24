@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'state.dart';
 import './pages/about_page.dart';
 import './pages/gifts_page.dart';
 import './pages/occasions_page.dart';
 import './pages/people_page.dart';
 import './pages/settings_page.dart';
 
-var useMaterial = false; // false for Cupertino
+var useMaterial = true; // false for Cupertino
 
 void main() => runApp(const MyApp());
 
@@ -17,7 +19,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var title = 'Gift Track';
-    var home = HomePage();
+    var home = ChangeNotifierProvider(
+      create: (context) => AppState(),
+      child: HomePage(),
+    );
     return useMaterial
         ? MaterialApp(
             title: title,
@@ -60,8 +65,24 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _pageIndex = 0;
 
+  List<Widget> _getActions(AppState appState, int index) {
+    var actions = <Widget>[];
+    var title = pages[index].title;
+    var canAdd = title == 'People' || title == 'Occasions' || title == 'Gifts';
+    if (canAdd) {
+      actions.add(TextButton(
+        child: Text('Add', style: TextStyle(color: Colors.yellow)),
+        onPressed: () => appState.adding = true,
+      ));
+    }
+    print('_getActions: actions = $actions');
+    return actions;
+  }
+
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<AppState>(context);
+
     var items = pages
         .map(
           (page) => BottomNavigationBarItem(
@@ -82,6 +103,7 @@ class _HomePageState extends State<HomePage> {
         ? Scaffold(
             appBar: AppBar(
               title: Text(pages[_pageIndex].title),
+              actions: _getActions(appState, _pageIndex),
             ),
             body: Center(child: pages[_pageIndex].page),
             bottomNavigationBar: BottomNavigationBar(

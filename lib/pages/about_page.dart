@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // defines Colors
 import 'package:flutter/widgets.dart';
-import '../extensions/widget_extensions.dart';
+//import '../extensions/widget_extensions.dart';
 
 class AboutPage extends StatelessWidget {
   const AboutPage({Key? key}) : super(key: key);

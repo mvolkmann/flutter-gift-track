@@ -76,10 +76,18 @@ class _HomePageState extends State<HomePage> {
     var title = pages[index].title;
     var canAdd = title == 'People' || title == 'Occasions' || title == 'Gifts';
     if (canAdd) {
-      actions.add(TextButton(
-        child: Text('Add', style: TextStyle(color: Colors.yellow)),
-        onPressed: () => appState.adding = true,
-      ));
+      var buttonText = appState.adding ? 'Done' : 'Add';
+      actions.add(
+        TextButton(
+          child: Text(buttonText, style: TextStyle(color: Colors.yellow)),
+          onPressed: () {
+            if (appState.adding) {
+              print('Save the new data!');
+            }
+            appState.adding = !appState.adding;
+          },
+        ),
+      );
     }
     print('_getActions: actions = $actions');
     return actions;

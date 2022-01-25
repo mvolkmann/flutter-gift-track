@@ -3,18 +3,18 @@ import 'my_text.dart';
 
 // A Switch with off and on labels that can be tapped to set the value.
 class MySwitch extends StatelessWidget {
-  final Color offColor;
+  Color? offColor;
   final String offLabel;
-  final Color onColor;
+  Color? onColor;
   final String onLabel;
   final ValueChanged<bool> onChanged;
   final bool value;
 
-  const MySwitch({
+  MySwitch({
     Key? key,
-    this.offColor = Colors.red,
+    this.offColor,
     required this.offLabel,
-    this.onColor = Colors.green,
+    this.onColor,
     required this.onChanged,
     required this.onLabel,
     required this.value,
@@ -22,15 +22,19 @@ class MySwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var colorScheme = Theme.of(context).colorScheme;
+    onColor ??= colorScheme.primary;
+    offColor ??= Colors.orange; //colorScheme.secondary;
+
     return Row(
       children: [
         TextButton(
-          child: MyText(offLabel, bold: !value, color: offColor),
+          child: MyText(offLabel, color: offColor),
           onPressed: () => onChanged(false),
         ),
         Switch(onChanged: onChanged, value: value),
         TextButton(
-          child: MyText(onLabel, bold: value, color: onColor),
+          child: MyText(onLabel, color: onColor),
           onPressed: () => onChanged(true),
         ),
       ],

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:flutter_gift_track/widgets/my_switch.dart';
 import 'package:flutter_gift_track/widgets/my_text_field.dart';
 import 'package:provider/provider.dart';
@@ -20,14 +21,8 @@ class PeoplePage extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            Spacer(),
-            Text(
-              'People',
-              textAlign: TextAlign.center,
-            ),
             if (!adding) Text('show list of people'),
             if (adding) PersonForm(),
-            Spacer(),
           ],
         ),
       ),
@@ -51,6 +46,7 @@ class _PersonFormState extends State<PersonForm> {
   Widget build(BuildContext context) {
     return Form(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           MyTextField(
             initialValue: name,

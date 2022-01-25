@@ -45,14 +45,20 @@ class PageDescriptor {
   PageDescriptor(this.title, this.icon, this.page);
 }
 
+var aboutIcon = useMaterial ? Icons.info : CupertinoIcons.info;
+var peopleIcon = useMaterial ? Icons.person : CupertinoIcons.person_3_fill;
+var occasionsIcon = Icons.cake_rounded;
+var giftsIcon = useMaterial ? Icons.card_giftcard : CupertinoIcons.gift_fill;
+var settingsIcon = useMaterial ? Icons.settings : CupertinoIcons.gear_solid;
+
 //TODO: Why aren't constructor tear-offs working?
 //TODO: Why can't the type here be replaced by var?
 List<PageDescriptor> pages = <PageDescriptor>[
-  PageDescriptor('About', Icons.info, AboutPage()),
-  PageDescriptor('People', Icons.person, PeoplePage()),
-  PageDescriptor('Occasions', Icons.cake, OccasionsPage()),
-  PageDescriptor('Gifts', Icons.card_giftcard, GiftsPage()),
-  PageDescriptor('Settings', Icons.settings, SettingsPage()),
+  PageDescriptor('About', aboutIcon, AboutPage()),
+  PageDescriptor('People', peopleIcon, PeoplePage()),
+  PageDescriptor('Occasions', occasionsIcon, OccasionsPage()),
+  PageDescriptor('Gifts', giftsIcon, GiftsPage()),
+  PageDescriptor('Settings', settingsIcon, SettingsPage()),
 ];
 
 class HomePage extends StatefulWidget {

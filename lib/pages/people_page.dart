@@ -1,6 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; // defines Colors
-import 'package:flutter/widgets.dart';
 import 'package:flutter_gift_track/widgets/my_switch.dart';
 import 'package:flutter_gift_track/widgets/my_text_field.dart';
 import 'package:provider/provider.dart';

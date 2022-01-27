@@ -1,14 +1,26 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; // defines Colors
-import 'package:flutter/widgets.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  var adding = false;
+
+  Widget _buildBody(BuildContext context) {
+    return Center(child: Text('Settings'));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Settings'),
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('Settings'),
+      ),
+      child: SafeArea(child: _buildBody(context)),
     );
   }
 }

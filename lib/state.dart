@@ -5,6 +5,8 @@ class Person {
   DateTime? birthday;
 
   Person({required this.name, this.birthday});
+
+  Person copy() => Person(name: name, birthday: birthday);
 }
 
 class AppState extends ChangeNotifier {
@@ -29,13 +31,11 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Person> getPeople() {
-    return _people;
-  }
+  List<Person> get people => _people;
 
-  Person? get person => _person;
+  Person get person => _person;
 
-  set person(Person? p) {
+  set person(Person p) {
     _person = p;
     notifyListeners();
   }

@@ -7,6 +7,7 @@ import './pages/about_page.dart';
 import './pages/gifts_page.dart';
 import './pages/occasions_page.dart';
 import './pages/people_page.dart';
+import './pages/person_page.dart';
 import './pages/settings_page.dart';
 
 void main() => runApp(const MyApp());
@@ -22,9 +23,17 @@ class MyApp extends StatelessWidget {
       child: HomePage(),
     );
     return CupertinoApp(
-      title: title,
-      theme: CupertinoThemeData(brightness: Brightness.light),
       home: home,
+      routes: {
+        AboutPage.route: (_) => AboutPage(),
+        GiftsPage.route: (_) => GiftsPage(),
+        OccasionsPage.route: (_) => OccasionsPage(),
+        PeoplePage.route: (_) => PeoplePage(),
+        PersonPage.route: (_) => PersonPage(),
+        SettingsPage.route: (_) => SettingsPage(),
+      },
+      theme: CupertinoThemeData(brightness: Brightness.light),
+      title: title,
     );
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class OccasionsPage extends StatefulWidget {
+  static const route = '/occasions'; // used to register route
+
   const OccasionsPage({Key? key}) : super(key: key);
 
   @override

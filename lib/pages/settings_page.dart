@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class SettingsPage extends StatefulWidget {
+  static const route = '/settings'; // used to register route
+
   const SettingsPage({Key? key}) : super(key: key);
 
   @override

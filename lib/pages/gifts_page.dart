@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 
 class GiftsPage extends StatefulWidget {
+  static const route = '/gifts'; // used to register route
+
   const GiftsPage({Key? key}) : super(key: key);
 
   @override

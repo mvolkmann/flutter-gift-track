@@ -14,11 +14,9 @@ class PeoplePage extends StatefulWidget {
   State<PeoplePage> createState() => _PeoplePageState();
 }
 
-Person makePerson() => Person(name: '', birthday: DateTime.now());
-
 class _PeoplePageState extends State<PeoplePage> {
   var adding = false;
-  Person person = makePerson();
+  Person person = Person(name: '');
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +35,7 @@ class _PeoplePageState extends State<PeoplePage> {
             if (adding) {
               print('adding name = ${person.name}');
               appState.addPerson(person);
-              person = makePerson();
+              person = Person(name: '');
             }
             setState(() => adding = !adding);
           },
@@ -97,6 +95,7 @@ class _PersonFormState extends State<PersonForm> {
     super.initState();
     _nameController.addListener(() {
       print('name is now ${_nameController.text}');
+      //TODO: This is not updating the person object in the parent component!
       setState(() => person.name = _nameController.text);
     });
   }

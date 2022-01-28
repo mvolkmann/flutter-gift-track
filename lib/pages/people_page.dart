@@ -3,6 +3,7 @@ import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
 //import '../extensions/widget_extensions.dart';
+import '../models/person.dart';
 import '../state.dart';
 
 // Change this to StatefulWidget to hold only array of people?
@@ -13,20 +14,53 @@ class PeoplePage extends StatefulWidget {
   State<PeoplePage> createState() => _PeoplePageState();
 }
 
+Person makePerson() => Person(name: '', birthday: DateTime.now());
+
 class _PeoplePageState extends State<PeoplePage> {
   var adding = false;
+  Person person = makePerson();
+
+  @override
+  Widget build(BuildContext context) {
+    var appState = Provider.of<AppState>(context);
+    print('adding = $adding');
+    print('person = $person');
+
+    return CupertinoPageScaffold(
+      navigationBar: CupertinoNavigationBar(
+        middle: Text('People'),
+        trailing: CupertinoButton(
+          child: Text(adding ? 'Done' : 'Add'),
+          onPressed: () {
+            print('onPressed: adding = $adding');
+            // If "Done" was pressed, save a new person.
+            if (adding) {
+              print('adding name = ${person.name}');
+              appState.addPerson(person);
+              person = makePerson();
+            }
+            setState(() => adding = !adding);
+          },
+          padding: EdgeInsets.zero,
+        ),
+      ),
+      child: SafeArea(child: _buildBody(context)),
+    );
+  }
 
   Widget _buildBody(BuildContext context) {
     var appState = Provider.of<AppState>(context);
     var people = appState.people;
+    for (var person in people) {
+      print('person = $person');
+    }
 
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Center(
-        //child: Text('Can you see me?'),
         child: Column(
           children: [
-            if (adding) PersonForm(),
+            if (adding) PersonForm(person: person),
             if (!adding)
               Column(
                 children: [
@@ -39,39 +73,22 @@ class _PeoplePageState extends State<PeoplePage> {
       ),
     );
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: Text('People'),
-        trailing: CupertinoButton(
-          child: Text(adding ? 'Done' : 'Add'),
-          onPressed: () {
-            // If "Done" was pressed, save a new person.
-            if (adding) {
-              //TODO: Modify appState here.
-              //TODO: But how can you get the state from PersonForm?
-            }
-            setState(() => adding = !adding);
-          },
-          padding: EdgeInsets.zero,
-        ),
-      ),
-      child: SafeArea(child: _buildBody(context)),
-    );
-  }
 }
 
 class PersonForm extends StatefulWidget {
-  const PersonForm({Key? key}) : super(key: key);
+  final Person person;
+
+  PersonForm({
+    Key? key,
+    required this.person,
+  }) : super(key: key);
 
   @override
   State<PersonForm> createState() => _PersonFormState();
 }
 
 class _PersonFormState extends State<PersonForm> {
-  var _birthday = DateTime.now();
+  var person = Person(name: '', birthday: DateTime.now());
   var _includeBirthday = false;
   final _nameController = TextEditingController(text: '');
 
@@ -80,14 +97,12 @@ class _PersonFormState extends State<PersonForm> {
     super.initState();
     _nameController.addListener(() {
       print('name is now ${_nameController.text}');
+      setState(() => person.name = _nameController.text);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    //var appState = Provider.of<AppState>(context);
-    //var person = appState.person;
-
     return Form(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -104,8 +119,10 @@ class _PersonFormState extends State<PersonForm> {
               CupertinoSwitch(
                 value: _includeBirthday,
                 onChanged: (value) {
-                  setState(() => _includeBirthday = value);
-                  if (!value) _birthday = DateTime.now();
+                  setState(() {
+                    _includeBirthday = value;
+                    if (!value) person.birthday = DateTime.now();
+                  });
                 },
               ),
             ],
@@ -114,12 +131,12 @@ class _PersonFormState extends State<PersonForm> {
             SizedBox(
               height: 150,
               child: CupertinoDatePicker(
-                initialDateTime: _birthday,
+                initialDateTime: person.birthday,
                 maximumYear: 2200,
                 minimumYear: 1900,
                 mode: CupertinoDatePickerMode.date,
                 onDateTimeChanged: (DateTime value) {
-                  setState(() => _birthday = value);
+                  setState(() => person.birthday = value);
                 },
               ),
             )

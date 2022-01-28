@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 
-class Person {
-  String name;
-  DateTime? birthday;
-
-  Person({required this.name, this.birthday});
-
-  Person copy() => Person(name: name, birthday: birthday);
-}
+import './models/gift.dart';
+import './models/occasion.dart';
+import './models/person.dart';
 
 class AppState extends ChangeNotifier {
-  var _adding = false;
-  Person _person = Person(name: '');
+  final _occasions = <Occasion>[];
   final _people = <Person>[];
 
-  bool get adding => _adding;
+  List<Occasion> get occasions => _occasions;
 
-  set adding(bool a) {
-    _adding = a;
+  List<Person> get people => _people;
+
+  void addGift({
+    required Person person,
+    required Occasion occasion,
+    required Gift gift,
+  }) {
+    person.addGift(occasion: occasion, gift: gift);
+    notifyListeners();
+  }
+
+  void addOccasion(Occasion o) {
+    _occasions.add(o);
     notifyListeners();
   }
 
@@ -26,17 +31,22 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deletePerson(Person p) {
-    _people.remove(p);
+  void deleteGift({
+    required Person person,
+    required Occasion occasion,
+    required Gift gift,
+  }) {
+    person.deleteGift(occasion: occasion, gift: gift);
     notifyListeners();
   }
 
-  List<Person> get people => _people;
+  void deleteOccasion(Occasion o) {
+    _occasions.remove(o);
+    notifyListeners();
+  }
 
-  Person get person => _person;
-
-  set person(Person p) {
-    _person = p;
+  void deletePerson(Person p) {
+    _people.remove(p);
     notifyListeners();
   }
 }

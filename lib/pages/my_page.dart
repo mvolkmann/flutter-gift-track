@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+import '../widgets/my_text.dart';
+
 class MyPage extends StatelessWidget {
   final Widget child;
   final String title;
@@ -17,7 +19,7 @@ class MyPage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         backgroundColor: CupertinoColors.systemBlue,
-        middle: Text(title, style: TextStyle(color: CupertinoColors.white)),
+        middle: MyText(title, color: CupertinoColors.white),
         trailing: trailing,
       ),
       child: Center(child: child),

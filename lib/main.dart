@@ -79,7 +79,7 @@ class HomePage extends StatelessWidget {
 
     // Notes for blog:
     // - See CupertinoColors.
-    // - Change page background to CupertinoColors.activeBlue.
+    // - Change page background to CupertinoColors.activeBlue?
     // - style argument can be set to
     //   CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle.
     // - Material has a single Scaffold class, but Cupertino has two:

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import './my_page.dart';
 import '../models/occasion.dart';
 import '../state.dart';
+import '../widgets/my_text_button.dart';
 
 //TODO: Modify to support both adding and editing an occasion.
 //TODO: Get selected person from appState.
@@ -36,16 +37,12 @@ class _OccasionPageState extends State<OccasionPage> {
 
     return MyPage(
       title: 'Occasion',
-      trailing: CupertinoButton(
-        child: Text(
-          'Done',
-          style: TextStyle(color: CupertinoColors.white),
-        ),
+      trailing: MyTextButton(
+        text: 'Done',
         onPressed: () {
           if (occasion.name.isNotEmpty) appState.addOccasion(occasion);
           Navigator.pop(context);
         },
-        padding: EdgeInsets.zero,
       ),
       child: _buildBody(context),
     );

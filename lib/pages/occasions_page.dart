@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import './my_page.dart';
 import './occasion_page.dart';
+import '../widgets/my_text_button.dart';
 
 class OccasionsPage extends StatelessWidget {
   static const route = '/occasions';
@@ -13,15 +14,11 @@ class OccasionsPage extends StatelessWidget {
     return MyPage(
       title: 'Occasions',
       child: _buildBody(context),
-      trailing: CupertinoButton(
-        child: Text(
-          'Add',
-          style: TextStyle(color: CupertinoColors.white),
-        ),
+      trailing: MyTextButton(
+        text: 'Add',
         onPressed: () {
           Navigator.pushNamed(context, OccasionPage.route);
         },
-        padding: EdgeInsets.zero,
       ),
     );
   }

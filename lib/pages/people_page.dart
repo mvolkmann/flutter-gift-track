@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import './my_page.dart';
 import './person_page.dart';
 import '../state.dart';
+import '../widgets/my_text_button.dart';
 
 // Change this to StatefulWidget to hold only array of people?
 class PeoplePage extends StatelessWidget {
@@ -16,15 +17,11 @@ class PeoplePage extends StatelessWidget {
     return MyPage(
       title: 'People',
       child: _buildBody(context),
-      trailing: CupertinoButton(
-        child: Text(
-          'Add',
-          style: TextStyle(color: CupertinoColors.white),
-        ),
+      trailing: MyTextButton(
+        text: 'Add',
         onPressed: () {
           Navigator.pushNamed(context, PersonPage.route);
         },
-        padding: EdgeInsets.zero,
       ),
     );
   }

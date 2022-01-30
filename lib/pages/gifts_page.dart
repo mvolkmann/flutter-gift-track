@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 
 import './gift_page.dart';
 import './my_page.dart';
+import '../widgets/my_text_button.dart';
 
 class GiftsPage extends StatelessWidget {
   static const route = '/gifts';
@@ -13,15 +14,11 @@ class GiftsPage extends StatelessWidget {
     return MyPage(
       title: 'Gifts',
       child: _buildBody(context),
-      trailing: CupertinoButton(
-        child: Text(
-          'Add',
-          style: TextStyle(color: CupertinoColors.white),
-        ),
+      trailing: MyTextButton(
+        text: 'Add',
         onPressed: () {
           Navigator.pushNamed(context, GiftPage.route);
         },
-        padding: EdgeInsets.zero,
       ),
     );
   }

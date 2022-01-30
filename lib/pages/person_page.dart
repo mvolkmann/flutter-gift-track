@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import './my_page.dart';
 import '../models/person.dart';
 import '../state.dart';
+import '../widgets/my_text_button.dart';
 
 //TODO: Modify to support both adding and editing a person.
 //TODO: Get selected person from appState.
@@ -36,16 +37,12 @@ class _PersonPageState extends State<PersonPage> {
 
     return MyPage(
       title: 'Person',
-      trailing: CupertinoButton(
-        child: Text(
-          'Done',
-          style: TextStyle(color: CupertinoColors.white),
-        ),
+      trailing: MyTextButton(
+        text: 'Done',
         onPressed: () {
           if (person.name.isNotEmpty) appState.addPerson(person);
           Navigator.pop(context);
         },
-        padding: EdgeInsets.zero,
       ),
       child: _buildBody(context),
     );

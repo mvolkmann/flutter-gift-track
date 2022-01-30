@@ -7,6 +7,7 @@ import '../models/gift.dart';
 import '../models/occasion.dart';
 import '../models/person.dart';
 import '../state.dart';
+import '../widgets/my_text_button.dart';
 
 //TODO: Modify to support both adding and editing an gift.
 //TODO: Get selected person from appState.
@@ -41,11 +42,8 @@ class _GiftPageState extends State<GiftPage> {
 
     return MyPage(
       title: 'Gift',
-      trailing: CupertinoButton(
-        child: Text(
-          'Done',
-          style: TextStyle(color: CupertinoColors.white),
-        ),
+      trailing: MyTextButton(
+        text: 'Done',
         onPressed: () {
           if (gift.name.isNotEmpty) {
             appState.addGift(
@@ -56,7 +54,6 @@ class _GiftPageState extends State<GiftPage> {
           }
           Navigator.pop(context);
         },
-        padding: EdgeInsets.zero,
       ),
       child: _buildBody(context),
     );

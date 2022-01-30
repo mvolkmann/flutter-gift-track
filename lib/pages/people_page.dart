@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show Colors;
 import 'package:provider/provider.dart';
 
 import './my_page.dart';
 import './person_page.dart';
 import '../state.dart';
+import '../util.dart' show formatDate;
+import '../widgets/my_text.dart';
 import '../widgets/my_text_button.dart';
 
 // Change this to StatefulWidget to hold only array of people?
@@ -36,7 +39,22 @@ class PeoplePage extends StatelessWidget {
         child: Column(
           children: [
             Text('People Count: ${people.length}'),
-            for (var person in people) Text('name = ${person.name}')
+            Expanded(
+              child: ListView.builder(
+                itemCount: people.length,
+                itemBuilder: (context, index) {
+                  var person = people[index];
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MyText(person.name),
+                      if (person.birthday != null)
+                        MyText(formatDate(person.birthday!)),
+                    ],
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

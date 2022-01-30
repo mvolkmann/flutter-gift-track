@@ -18,24 +18,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var title = 'Gift Track';
-    var home = ChangeNotifierProvider(
-      create: (context) => AppState(),
-      child: HomePage(),
-    );
     return CupertinoApp(
-      //home: home,
-      //initialRoute: '/',
-      initialRoute: PeoplePage.route,
-      routes: {
-        AboutPage.route: (_) => AboutPage(),
-        GiftsPage.route: (_) => GiftsPage(),
-        HomePage.route: (_) => home,
-        OccasionsPage.route: (_) => OccasionsPage(),
-        PeoplePage.route: (_) => PeoplePage(),
-        PersonPage.route: (_) => PersonPage(),
-        SettingsPage.route: (_) => SettingsPage(),
-      },
-      theme: CupertinoThemeData(brightness: Brightness.light),
+      home: ChangeNotifierProvider(
+        create: (context) => AppState(),
+        child: HomePage(),
+      ),
+      theme: CupertinoThemeData(
+        brightness: Brightness.light,
+        // This sets the color of the back button icon in the app bar.
+        textTheme: CupertinoTextThemeData(
+          primaryColor: CupertinoColors.white,
+        ),
+      ),
       title: title,
     );
   }
@@ -92,6 +86,14 @@ class HomePage extends StatelessWidget {
       tabBar: CupertinoTabBar(items: items),
       tabBuilder: (context, index) => CupertinoTabView(
         builder: (BuildContext context) => pages[index].page,
+        routes: {
+          AboutPage.route: (_) => AboutPage(),
+          GiftsPage.route: (_) => GiftsPage(),
+          OccasionsPage.route: (_) => OccasionsPage(),
+          PeoplePage.route: (_) => PeoplePage(),
+          PersonPage.route: (_) => PersonPage(),
+          SettingsPage.route: (_) => SettingsPage(),
+        },
       ),
     );
   }

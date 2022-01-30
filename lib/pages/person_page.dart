@@ -43,8 +43,7 @@ class _PersonPageState extends State<PersonPage> {
             style: TextStyle(color: CupertinoColors.white),
           ),
           onPressed: () {
-            print('adding name = ${person.name}');
-            appState.addPerson(person);
+            if (person.name.isNotEmpty) appState.addPerson(person);
             Navigator.pop(context);
           },
           padding: EdgeInsets.zero,

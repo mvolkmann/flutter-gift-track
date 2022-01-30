@@ -20,6 +20,7 @@ class _GiftsPageState extends State<GiftsPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.systemBlue,
         middle: Text('Gifts'),
         trailing: CupertinoButton(
           child: Text(adding ? 'Done' : 'Add'),

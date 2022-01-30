@@ -20,6 +20,7 @@ class _OccasionsPageState extends State<OccasionsPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.systemBlue,
         middle: Text('Occasions'),
         trailing: CupertinoButton(
           child: Text(adding ? 'Done' : 'Add'),

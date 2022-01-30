@@ -20,6 +20,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.systemBlue,
         middle: Text('Settings'),
       ),
       child: SafeArea(child: _buildBody(context)),

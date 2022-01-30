@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -13,10 +14,18 @@ class PeoplePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.systemBlue,
         middle: Text('People'),
         trailing: CupertinoButton(
-          child: Text('Add'),
+          child: Text(
+            'Add',
+            style: TextStyle(color: CupertinoColors.white),
+          ),
           onPressed: () {
+            print('got Add press');
+            //TODO: Why doesn't this work? DEBUG CONSOLE says
+            // "Could not find a generator for route
+            // RouteSettings("/person", null) in the _CupertinoTabViewState."
             Navigator.pushNamed(context, '/person');
           },
           padding: EdgeInsets.zero,

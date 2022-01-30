@@ -35,9 +35,13 @@ class _PersonPageState extends State<PersonPage> {
 
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.systemBlue,
         middle: Text('Person'),
         trailing: CupertinoButton(
-          child: Text('Done'),
+          child: Text(
+            'Done',
+            style: TextStyle(color: CupertinoColors.white),
+          ),
           onPressed: () {
             print('adding name = ${person.name}');
             appState.addPerson(person);

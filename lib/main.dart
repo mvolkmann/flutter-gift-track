@@ -23,10 +23,13 @@ class MyApp extends StatelessWidget {
       child: HomePage(),
     );
     return CupertinoApp(
-      home: home,
+      //home: home,
+      //initialRoute: '/',
+      initialRoute: PeoplePage.route,
       routes: {
         AboutPage.route: (_) => AboutPage(),
         GiftsPage.route: (_) => GiftsPage(),
+        HomePage.route: (_) => home,
         OccasionsPage.route: (_) => OccasionsPage(),
         PeoplePage.route: (_) => PeoplePage(),
         PersonPage.route: (_) => PersonPage(),
@@ -63,6 +66,8 @@ List<PageDescriptor> pages = <PageDescriptor>[
 ];
 
 class HomePage extends StatelessWidget {
+  static const route = '/'; // used to register route
+
   const HomePage({Key? key}) : super(key: key);
 
   @override

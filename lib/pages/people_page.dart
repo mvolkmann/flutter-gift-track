@@ -1,7 +1,7 @@
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import './person_page.dart';
 import '../state.dart';
 
 // Change this to StatefulWidget to hold only array of people?
@@ -26,7 +26,7 @@ class PeoplePage extends StatelessWidget {
             //TODO: Why doesn't this work? DEBUG CONSOLE says
             // "Could not find a generator for route
             // RouteSettings("/person", null) in the _CupertinoTabViewState."
-            Navigator.pushNamed(context, '/person');
+            Navigator.pushNamed(context, PersonPage.route);
           },
           padding: EdgeInsets.zero,
         ),

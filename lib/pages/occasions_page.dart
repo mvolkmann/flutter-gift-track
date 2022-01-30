@@ -1,36 +1,32 @@
 import 'package:flutter/cupertino.dart';
 
-class OccasionsPage extends StatefulWidget {
-  static const route = '/occasions'; // used to register route
+import './my_page.dart';
+import './occasion_page.dart';
 
-  const OccasionsPage({Key? key}) : super(key: key);
+class OccasionsPage extends StatelessWidget {
+  static const route = '/occasions';
 
-  @override
-  State<OccasionsPage> createState() => _OccasionsPageState();
-}
-
-class _OccasionsPageState extends State<OccasionsPage> {
-  var adding = false;
-
-  Widget _buildBody(BuildContext context) {
-    return Center(child: Text('Occasions'));
-  }
+  OccasionsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBlue,
-        middle: Text('Occasions'),
-        trailing: CupertinoButton(
-          child: Text(adding ? 'Done' : 'Add'),
-          onPressed: () {
-            setState(() => adding = !adding);
-          },
-          padding: EdgeInsets.zero,
+    return MyPage(
+      title: 'Occasions',
+      child: _buildBody(context),
+      trailing: CupertinoButton(
+        child: Text(
+          'Add',
+          style: TextStyle(color: CupertinoColors.white),
         ),
+        onPressed: () {
+          Navigator.pushNamed(context, OccasionPage.route);
+        },
+        padding: EdgeInsets.zero,
       ),
-      child: SafeArea(child: _buildBody(context)),
     );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Center(child: Text('List occasions here.'));
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 
+import './my_page.dart';
+
 class SettingsPage extends StatefulWidget {
-  static const route = '/settings'; // used to register route
+  static const route = '/settings';
 
   const SettingsPage({Key? key}) : super(key: key);
 
@@ -12,18 +14,15 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   var adding = false;
 
-  Widget _buildBody(BuildContext context) {
-    return Center(child: Text('Settings'));
-  }
-
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBlue,
-        middle: Text('Settings'),
-      ),
-      child: SafeArea(child: _buildBody(context)),
+    return MyPage(
+      title: 'Settings',
+      child: _buildBody(context),
     );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Text('Settings go here.');
   }
 }

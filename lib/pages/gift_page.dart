@@ -2,22 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
+import './my_page.dart';
+import '../models/gift.dart';
+import '../models/occasion.dart';
 import '../models/person.dart';
 import '../state.dart';
 
-//TODO: Modify to support both adding and editing a person.
+//TODO: Modify to support both adding and editing an gift.
 //TODO: Get selected person from appState.
-class PersonPage extends StatefulWidget {
-  static const route = '/person';
+class GiftPage extends StatefulWidget {
+  static const route = '/gift';
 
-  const PersonPage({Key? key}) : super(key: key);
+  const GiftPage({Key? key}) : super(key: key);
 
   @override
-  State<PersonPage> createState() => _PersonPageState();
+  State<GiftPage> createState() => _GiftPageState();
 }
 
-class _PersonPageState extends State<PersonPage> {
-  var person = Person(name: '');
+class _GiftPageState extends State<GiftPage> {
+  var gift = Gift(name: '');
+  var occasion = Occasion(name: ''); // select from wheel
+  var person = Person(name: ''); // select from wheel
+
   var _includeBirthday = false;
   final _nameController = TextEditingController(text: '');
 
@@ -25,7 +31,7 @@ class _PersonPageState extends State<PersonPage> {
   void initState() {
     super.initState();
     _nameController.addListener(() {
-      setState(() => person.name = _nameController.text);
+      setState(() => gift.name = _nameController.text);
     });
   }
 
@@ -33,21 +39,24 @@ class _PersonPageState extends State<PersonPage> {
   Widget build(BuildContext context) {
     var appState = Provider.of<AppState>(context);
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBlue,
-        middle: Text('Person'),
-        trailing: CupertinoButton(
-          child: Text(
-            'Done',
-            style: TextStyle(color: CupertinoColors.white),
-          ),
-          onPressed: () {
-            if (person.name.isNotEmpty) appState.addPerson(person);
-            Navigator.pop(context);
-          },
-          padding: EdgeInsets.zero,
+    return MyPage(
+      title: 'Gift',
+      trailing: CupertinoButton(
+        child: Text(
+          'Done',
+          style: TextStyle(color: CupertinoColors.white),
         ),
+        onPressed: () {
+          if (gift.name.isNotEmpty) {
+            appState.addGift(
+              person: person,
+              occasion: occasion,
+              gift: gift,
+            );
+          }
+          Navigator.pop(context);
+        },
+        padding: EdgeInsets.zero,
       ),
       child: _buildBody(context),
     );
@@ -74,7 +83,7 @@ class _PersonPageState extends State<PersonPage> {
                   onChanged: (value) {
                     setState(() {
                       _includeBirthday = value;
-                      if (!value) person.birthday = DateTime.now();
+                      if (!value) gift.date = DateTime.now();
                     });
                   },
                 ),
@@ -84,12 +93,12 @@ class _PersonPageState extends State<PersonPage> {
               SizedBox(
                 height: 150,
                 child: CupertinoDatePicker(
-                  initialDateTime: person.birthday,
+                  initialDateTime: gift.date,
                   maximumYear: 2200,
                   minimumYear: 1900,
                   mode: CupertinoDatePickerMode.date,
                   onDateTimeChanged: (DateTime value) {
-                    setState(() => person.birthday = value);
+                    setState(() => gift.date = value);
                   },
                 ),
               )

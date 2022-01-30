@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 //import '../extensions/widget_extensions.dart';
 
 class AboutPage extends StatelessWidget {
-  static const route = '/about'; // used to register route
+  static const route = '/about';
 
   const AboutPage({Key? key}) : super(key: key);
 

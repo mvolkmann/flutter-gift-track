@@ -1,37 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import './my_page.dart';
 import './person_page.dart';
 import '../state.dart';
 
 // Change this to StatefulWidget to hold only array of people?
 class PeoplePage extends StatelessWidget {
-  static const route = '/people'; // used to register route
+  static const route = '/people';
 
   const PeoplePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBlue,
-        middle: Text('People'),
-        trailing: CupertinoButton(
-          child: Text(
-            'Add',
-            style: TextStyle(color: CupertinoColors.white),
-          ),
-          onPressed: () {
-            print('got Add press');
-            //TODO: Why doesn't this work? DEBUG CONSOLE says
-            // "Could not find a generator for route
-            // RouteSettings("/person", null) in the _CupertinoTabViewState."
-            Navigator.pushNamed(context, PersonPage.route);
-          },
-          padding: EdgeInsets.zero,
+    return MyPage(
+      title: 'People',
+      child: _buildBody(context),
+      trailing: CupertinoButton(
+        child: Text(
+          'Add',
+          style: TextStyle(color: CupertinoColors.white),
         ),
+        onPressed: () {
+          Navigator.pushNamed(context, PersonPage.route);
+        },
+        padding: EdgeInsets.zero,
       ),
-      child: SafeArea(child: _buildBody(context)),
     );
   }
 

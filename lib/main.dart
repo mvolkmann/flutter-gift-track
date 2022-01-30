@@ -4,7 +4,9 @@ import 'package:provider/provider.dart';
 
 import 'state.dart';
 import './pages/about_page.dart';
+import './pages/gift_page.dart';
 import './pages/gifts_page.dart';
+import './pages/occasion_page.dart';
 import './pages/occasions_page.dart';
 import './pages/people_page.dart';
 import './pages/person_page.dart';
@@ -60,7 +62,7 @@ List<PageDescriptor> pages = <PageDescriptor>[
 ];
 
 class HomePage extends StatelessWidget {
-  static const route = '/'; // used to register route
+  static const route = '/';
 
   const HomePage({Key? key}) : super(key: key);
 
@@ -88,7 +90,9 @@ class HomePage extends StatelessWidget {
         builder: (BuildContext context) => pages[index].page,
         routes: {
           AboutPage.route: (_) => AboutPage(),
+          GiftPage.route: (_) => GiftPage(),
           GiftsPage.route: (_) => GiftsPage(),
+          OccasionPage.route: (_) => OccasionPage(),
           OccasionsPage.route: (_) => OccasionsPage(),
           PeoplePage.route: (_) => PeoplePage(),
           PersonPage.route: (_) => PersonPage(),

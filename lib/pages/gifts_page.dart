@@ -1,36 +1,32 @@
 import 'package:flutter/cupertino.dart';
 
-class GiftsPage extends StatefulWidget {
-  static const route = '/gifts'; // used to register route
+import './gift_page.dart';
+import './my_page.dart';
 
-  const GiftsPage({Key? key}) : super(key: key);
+class GiftsPage extends StatelessWidget {
+  static const route = '/gifts';
 
-  @override
-  State<GiftsPage> createState() => _GiftsPageState();
-}
-
-class _GiftsPageState extends State<GiftsPage> {
-  var adding = false;
-
-  Widget _buildBody(BuildContext context) {
-    return Center(child: Text('Gifts'));
-  }
+  GiftsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBlue,
-        middle: Text('Gifts'),
-        trailing: CupertinoButton(
-          child: Text(adding ? 'Done' : 'Add'),
-          onPressed: () {
-            setState(() => adding = !adding);
-          },
-          padding: EdgeInsets.zero,
+    return MyPage(
+      title: 'Gifts',
+      child: _buildBody(context),
+      trailing: CupertinoButton(
+        child: Text(
+          'Add',
+          style: TextStyle(color: CupertinoColors.white),
         ),
+        onPressed: () {
+          Navigator.pushNamed(context, GiftPage.route);
+        },
+        padding: EdgeInsets.zero,
       ),
-      child: SafeArea(child: _buildBody(context)),
     );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return Center(child: Text('List gifts here.'));
   }
 }

@@ -2,30 +2,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
-import '../models/person.dart';
+import './my_page.dart';
+import '../models/occasion.dart';
 import '../state.dart';
 
-//TODO: Modify to support both adding and editing a person.
+//TODO: Modify to support both adding and editing an occasion.
 //TODO: Get selected person from appState.
-class PersonPage extends StatefulWidget {
-  static const route = '/person';
+class OccasionPage extends StatefulWidget {
+  static const route = '/occasion';
 
-  const PersonPage({Key? key}) : super(key: key);
+  const OccasionPage({Key? key}) : super(key: key);
 
   @override
-  State<PersonPage> createState() => _PersonPageState();
+  State<OccasionPage> createState() => _OccasionPageState();
 }
 
-class _PersonPageState extends State<PersonPage> {
-  var person = Person(name: '');
-  var _includeBirthday = false;
+class _OccasionPageState extends State<OccasionPage> {
+  var occasion = Occasion(name: '');
+  var _includeDate = false;
   final _nameController = TextEditingController(text: '');
 
   @override
   void initState() {
     super.initState();
     _nameController.addListener(() {
-      setState(() => person.name = _nameController.text);
+      setState(() => occasion.name = _nameController.text);
     });
   }
 
@@ -33,21 +34,18 @@ class _PersonPageState extends State<PersonPage> {
   Widget build(BuildContext context) {
     var appState = Provider.of<AppState>(context);
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBlue,
-        middle: Text('Person'),
-        trailing: CupertinoButton(
-          child: Text(
-            'Done',
-            style: TextStyle(color: CupertinoColors.white),
-          ),
-          onPressed: () {
-            if (person.name.isNotEmpty) appState.addPerson(person);
-            Navigator.pop(context);
-          },
-          padding: EdgeInsets.zero,
+    return MyPage(
+      title: 'Occasion',
+      trailing: CupertinoButton(
+        child: Text(
+          'Done',
+          style: TextStyle(color: CupertinoColors.white),
         ),
+        onPressed: () {
+          if (occasion.name.isNotEmpty) appState.addOccasion(occasion);
+          Navigator.pop(context);
+        },
+        padding: EdgeInsets.zero,
       ),
       child: _buildBody(context),
     );
@@ -68,28 +66,28 @@ class _PersonPageState extends State<PersonPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Include Birthday'),
+                Text('Include Date'),
                 CupertinoSwitch(
-                  value: _includeBirthday,
+                  value: _includeDate,
                   onChanged: (value) {
                     setState(() {
-                      _includeBirthday = value;
-                      if (!value) person.birthday = DateTime.now();
+                      _includeDate = value;
+                      if (!value) occasion.date = DateTime.now();
                     });
                   },
                 ),
               ],
             ),
-            if (_includeBirthday)
+            if (_includeDate)
               SizedBox(
                 height: 150,
                 child: CupertinoDatePicker(
-                  initialDateTime: person.birthday,
+                  initialDateTime: occasion.date,
                   maximumYear: 2200,
                   minimumYear: 1900,
                   mode: CupertinoDatePickerMode.date,
                   onDateTimeChanged: (DateTime value) {
-                    setState(() => person.birthday = value);
+                    setState(() => occasion.date = value);
                   },
                 ),
               )

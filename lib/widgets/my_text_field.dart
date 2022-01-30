@@ -41,6 +41,6 @@ class _MyTextFieldState extends State<MyTextField> {
       obscureText: widget.obscureText,
       onChanged: (String value) => widget.onChanged(value),
       validator: validator,
-    ).pad(10);
+    ).padding(10);
   }
 }

@@ -77,13 +77,15 @@ class HomePage extends StatelessWidget {
         )
         .toList();
 
-    // See CupertinoColors.
-    // Change page background to CupertinoColors.activeBlue.
-    // style argument can be set to
-    // CupertinoTheme.of(context).textTheme.navLargeTitltTextStyle.
-    // Material has a single Scaffold class, but Cupertino has two:
-    // CupertinoPageScaffold and CupertinoTabScaffold.
-    // It is common to use the first inside the second.
+    // Notes for blog:
+    // - See CupertinoColors.
+    // - Change page background to CupertinoColors.activeBlue.
+    // - style argument can be set to
+    //   CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle.
+    // - Material has a single Scaffold class, but Cupertino has two:
+    //   CupertinoPageScaffold and CupertinoTabScaffold.
+    //   It is common to use the first inside the second.
+
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(items: items),
       tabBuilder: (context, index) => CupertinoTabView(

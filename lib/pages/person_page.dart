@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
+import './my_page.dart';
 import '../models/person.dart';
 import '../state.dart';
 
@@ -33,21 +34,18 @@ class _PersonPageState extends State<PersonPage> {
   Widget build(BuildContext context) {
     var appState = Provider.of<AppState>(context);
 
-    return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBlue,
-        middle: Text('Person'),
-        trailing: CupertinoButton(
-          child: Text(
-            'Done',
-            style: TextStyle(color: CupertinoColors.white),
-          ),
-          onPressed: () {
-            if (person.name.isNotEmpty) appState.addPerson(person);
-            Navigator.pop(context);
-          },
-          padding: EdgeInsets.zero,
+    return MyPage(
+      title: 'Person',
+      trailing: CupertinoButton(
+        child: Text(
+          'Done',
+          style: TextStyle(color: CupertinoColors.white),
         ),
+        onPressed: () {
+          if (person.name.isNotEmpty) appState.addPerson(person);
+          Navigator.pop(context);
+        },
+        padding: EdgeInsets.zero,
       ),
       child: _buildBody(context),
     );

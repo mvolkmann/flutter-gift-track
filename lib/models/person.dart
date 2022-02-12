@@ -2,8 +2,8 @@ import './gift.dart';
 import './occasion.dart';
 
 class Person {
-  int? id;
   DateTime? birthday;
+  int? id;
   String name;
 
   // key is occasion name.
@@ -28,6 +28,6 @@ class Person {
 
   @override
   String toString() {
-    return '$name $birthday';
+    return 'Person: $name $birthday';
   }
 }

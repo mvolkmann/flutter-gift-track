@@ -2,13 +2,14 @@ import './gift.dart';
 import './occasion.dart';
 
 class Person {
+  int? id;
   DateTime? birthday;
   String name;
 
   // key is occasion name.
   var giftMap = <String, List<Gift>>{};
 
-  Person({required this.name, this.birthday});
+  Person({this.birthday, this.id, required this.name});
 
   void addGift({required Occasion occasion, required Gift gift}) {
     var giftList = giftMap[occasion.name];
@@ -16,12 +17,13 @@ class Person {
     giftList.add(gift);
   }
 
-  //TODO: Need this?
-  Person copy() => Person(name: name, birthday: birthday);
-
   void deleteGift({required Occasion occasion, required Gift gift}) {
     var giftList = giftMap[occasion.name];
     if (giftList != null) giftList.remove(gift);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'birthday': birthday, 'id': id, 'name': name};
   }
 
   @override

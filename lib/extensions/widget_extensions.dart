@@ -1,5 +1,27 @@
 import 'package:flutter/material.dart';
 
+extension ColumnExtension on Column {
+  /// Adds a SizedBox with a given height and no width
+  /// between all Widgets in the Column.
+  Column gap(double size) {
+    for (int i = children.length - 1; i > 0; i--) {
+      children.insert(i, SizedBox(height: size));
+    }
+    return this;
+  }
+}
+
+extension RowExtension on Row {
+  /// Adds a SizedBox with a given width and no height
+  /// between all Widgets in the Row.
+  Row gap(double size) {
+    for (int i = children.length - 1; i > 0; i--) {
+      children.insert(i, SizedBox(width: size));
+    }
+    return this;
+  }
+}
+
 extension WidgetExtension on Widget {
   Widget align([Alignment alignment = Alignment.centerLeft]) {
     return Container(alignment: alignment, child: this);
@@ -26,8 +48,8 @@ extension WidgetExtension on Widget {
   /// Wraps a widget in a Center.
   Widget get center => Center(child: this);
 
-  /// Wraps a widget in a Center.
-  Widget get expand => Expanded(child: this);
+  /// Wraps a widget in an Expanded.
+  Widget get expanded => Expanded(child: this);
 
   /// Wraps a widget in a Row which can prevent
   /// expanding the width to match the parent width.
@@ -39,7 +61,7 @@ extension WidgetExtension on Widget {
   }
 
   /// Wraps a widget in a Padding with a given horizontal padding.
-  Widget hPad(double size) {
+  Widget hPadding(double size) {
     return Padding(
         child: this, padding: EdgeInsets.symmetric(horizontal: size));
   }
@@ -50,7 +72,7 @@ extension WidgetExtension on Widget {
   }
 
   /// Wraps a widget in a Padding with a given horizontal padding.
-  Widget vPad(double size) {
+  Widget vPadding(double size) {
     return Padding(child: this, padding: EdgeInsets.symmetric(vertical: size));
   }
 }
@@ -64,15 +86,6 @@ extension WidgetListExtension<Widget> on List<Widget> {
     }
     return this;
   }
-
-  /*
-  Row row() {
-    //TODO: Why does the next line give the following error?
-    //TODO: The argument type 'List<Widget>' can't be
-    //TODO: assigned to the parameter type 'List<Widget>'
-    return Row(children: this);
-  }
-  */
 
   /// Adds a SizedBox with the same width and height
   /// between all Widgets in the List.

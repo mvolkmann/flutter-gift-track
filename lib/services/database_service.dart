@@ -47,12 +47,12 @@ class DatabaseService {
         await db.execute('''
           create table gifts(
             id integer primary key autoincrement,
-            date date,
+            date numeric,
             description text,
             imageUrl text,
             location text,
             name text,
-            price int,
+            price integer,
             purchased bool,
             websiteUrl text
           )
@@ -61,7 +61,7 @@ class DatabaseService {
         await db.execute('''
           create table occasions(
             id integer primary key autoincrement,
-            date date,
+            date numeric,
             name text
           )
         ''');
@@ -69,7 +69,7 @@ class DatabaseService {
         await db.execute('''
           create table people(
             id integer primary key autoincrement,
-            irthday date,
+            birthday numeric,
             name text
           )
         ''');

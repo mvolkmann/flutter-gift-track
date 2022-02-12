@@ -40,13 +40,39 @@ class DatabaseService {
 
     return openDatabase(
       join(await getDatabasesPath(), 'dog.db'),
-      onCreate: (db, version) {
+      onCreate: (db, version) async {
         // This is only called if the database does not yet exist.
         reset = true;
-        return db.execute(
-          'create table dogs('
-          'id integer primary key autoincrement, age integer, breed text, name text)',
-        );
+
+        await db.execute('''
+          create table gifts(
+            id integer primary key autoincrement,
+            date date,
+            description text,
+            imageUrl text,
+            location text,
+            name text,
+            price int,
+            purchased bool,
+            websiteUrl text
+          )
+        ''');
+
+        await db.execute('''
+          create table occasions(
+            id integer primary key autoincrement,
+            date date,
+            name text
+          )
+        ''');
+
+        await db.execute('''
+          create table people(
+            id integer primary key autoincrement,
+            irthday date,
+            name text
+          )
+        ''');
       },
       // The version can be used to perform database upgrades and downgrades.
       version: 1,

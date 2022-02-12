@@ -3,10 +3,21 @@ import 'package:flutter/material.dart';
 import './models/gift.dart';
 import './models/occasion.dart';
 import './models/person.dart';
+import './services/database_service.dart';
 
 class AppState extends ChangeNotifier {
-  final _occasions = <Occasion>[];
-  final _people = <Person>[];
+  var _occasions = <Occasion>[];
+  var _people = <Person>[];
+
+  AppState() {
+    _loadData();
+  }
+
+  _loadData() async {
+    await DatabaseService.setup();
+    _people = await DatabaseService.personService.getAll();
+    _occasions = await DatabaseService.occasionService.getAll();
+  }
 
   List<Occasion> get occasions => _occasions;
 

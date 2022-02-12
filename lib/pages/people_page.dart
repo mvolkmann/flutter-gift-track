@@ -31,6 +31,7 @@ class PeoplePage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     var appState = Provider.of<AppState>(context);
     var people = appState.people;
+    print('people_page.dart _buildBody: people = $people');
 
     return Padding(
       padding: const EdgeInsets.all(20),

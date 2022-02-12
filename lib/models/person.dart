@@ -23,7 +23,11 @@ class Person {
   }
 
   Map<String, dynamic> toMap() {
-    return {'birthday': birthday, 'id': id, 'name': name};
+    return {
+      'birthday': birthday?.millisecondsSinceEpoch,
+      'id': id,
+      'name': name
+    };
   }
 
   @override

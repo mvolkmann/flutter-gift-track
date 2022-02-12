@@ -10,47 +10,45 @@ import '../services/person_service.dart';
 import '../services/occasion_service.dart';
 
 class DatabaseService {
-  var reset = false;
-  late GiftService giftService;
-  late OccasionService occasionService;
-  late PersonService personService;
-  var people = <Person>[];
+  static late GiftService giftService;
+  static late OccasionService occasionService;
+  static late PersonService personService;
 
-  void setup() async {
-    _getDatabase().then((db) async {
-      occasionService = OccasionService(database: db);
-      personService = PersonService(database: db);
-      if (reset) {
-        await personService.deleteAll();
-        await occasionService.deleteAll();
-        //TODO: Maybe this isn't needed if gifts are deleted through cascades.
-        //await giftService.deleteAll();
+  static var reset = true;
 
-        await _createPeople();
-        await _createOccasions();
-        await _createGifts();
-      }
-      people = await personService.getAll();
-      //setState(() {});
-    });
+  static Future<void> setup() async {
+    var db = await _getDatabase();
+    giftService = GiftService(database: db);
+    occasionService = OccasionService(database: db);
+    personService = PersonService(database: db);
+    if (reset) {
+      await personService.deleteAll();
+      await occasionService.deleteAll();
+      //TODO: Maybe this isn't needed if gifts are deleted through cascades.
+      //await giftService.deleteAll();
+
+      await _createPeople();
+      await _createOccasions();
+      await _createGifts();
+    }
   }
 
-  Future<void> _createGifts() async {
+  static Future<void> _createGifts() async {
     _createGift(name: 'socks');
     _createGift(name: 'laptop', description: 'MacBook Pro');
   }
 
-  Future<void> _createOccasions() async {
+  static Future<void> _createOccasions() async {
     _createOccasion(name: 'Birthday');
     _createOccasion(name: 'Christmas', date: DateTime(0, 12, 25));
   }
 
-  Future<void> _createPeople() async {
+  static Future<void> _createPeople() async {
     _createPerson(name: 'Mark', birthday: DateTime.utc(1961, 4, 16));
     _createPerson(name: 'Tami', birthday: DateTime.utc(1961, 9, 9));
   }
 
-  Future<Gift> _createGift({
+  static Future<Gift> _createGift({
     required String name,
     String? description,
   }) async {
@@ -59,7 +57,7 @@ class DatabaseService {
     return gift;
   }
 
-  Future<Occasion> _createOccasion({
+  static Future<Occasion> _createOccasion({
     required String name,
     DateTime? date,
   }) async {
@@ -68,7 +66,7 @@ class DatabaseService {
     return occasion;
   }
 
-  Future<Person> _createPerson({
+  static Future<Person> _createPerson({
     required String name,
     required DateTime birthday,
   }) async {
@@ -77,7 +75,7 @@ class DatabaseService {
     return person;
   }
 
-  Future<Database> _getDatabase() async {
+  static Future<Database> _getDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
 
     return openDatabase(
@@ -95,7 +93,7 @@ class DatabaseService {
             location text,
             name text,
             price integer,
-            purchased bool,
+            purchased numeric,
             websiteUrl text
           )
         ''');

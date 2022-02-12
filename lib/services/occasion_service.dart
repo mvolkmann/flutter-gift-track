@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import '../models/occasion.dart';
+import '../util.dart' show msToDateTime;
 
 class OccasionService {
   final Database database;
@@ -35,7 +36,7 @@ class OccasionService {
     return List.generate(maps.length, (index) {
       var map = maps[index];
       return Occasion(
-        date: map['date'],
+        date: msToDateTime(map['date']),
         id: map['id'],
         name: map['name'],
       );

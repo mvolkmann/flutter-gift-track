@@ -19,10 +19,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = 'Gift Track';
+    var state = AppState();
     return CupertinoApp(
       home: ChangeNotifierProvider(
-        create: (context) => AppState(),
+        create: (context) => state,
         child: HomePage(),
       ),
       theme: CupertinoThemeData(
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           primaryColor: CupertinoColors.white,
         ),
       ),
-      title: title,
+      title: 'Gift Track',
     );
   }
 }

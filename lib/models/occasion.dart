@@ -6,7 +6,11 @@ class Occasion {
   Occasion({this.id, required this.name, this.date});
 
   Map<String, dynamic> toMap() {
-    return {'date': date, 'id': id, 'name': name};
+    return {
+      'date': date?.millisecondsSinceEpoch,
+      'id': id,
+      'name': name,
+    };
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import '../models/person.dart';
+import '../util.dart' show msToDateTime;
 
 class PersonService {
   final Database database;
@@ -36,7 +37,7 @@ class PersonService {
     return List.generate(maps.length, (index) {
       var map = maps[index];
       return Person(
-        birthday: map['birthday'],
+        birthday: msToDateTime(map['birthday']),
         id: map['id'],
         name: map['name'],
       );

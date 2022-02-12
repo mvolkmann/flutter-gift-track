@@ -23,7 +23,7 @@ class Gift {
 
   Map<String, dynamic> toMap() {
     return {
-      'date': date,
+      'date': date?.millisecondsSinceEpoch,
       'description': description,
       'id': id,
       'imageUrl': imageUrl,

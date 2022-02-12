@@ -17,6 +17,7 @@ class PersonService {
   }
 
   Future<void> delete(int id) {
+    //TODO: Need cascading delete of gifts.
     return database.delete(
       'people',
       where: 'id = ?',
@@ -25,11 +26,13 @@ class PersonService {
   }
 
   Future<void> deleteAll() {
+    //TODO: Need cascading delete of gifts.
     return database.delete('people');
   }
 
   Future<List<Person>> getAll() async {
     final List<Map<String, dynamic>> maps = await database.query('people');
+    //TODO: Also populate `giftMap` for each person.
     return List.generate(maps.length, (index) {
       var map = maps[index];
       return Person(

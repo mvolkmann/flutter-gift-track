@@ -17,6 +17,7 @@ class OccasionService {
   }
 
   Future<void> delete(int id) {
+    //TODO: Need cascading delete of gifts.
     return database.delete(
       'occasions',
       where: 'id = ?',
@@ -25,6 +26,7 @@ class OccasionService {
   }
 
   Future<void> deleteAll() {
+    /TODO: Need cascading delete of gifts.
     return database.delete('occasions');
   }
 

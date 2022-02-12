@@ -8,9 +8,6 @@ class GiftService {
   GiftService({required this.database});
 
   Future<Gift> create(Gift gift) async {
-    print('gift_service.dart create: entered');
-    var map = gift.toMap();
-    print('gift_service.dart create: map = $map');
     var id = await database.insert(
       'gifts',
       gift.toMap(),

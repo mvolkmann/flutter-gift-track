@@ -30,7 +30,7 @@ class Gift {
       'location': location,
       'name': name,
       'price': price,
-      'purchased': purchased,
+      'purchased': purchased ? 1 : 0,
       'websiteUrl': websiteUrl,
     };
   }

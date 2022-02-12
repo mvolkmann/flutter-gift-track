@@ -44,8 +44,8 @@ class DatabaseService {
   }
 
   static Future<void> _createPeople() async {
-    _createPerson(name: 'Mark', birthday: DateTime.utc(1961, 4, 16));
-    _createPerson(name: 'Tami', birthday: DateTime.utc(1961, 9, 9));
+    _createPerson(name: 'Mark', birthday: DateTime(1961, 4, 16));
+    _createPerson(name: 'Tami', birthday: DateTime(1961, 9, 9));
   }
 
   static Future<Gift> _createGift({

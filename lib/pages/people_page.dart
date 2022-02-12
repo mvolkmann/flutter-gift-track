@@ -1,5 +1,6 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 
 import './my_page.dart';
 import './person_page.dart';
@@ -44,13 +45,15 @@ class PeoplePage extends StatelessWidget {
                 itemCount: people.length,
                 itemBuilder: (context, index) {
                   var person = people[index];
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      MyText(person.name),
-                      if (person.birthday != null)
-                        MyText(formatDate(person.birthday!)),
-                    ],
+                  return CupertinoListTile(
+                    //border: Border.all(color: Colors.green),
+                    contentPadding: EdgeInsets.zero,
+                    title: MyText(person.name),
+                    subtitle: person.birthday == null
+                        ? null
+                        : MyText(
+                            formatDate(person.birthday!),
+                          ),
                   );
                 },
               ),

@@ -26,7 +26,7 @@ class OccasionService {
   }
 
   Future<void> deleteAll() {
-    /TODO: Need cascading delete of gifts.
+    //TODO: Need cascading delete of gifts.
     return database.delete('occasions');
   }
 

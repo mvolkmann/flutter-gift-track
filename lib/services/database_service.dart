@@ -9,6 +9,7 @@ import '../services/gift_service.dart';
 import '../services/person_service.dart';
 import '../services/occasion_service.dart';
 
+// This should ONLY be used in app_state.dart!
 class DatabaseService {
   static late GiftService giftService;
   static late OccasionService occasionService;

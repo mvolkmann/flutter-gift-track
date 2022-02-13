@@ -12,9 +12,9 @@ class PersonPage extends StatefulWidget {
   static const route = '/person';
 
   //TODO: Should this come from appState instead of being passed in?
-  final Person person;
+  final Person? person;
 
-  const PersonPage({required this.person, Key? key}) : super(key: key);
+  const PersonPage({this.person, Key? key}) : super(key: key);
 
   @override
   State<PersonPage> createState() => _PersonPageState();
@@ -28,11 +28,13 @@ class _PersonPageState extends State<PersonPage> {
   void initState() {
     super.initState();
     var person = widget.person;
-    _nameController = TextEditingController(text: person.name);
+    _nameController =
+        TextEditingController(text: person == null ? '' : person.name);
     _nameController.addListener(() {
-      setState(() => widget.person.name = _nameController.text);
+      //TODO: Handle case where person is null to add a new person.
+      setState(() => person.name = _nameController.text);
     });
-    _includeBirthday = person.birthday != null;
+    _includeBirthday = person == null ? false : person.birthday != null;
   }
 
   @override
@@ -43,7 +45,7 @@ class _PersonPageState extends State<PersonPage> {
     return MyPage(
       title: 'Person',
       trailing: MyTextButton(
-        text: 'Done',
+        text: person == null ? 'Add' : 'Update',
         onPressed: () {
           // This is only for adding a new person.
           if (person.name.isNotEmpty) appState.addPerson(person);

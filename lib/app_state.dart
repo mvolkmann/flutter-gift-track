@@ -62,6 +62,7 @@ class AppState extends ChangeNotifier {
   }
 
   void updatePerson(Person p) {
+    DatabaseService.personService.update(p);
     var id = p.id;
     Person person = _people.firstWhere((person) => person.id == id);
     person.name = p.name;

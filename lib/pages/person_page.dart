@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 
 import './my_page.dart';
 import '../models/person.dart';
-import '../services/database_service.dart';
 import '../app_state.dart';
 import '../widgets/my_text_button.dart';
 
@@ -51,7 +50,6 @@ class _PersonPageState extends State<PersonPage> {
           if (_isNew) {
             if (_person.name.isNotEmpty) appState.addPerson(_person);
           } else {
-            DatabaseService.personService.update(_person);
             appState.updatePerson(_person);
           }
           Navigator.pop(context);

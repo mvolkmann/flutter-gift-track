@@ -10,6 +10,8 @@ import '../widgets/my_text_button.dart';
 //TODO: Modify to support both adding and editing a person.
 class PersonPage extends StatefulWidget {
   static const route = '/person';
+
+  //TODO: Should this come from appState instead of being passed in?
   final Person person;
 
   const PersonPage({required this.person, Key? key}) : super(key: key);
@@ -19,27 +21,31 @@ class PersonPage extends StatefulWidget {
 }
 
 class _PersonPageState extends State<PersonPage> {
-  var person = Person(name: '');
   var _includeBirthday = false;
-  final _nameController = TextEditingController(text: '');
+  late TextEditingController _nameController;
 
   @override
   void initState() {
     super.initState();
+    var person = widget.person;
+    _nameController = TextEditingController(text: person.name);
     _nameController.addListener(() {
-      setState(() => person.name = _nameController.text);
+      setState(() => widget.person.name = _nameController.text);
     });
+    _includeBirthday = person.birthday != null;
   }
 
   @override
   Widget build(BuildContext context) {
     var appState = Provider.of<AppState>(context);
+    var person = widget.person;
 
     return MyPage(
       title: 'Person',
       trailing: MyTextButton(
         text: 'Done',
         onPressed: () {
+          // This is only for adding a new person.
           if (person.name.isNotEmpty) appState.addPerson(person);
           Navigator.pop(context);
         },
@@ -49,6 +55,7 @@ class _PersonPageState extends State<PersonPage> {
   }
 
   Widget _buildBody(BuildContext context) {
+    var person = widget.person;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Center(
@@ -66,10 +73,11 @@ class _PersonPageState extends State<PersonPage> {
                 Text('Include Birthday'),
                 CupertinoSwitch(
                   value: _includeBirthday,
-                  onChanged: (value) {
+                  onChanged: (bool value) {
+                    _includeBirthday = value;
                     setState(() {
-                      _includeBirthday = value;
-                      if (!value) person.birthday = DateTime.now();
+                      person.birthday =
+                          _includeBirthday ? DateTime.now() : null;
                     });
                   },
                 ),

@@ -41,7 +41,7 @@ class GiftService {
         location: map['location'],
         name: map['name'],
         price: map['price'],
-        //purchased: map['purchased'],
+        purchased: map['purchased'] == 1,
         websiteUrl: map['websiteUrl'],
       );
     });

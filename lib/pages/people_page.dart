@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 
 import './my_page.dart';
 import './person_page.dart';
+import '../models/person.dart';
 import '../state.dart';
 import '../util.dart' show formatDate;
 import '../widgets/my_text.dart';
@@ -48,6 +49,7 @@ class PeoplePage extends StatelessWidget {
                   return CupertinoListTile(
                     //border: Border.all(color: Colors.green),
                     contentPadding: EdgeInsets.zero,
+                    onTap: () => _edit(context, person),
                     title: MyText(person.name),
                     subtitle: person.birthday == null
                         ? null
@@ -60,6 +62,15 @@ class PeoplePage extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _edit(BuildContext context, Person person) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => PersonPage(person: person),
       ),
     );
   }

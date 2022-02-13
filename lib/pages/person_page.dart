@@ -8,11 +8,11 @@ import '../state.dart';
 import '../widgets/my_text_button.dart';
 
 //TODO: Modify to support both adding and editing a person.
-//TODO: Get selected person from appState.
 class PersonPage extends StatefulWidget {
   static const route = '/person';
+  final Person person;
 
-  const PersonPage({Key? key}) : super(key: key);
+  const PersonPage({required this.person, Key? key}) : super(key: key);
 
   @override
   State<PersonPage> createState() => _PersonPageState();

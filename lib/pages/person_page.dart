@@ -52,7 +52,7 @@ class _PersonPageState extends State<PersonPage> {
             if (_person.name.isNotEmpty) appState.addPerson(_person);
           } else {
             DatabaseService.personService.update(_person);
-            //TODO: Update person in appState.
+            appState.updatePerson(_person);
           }
           Navigator.pop(context);
         },

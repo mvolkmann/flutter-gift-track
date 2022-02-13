@@ -60,4 +60,12 @@ class AppState extends ChangeNotifier {
     _people.remove(p);
     notifyListeners();
   }
+
+  void updatePerson(Person p) {
+    var id = p.id;
+    Person person = _people.firstWhere((person) => person.id == id);
+    person.name = p.name;
+    person.birthday = p.birthday;
+    notifyListeners();
+  }
 }

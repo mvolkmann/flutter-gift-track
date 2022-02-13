@@ -14,7 +14,8 @@ class DatabaseService {
   static late OccasionService occasionService;
   static late PersonService personService;
 
-  static var reset = true;
+  // Set to true to recreate the database with initial data.
+  static var reset = false;
 
   static Future<void> setup() async {
     var db = await _getDatabase();

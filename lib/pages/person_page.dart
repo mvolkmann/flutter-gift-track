@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import './my_page.dart';
 import '../models/person.dart';
+import '../services/database_service.dart';
 import '../state.dart';
 import '../widgets/my_text_button.dart';
 
@@ -50,7 +51,8 @@ class _PersonPageState extends State<PersonPage> {
           if (_isNew) {
             if (_person.name.isNotEmpty) appState.addPerson(_person);
           } else {
-            //TODO: Update an existing person.
+            DatabaseService.personService.update(_person);
+            //TODO: Update person in appState.
           }
           Navigator.pop(context);
         },
@@ -60,7 +62,6 @@ class _PersonPageState extends State<PersonPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    var person = widget.person;
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Center(

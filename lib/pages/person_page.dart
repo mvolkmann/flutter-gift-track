@@ -21,34 +21,37 @@ class PersonPage extends StatefulWidget {
 }
 
 class _PersonPageState extends State<PersonPage> {
+  late bool _isNew;
+  late Person _person;
   var _includeBirthday = false;
   late TextEditingController _nameController;
 
   @override
   void initState() {
     super.initState();
-    var person = widget.person;
-    _nameController =
-        TextEditingController(text: person == null ? '' : person.name);
+    _isNew = widget.person == null;
+    _person = _isNew ? Person(name: '') : widget.person!;
+    _nameController = TextEditingController(text: _person.name);
     _nameController.addListener(() {
-      //TODO: Handle case where person is null to add a new person.
-      setState(() => person.name = _nameController.text);
+      setState(() => _person.name = _nameController.text);
     });
-    _includeBirthday = person == null ? false : person.birthday != null;
+    _includeBirthday = _isNew ? false : _person.birthday != null;
   }
 
   @override
   Widget build(BuildContext context) {
     var appState = Provider.of<AppState>(context);
-    var person = widget.person;
 
     return MyPage(
       title: 'Person',
       trailing: MyTextButton(
-        text: person == null ? 'Add' : 'Update',
+        text: _isNew ? 'Add' : 'Update',
         onPressed: () {
-          // This is only for adding a new person.
-          if (person.name.isNotEmpty) appState.addPerson(person);
+          if (_isNew) {
+            if (_person.name.isNotEmpty) appState.addPerson(_person);
+          } else {
+            //TODO: Update an existing person.
+          }
           Navigator.pop(context);
         },
       ),
@@ -78,7 +81,7 @@ class _PersonPageState extends State<PersonPage> {
                   onChanged: (bool value) {
                     _includeBirthday = value;
                     setState(() {
-                      person.birthday =
+                      _person.birthday =
                           _includeBirthday ? DateTime.now() : null;
                     });
                   },
@@ -89,12 +92,12 @@ class _PersonPageState extends State<PersonPage> {
               SizedBox(
                 height: 150,
                 child: CupertinoDatePicker(
-                  initialDateTime: person.birthday,
+                  initialDateTime: _person.birthday,
                   maximumYear: 2200,
                   minimumYear: 1900,
                   mode: CupertinoDatePickerMode.date,
                   onDateTimeChanged: (DateTime value) {
-                    setState(() => person.birthday = value);
+                    setState(() => _person.birthday = value);
                   },
                 ),
               )

@@ -12,9 +12,9 @@ class PersonPage extends StatefulWidget {
   static const route = '/person';
 
   //TODO: Should this come from appState instead of being passed in?
-  final Person? person;
+  final Person person;
 
-  const PersonPage({this.person, Key? key}) : super(key: key);
+  const PersonPage({required this.person, Key? key}) : super(key: key);
 
   @override
   State<PersonPage> createState() => _PersonPageState();
@@ -29,8 +29,8 @@ class _PersonPageState extends State<PersonPage> {
   @override
   void initState() {
     super.initState();
-    _isNew = widget.person == null;
-    _person = _isNew ? Person(name: '') : widget.person!;
+    _isNew = widget.person.id == 0;
+    _person = _isNew ? Person(name: '') : widget.person;
     _nameController = TextEditingController(text: _person.name);
     _nameController.addListener(() {
       setState(() => _person.name = _nameController.text);

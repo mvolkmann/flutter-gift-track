@@ -1,9 +1,13 @@
 class Occasion {
   DateTime? date;
-  int? id;
+  int id;
   String name;
 
-  Occasion({this.id, required this.name, this.date});
+  Occasion({
+    required this.name,
+    this.id = 0,
+    this.date,
+  });
 
   Map<String, dynamic> toMap() {
     return {

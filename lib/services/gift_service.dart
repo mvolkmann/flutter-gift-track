@@ -29,22 +29,22 @@ class GiftService {
     return database.delete('gifts');
   }
 
-  Future<List<Gift>> getAll() async {
+  Future<Map<int, Gift>> getAll() async {
     final List<Map<String, dynamic>> maps = await database.query('gifts');
-    return List.generate(maps.length, (index) {
-      var map = maps[index];
-      return Gift(
-        date: msToDateTime(map['date']),
-        description: map['description'],
-        id: map['id'],
-        imageUrl: map['imageUrl'],
-        location: map['location'],
-        name: map['name'],
-        price: map['price'],
-        purchased: map['purchased'] == 1,
-        websiteUrl: map['websiteUrl'],
-      );
-    });
+    return <int, Gift>{
+      for (var map in maps)
+        map['id']: Gift(
+          date: msToDateTime(map['date']),
+          description: map['description'],
+          id: map['id'],
+          imageUrl: map['imageUrl'],
+          location: map['location'],
+          name: map['name'],
+          price: map['price'],
+          purchased: map['purchased'] == 1,
+          websiteUrl: map['websiteUrl'],
+        )
+    };
   }
 
   Future<void> update(Gift gift) {

@@ -1,7 +1,7 @@
 class Gift {
   DateTime? date;
   String? description;
-  int? id;
+  int id;
   String? imageUrl;
   String? location;
   String name;
@@ -10,14 +10,14 @@ class Gift {
   String? websiteUrl;
 
   Gift({
-    this.id,
-    this.purchased = false,
+    required this.name,
     this.date,
+    this.id = 0,
     this.price,
+    this.purchased = false,
     this.description,
     this.imageUrl,
     this.location,
-    required this.name,
     this.websiteUrl,
   });
 

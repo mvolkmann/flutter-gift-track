@@ -3,13 +3,17 @@ import './occasion.dart';
 
 class Person {
   DateTime? birthday;
-  int? id;
+  int id;
   String name;
 
   // key is occasion name.
   var giftMap = <String, List<Gift>>{};
 
-  Person({this.birthday, this.id, required this.name});
+  Person({
+    required this.name,
+    this.id = 0,
+    this.birthday,
+  });
 
   void addGift({required Occasion occasion, required Gift gift}) {
     var giftList = giftMap[occasion.name];

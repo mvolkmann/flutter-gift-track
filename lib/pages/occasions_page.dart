@@ -27,7 +27,8 @@ class OccasionsPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     var appState = Provider.of<AppState>(context);
-    var occasions = appState.occasions;
+    var occasions = appState.occasions.values.toList();
+    occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
 
     return Padding(
       padding: const EdgeInsets.all(20),

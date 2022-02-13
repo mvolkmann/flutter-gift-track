@@ -31,16 +31,16 @@ class OccasionService {
     return database.delete('occasions');
   }
 
-  Future<List<Occasion>> getAll() async {
+  Future<Map<int, Occasion>> getAll() async {
     final List<Map<String, dynamic>> maps = await database.query('occasions');
-    return List.generate(maps.length, (index) {
-      var map = maps[index];
-      return Occasion(
-        date: msToDateTime(map['date']),
-        id: map['id'],
-        name: map['name'],
-      );
-    });
+    return <int, Occasion>{
+      for (var map in maps)
+        map['id']: Occasion(
+          date: msToDateTime(map['date']),
+          id: map['id'],
+          name: map['name'],
+        )
+    };
   }
 
   Future<void> update(Occasion occasion) {

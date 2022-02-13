@@ -6,8 +6,8 @@ import './models/person.dart';
 import './services/database_service.dart';
 
 class AppState extends ChangeNotifier {
-  var _occasions = <Occasion>[];
-  var _people = <Person>[];
+  var _occasions = <int, Occasion>{};
+  var _people = <int, Person>{};
 
   AppState() {
     _loadData();
@@ -19,9 +19,9 @@ class AppState extends ChangeNotifier {
     _occasions = await DatabaseService.occasionService.getAll();
   }
 
-  List<Occasion> get occasions => _occasions;
+  Map<int, Occasion> get occasions => _occasions;
 
-  List<Person> get people => _people;
+  Map<int, Person> get people => _people;
 
   void addGift({
     required Person person,
@@ -33,12 +33,12 @@ class AppState extends ChangeNotifier {
   }
 
   void addOccasion(Occasion o) {
-    _occasions.add(o);
+    _occasions[o.id] = o;
     notifyListeners();
   }
 
   void addPerson(Person p) {
-    _people.add(p);
+    _people[p.id] = p;
     notifyListeners();
   }
 
@@ -63,8 +63,7 @@ class AppState extends ChangeNotifier {
 
   void updatePerson(Person p) {
     DatabaseService.personService.update(p);
-    var id = p.id;
-    Person person = _people.firstWhere((person) => person.id == id);
+    Person person = _people[p.id]!;
     person.name = p.name;
     person.birthday = p.birthday;
     notifyListeners();

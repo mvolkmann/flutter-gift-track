@@ -31,17 +31,17 @@ class PersonService {
     return database.delete('people');
   }
 
-  Future<List<Person>> getAll() async {
+  Future<Map<int, Person>> getAll() async {
     final List<Map<String, dynamic>> maps = await database.query('people');
     //TODO: Also populate `giftMap` for each person.
-    return List.generate(maps.length, (index) {
-      var map = maps[index];
-      return Person(
-        birthday: msToDateTime(map['birthday']),
-        id: map['id'],
-        name: map['name'],
-      );
-    });
+    return <int, Person>{
+      for (var map in maps)
+        map['id']: Person(
+          birthday: msToDateTime(map['birthday']),
+          id: map['id'],
+          name: map['name'],
+        )
+    };
   }
 
   Future<void> update(Person person) {

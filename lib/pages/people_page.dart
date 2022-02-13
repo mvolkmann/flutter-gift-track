@@ -32,7 +32,8 @@ class PeoplePage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     var appState = Provider.of<AppState>(context);
-    var people = appState.people;
+    var people = appState.people.values.toList();
+    people.sort((p1, p2) => p1.name.compareTo(p2.name));
 
     return Padding(
       padding: const EdgeInsets.all(20),

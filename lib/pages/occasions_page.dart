@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import './my_page.dart';
 import './occasion_page.dart';
-import '../state.dart';
+import '../app_state.dart';
 import '../widgets/my_text_button.dart';
 
 class OccasionsPage extends StatelessWidget {

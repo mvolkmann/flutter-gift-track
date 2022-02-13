@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import './my_page.dart';
 import '../models/person.dart';
 import '../services/database_service.dart';
-import '../state.dart';
+import '../app_state.dart';
 import '../widgets/my_text_button.dart';
 
 //TODO: Modify to support both adding and editing a person.

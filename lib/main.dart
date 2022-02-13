@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'state.dart';
+import 'app_state.dart';
 import './pages/about_page.dart';
 import './pages/gifts_page.dart';
 import './pages/occasions_page.dart';

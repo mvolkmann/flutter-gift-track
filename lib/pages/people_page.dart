@@ -5,7 +5,7 @@ import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import './my_page.dart';
 import './person_page.dart';
 import '../models/person.dart';
-import '../state.dart';
+import '../app_state.dart';
 import '../util.dart' show formatDate;
 import '../widgets/my_text.dart';
 import '../widgets/my_text_button.dart';
@@ -33,7 +33,6 @@ class PeoplePage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     var appState = Provider.of<AppState>(context);
     var people = appState.people;
-    print('people_page.dart _buildBody: people = $people');
 
     return Padding(
       padding: const EdgeInsets.all(20),

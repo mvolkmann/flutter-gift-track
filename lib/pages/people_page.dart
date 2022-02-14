@@ -7,7 +7,7 @@ import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import './my_page.dart';
 import './person_page.dart';
 import '../app_state.dart';
-//import '../extensions/widget_extensions.dart';
+import '../extensions/widget_extensions.dart';
 import '../models/person.dart';
 import '../util.dart' show formatDate;
 import '../widgets/my_text.dart';
@@ -31,43 +31,34 @@ class PeoplePage extends StatelessWidget {
     people.sort((p1, p2) => p1.name.compareTo(p2.name));
 
     return Scaffold(
-      floatingActionButton: Align(
-        alignment: Alignment(1, 0.86),
-        child: FloatingActionButton(
-          child: Icon(CupertinoIcons.add),
-          elevation: 200,
-          onPressed: () => _add(context),
-        ),
-      ),
+      floatingActionButton: _buildFab(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: Center(
-          child: Column(
-            children: [
-              Text('People Count: ${people.length}'),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: people.length,
-                  itemBuilder: (context, index) {
-                    var person = people[index];
-                    return CupertinoListTile(
-                      //border: Border.all(color: Colors.green),
-                      contentPadding: EdgeInsets.zero,
-                      onTap: () => _edit(context, person),
-                      title: MyText(person.name),
-                      subtitle: person.birthday == null
-                          ? null
-                          : MyText(
-                              formatDate(person.birthday!),
-                            ),
-                    );
-                  },
-                ),
+        child: Column(
+          children: [
+            Text('People Count: ${people.length}'),
+            Expanded(
+              child: ListView.builder(
+                itemCount: people.length,
+                itemBuilder: (context, index) {
+                  var person = people[index];
+                  return CupertinoListTile(
+                    //border: Border.all(color: Colors.green),
+                    contentPadding: EdgeInsets.zero,
+                    onTap: () => _edit(context, person),
+                    title: MyText(person.name),
+                    subtitle: person.birthday == null
+                        ? null
+                        : MyText(
+                            formatDate(person.birthday!),
+                          ),
+                  );
+                },
               ),
-            ],
-          ),
-        ),
+            ),
+          ],
+        ).center,
       ),
     );
   }
@@ -77,6 +68,18 @@ class PeoplePage extends StatelessWidget {
       context,
       CupertinoPageRoute(
         builder: (context) => PersonPage(person: Person(name: '')),
+      ),
+    );
+  }
+
+  Padding _buildFab(BuildContext context) {
+    return Padding(
+      // This moves the FloatingActionButton above bottom navigation area.
+      padding: const EdgeInsets.only(bottom: 47),
+      child: FloatingActionButton(
+        child: Icon(CupertinoIcons.add),
+        elevation: 200,
+        onPressed: () => _add(context),
       ),
     );
   }

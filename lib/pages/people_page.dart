@@ -72,7 +72,7 @@ class PeoplePage extends StatelessWidget {
         //border: Border.all(color: Colors.green),
         contentPadding: EdgeInsets.zero,
         onTap: () => _edit(context, person),
-        title: MyText(person.name + ' - ${person.id}'),
+        title: MyText(person.name),
         subtitle: person.birthday == null
             ? null
             : MyText(

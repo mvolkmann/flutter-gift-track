@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
 import 'package:provider/provider.dart';
 
 import './my_page.dart';
+import '../models/occasion.dart';
 import './occasion_page.dart';
 import '../app_state.dart';
 import '../widgets/my_text_button.dart';
@@ -10,6 +12,15 @@ class OccasionsPage extends StatelessWidget {
   static const route = '/occasions';
 
   OccasionsPage({Key? key}) : super(key: key);
+
+  void _add(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => OccasionPage(occasion: Occasion(name: '')),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,4 +53,14 @@ class OccasionsPage extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildFab(BuildContext context) => Padding(
+        // This moves the FloatingActionButton above bottom navigation area.
+        padding: const EdgeInsets.only(bottom: 47),
+        child: FloatingActionButton(
+          child: Icon(CupertinoIcons.add),
+          elevation: 200,
+          onPressed: () => _add(context),
+        ),
+      );
 }

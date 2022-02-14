@@ -8,11 +8,12 @@ import '../app_state.dart';
 import '../widgets/my_text_button.dart';
 
 //TODO: Modify to support both adding and editing an occasion.
-//TODO: Get selected person from appState.
 class OccasionPage extends StatefulWidget {
   static const route = '/occasion';
 
-  const OccasionPage({Key? key}) : super(key: key);
+  final Occasion occasion;
+
+  const OccasionPage({required this.occasion, Key? key}) : super(key: key);
 
   @override
   State<OccasionPage> createState() => _OccasionPageState();

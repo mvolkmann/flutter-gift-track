@@ -32,13 +32,16 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addOccasion(Occasion o) {
+  void addOccasion(Occasion o) async {
+    if (o.name.isEmpty) return;
+    await DatabaseService.occasionService.create(o);
     _occasions[o.id] = o;
     notifyListeners();
   }
 
-  void addPerson(Person p) {
+  void addPerson(Person p) async {
     if (p.name.isEmpty) return;
+    await DatabaseService.personService.create(p);
     _people[p.id] = p;
     notifyListeners();
   }
@@ -52,13 +55,15 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteOccasion(Occasion o) {
+  void deleteOccasion(Occasion o) async {
+    await DatabaseService.occasionService.delete(o.id);
     _occasions.remove(o);
     notifyListeners();
   }
 
-  void deletePerson(Person p) {
-    _people.remove(p);
+  void deletePerson(Person p) async {
+    await DatabaseService.personService.delete(p.id);
+    _people.remove(p.id);
     notifyListeners();
   }
 

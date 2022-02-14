@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'
-    show FloatingActionButton, FloatingActionButtonLocation, Scaffold;
+import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
 import 'package:provider/provider.dart';
 import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 
@@ -58,7 +57,7 @@ class PeoplePage extends StatelessWidget {
     );
   }
 
-  Padding _buildFab(BuildContext context) => Padding(
+  Widget _buildFab(BuildContext context) => Padding(
         // This moves the FloatingActionButton above bottom navigation area.
         padding: const EdgeInsets.only(bottom: 47),
         child: FloatingActionButton(
@@ -68,12 +67,12 @@ class PeoplePage extends StatelessWidget {
         ),
       );
 
-  CupertinoListTile _buildListTile(BuildContext context, Person person) =>
+  Widget _buildListTile(BuildContext context, Person person) =>
       CupertinoListTile(
         //border: Border.all(color: Colors.green),
         contentPadding: EdgeInsets.zero,
         onTap: () => _edit(context, person),
-        title: MyText(person.name),
+        title: MyText(person.name + ' - ${person.id}'),
         subtitle: person.birthday == null
             ? null
             : MyText(

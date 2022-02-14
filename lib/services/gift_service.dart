@@ -8,7 +8,7 @@ class GiftService {
   GiftService({required this.database});
 
   Future<Gift> create(Gift gift) async {
-    var id = await database.insert(
+    final id = await database.insert(
       'gifts',
       gift.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,

@@ -8,7 +8,7 @@ class OccasionService {
   OccasionService({required this.database});
 
   Future<Occasion> create(Occasion occasion) async {
-    var id = await database.insert(
+    final id = await database.insert(
       'occasions',
       occasion.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,

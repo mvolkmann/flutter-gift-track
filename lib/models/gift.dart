@@ -37,6 +37,6 @@ class Gift {
 
   @override
   String toString() {
-    return 'Gift: $name - $description';
+    return 'Gift: $id $name - $description';
   }
 }

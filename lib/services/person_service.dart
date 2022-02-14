@@ -7,17 +7,15 @@ class PersonService {
 
   PersonService({required this.database});
 
-  Future<Person> create(Person person) async {
-    var id = await database.insert(
-      'people',
-      person.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+  Future<void> create(Person person) async {
+    var map = person.toMap();
+    map.remove('id');
+    var id = await database.insert('people', map);
     person.id = id;
-    return person;
   }
 
   Future<void> delete(int id) {
+    print('person_service.dart delete: id = $id');
     //TODO: Need cascading delete of gifts.
     return database.delete(
       'people',

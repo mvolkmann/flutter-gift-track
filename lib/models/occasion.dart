@@ -19,6 +19,6 @@ class Occasion {
 
   @override
   String toString() {
-    return 'Occasion: $name $date';
+    return 'Occasion: $id $name $date';
   }
 }

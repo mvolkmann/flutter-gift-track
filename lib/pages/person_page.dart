@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
@@ -20,10 +21,11 @@ class PersonPage extends StatefulWidget {
 }
 
 class _PersonPageState extends State<PersonPage> {
+  late AppState _appState;
   late bool _isNew;
   late Person _person;
-  var _includeBirthday = false;
   late TextEditingController _nameController;
+  var _includeBirthday = false;
 
   @override
   void initState() {
@@ -39,23 +41,23 @@ class _PersonPageState extends State<PersonPage> {
 
   @override
   Widget build(BuildContext context) {
-    var appState = Provider.of<AppState>(context);
+    _appState = Provider.of<AppState>(context);
 
     return MyPage(
       title: 'Person',
-      trailing: _buildAddUpdateButton(appState, context),
+      trailing: _buildAddUpdateButton(context),
       child: _buildBody(context),
     );
   }
 
-  MyTextButton _buildAddUpdateButton(AppState appState, BuildContext context) {
+  MyTextButton _buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: _isNew ? 'Add' : 'Update',
       onPressed: () {
         if (_isNew) {
-          appState.addPerson(_person);
+          _appState.addPerson(_person);
         } else {
-          appState.updatePerson(_person);
+          _appState.updatePerson(_person);
         }
         Navigator.pop(context);
       },
@@ -63,14 +65,17 @@ class _PersonPageState extends State<PersonPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _buildNameField(),
-        _buildBirthdayRow(),
-        if (_includeBirthday) _buildDatePicker()
-      ],
-    ).gap(10).center.padding(20);
+    return Scaffold(
+      floatingActionButton: _buildFab(context),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildNameField(),
+          _buildBirthdayRow(),
+          if (_includeBirthday) _buildDatePicker()
+        ],
+      ).gap(10).center.padding(20),
+    );
   }
 
   Widget _buildBirthdayRow() => Row(
@@ -98,6 +103,20 @@ class _PersonPageState extends State<PersonPage> {
           mode: CupertinoDatePickerMode.date,
           onDateTimeChanged: (DateTime value) {
             setState(() => _person.birthday = value);
+          },
+        ),
+      );
+
+  Widget _buildFab(BuildContext context) => Padding(
+        // This moves the FloatingActionButton above bottom navigation area.
+        padding: const EdgeInsets.only(bottom: 47),
+        child: FloatingActionButton(
+          child: Icon(CupertinoIcons.delete),
+          backgroundColor: CupertinoColors.destructiveRed,
+          elevation: 200,
+          onPressed: () {
+            _appState.deletePerson(_person);
+            Navigator.pop(context);
           },
         ),
       );

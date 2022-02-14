@@ -17,6 +17,7 @@ class DatabaseService {
 
   // Set to true to recreate the database with initial data.
   static var reset = false;
+  //static var reset = true;
 
   static Future<void> setup() async {
     var db = await _getDatabase();

@@ -32,34 +32,20 @@ class PeoplePage extends StatelessWidget {
 
     return Scaffold(
       floatingActionButton: _buildFab(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            Text('People Count: ${people.length}'),
-            Expanded(
-              child: ListView.builder(
-                itemCount: people.length,
-                itemBuilder: (context, index) {
-                  var person = people[index];
-                  return CupertinoListTile(
-                    //border: Border.all(color: Colors.green),
-                    contentPadding: EdgeInsets.zero,
-                    onTap: () => _edit(context, person),
-                    title: MyText(person.name),
-                    subtitle: person.birthday == null
-                        ? null
-                        : MyText(
-                            formatDate(person.birthday!),
-                          ),
-                  );
-                },
-              ),
+      body: Column(
+        children: [
+          Text('People Count: ${people.length}'),
+          Expanded(
+            child: ListView.builder(
+              itemCount: people.length,
+              itemBuilder: (context, index) {
+                var person = people[index];
+                return _buildListTile(context, person);
+              },
             ),
-          ],
-        ).center,
-      ),
+          ),
+        ],
+      ).center.padding(20),
     );
   }
 
@@ -72,17 +58,28 @@ class PeoplePage extends StatelessWidget {
     );
   }
 
-  Padding _buildFab(BuildContext context) {
-    return Padding(
-      // This moves the FloatingActionButton above bottom navigation area.
-      padding: const EdgeInsets.only(bottom: 47),
-      child: FloatingActionButton(
-        child: Icon(CupertinoIcons.add),
-        elevation: 200,
-        onPressed: () => _add(context),
-      ),
-    );
-  }
+  Padding _buildFab(BuildContext context) => Padding(
+        // This moves the FloatingActionButton above bottom navigation area.
+        padding: const EdgeInsets.only(bottom: 47),
+        child: FloatingActionButton(
+          child: Icon(CupertinoIcons.add),
+          elevation: 200,
+          onPressed: () => _add(context),
+        ),
+      );
+
+  CupertinoListTile _buildListTile(BuildContext context, Person person) =>
+      CupertinoListTile(
+        //border: Border.all(color: Colors.green),
+        contentPadding: EdgeInsets.zero,
+        onTap: () => _edit(context, person),
+        title: MyText(person.name),
+        subtitle: person.birthday == null
+            ? null
+            : MyText(
+                formatDate(person.birthday!),
+              ),
+      );
 
   void _edit(BuildContext context, Person person) {
     Navigator.push(

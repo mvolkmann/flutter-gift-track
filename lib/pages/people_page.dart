@@ -11,9 +11,7 @@ import '../app_state.dart';
 import '../models/person.dart';
 import '../util.dart' show formatDate;
 import '../widgets/my_text.dart';
-import '../widgets/my_text_button.dart';
 
-// Change this to StatefulWidget to hold only array of people?
 class PeoplePage extends StatelessWidget {
   static const route = '/people';
 
@@ -24,12 +22,6 @@ class PeoplePage extends StatelessWidget {
     return MyPage(
       title: 'People',
       child: _buildBody(context),
-      trailing: MyTextButton(
-        text: 'Add',
-        onPressed: () {
-          Navigator.pushNamed(context, PersonPage.route);
-        },
-      ),
     );
   }
 

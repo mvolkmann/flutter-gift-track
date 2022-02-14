@@ -43,18 +43,22 @@ class _PersonPageState extends State<PersonPage> {
 
     return MyPage(
       title: 'Person',
-      trailing: MyTextButton(
-        text: _isNew ? 'Add' : 'Update',
-        onPressed: () {
-          if (_isNew) {
-            appState.addPerson(_person);
-          } else {
-            appState.updatePerson(_person);
-          }
-          Navigator.pop(context);
-        },
-      ),
+      trailing: _buildAddUpdateButton(appState, context),
       child: _buildBody(context),
+    );
+  }
+
+  MyTextButton _buildAddUpdateButton(AppState appState, BuildContext context) {
+    return MyTextButton(
+      text: _isNew ? 'Add' : 'Update',
+      onPressed: () {
+        if (_isNew) {
+          appState.addPerson(_person);
+        } else {
+          appState.updatePerson(_person);
+        }
+        Navigator.pop(context);
+      },
     );
   }
 
@@ -62,31 +66,27 @@ class _PersonPageState extends State<PersonPage> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        CupertinoTextField(
-          clearButtonMode: OverlayVisibilityMode.always,
-          controller: _nameController,
-          placeholder: 'Name',
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Include Birthday'),
-            _buildBirthdaySwitch(),
-          ],
-        ),
+        _buildNameField(),
+        _buildBirthdayRow(),
         if (_includeBirthday) _buildDatePicker()
-      ].vSpacing(10),
-    ).center.padding(20);
+      ],
+    ).gap(10).center.padding(20);
   }
 
-  CupertinoSwitch _buildBirthdaySwitch() => CupertinoSwitch(
-        value: _includeBirthday,
-        onChanged: (bool value) {
-          _includeBirthday = value;
-          setState(() {
-            _person.birthday = _includeBirthday ? DateTime.now() : null;
-          });
-        },
+  Widget _buildBirthdayRow() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Include Birthday'),
+          CupertinoSwitch(
+            value: _includeBirthday,
+            onChanged: (bool value) {
+              _includeBirthday = value;
+              setState(() {
+                _person.birthday = _includeBirthday ? DateTime.now() : null;
+              });
+            },
+          ),
+        ],
       );
 
   SizedBox _buildDatePicker() => SizedBox(
@@ -100,5 +100,11 @@ class _PersonPageState extends State<PersonPage> {
             setState(() => _person.birthday = value);
           },
         ),
+      );
+
+  CupertinoTextField _buildNameField() => CupertinoTextField(
+        clearButtonMode: OverlayVisibilityMode.always,
+        controller: _nameController,
+        placeholder: 'Name',
       );
 }

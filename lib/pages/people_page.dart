@@ -31,10 +31,13 @@ class PeoplePage extends StatelessWidget {
     people.sort((p1, p2) => p1.name.compareTo(p2.name));
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        child: Icon(CupertinoIcons.add),
-        elevation: 200,
-        onPressed: () => _add(context),
+      floatingActionButton: Align(
+        alignment: Alignment(1, 0.86),
+        child: FloatingActionButton(
+          child: Icon(CupertinoIcons.add),
+          elevation: 200,
+          onPressed: () => _add(context),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: Padding(

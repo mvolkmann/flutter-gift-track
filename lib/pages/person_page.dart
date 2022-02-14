@@ -3,15 +3,14 @@ import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
 import './my_page.dart';
+import '../extensions/widget_extensions.dart';
 import '../models/person.dart';
 import '../app_state.dart';
 import '../widgets/my_text_button.dart';
 
-//TODO: Modify to support both adding and editing a person.
 class PersonPage extends StatefulWidget {
   static const route = '/person';
 
-  //TODO: Should this come from appState instead of being passed in?
   final Person person;
 
   const PersonPage({required this.person, Key? key}) : super(key: key);
@@ -48,7 +47,7 @@ class _PersonPageState extends State<PersonPage> {
         text: _isNew ? 'Add' : 'Update',
         onPressed: () {
           if (_isNew) {
-            if (_person.name.isNotEmpty) appState.addPerson(_person);
+            appState.addPerson(_person);
           } else {
             appState.updatePerson(_person);
           }
@@ -60,49 +59,46 @@ class _PersonPageState extends State<PersonPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CupertinoTextField(
-              clearButtonMode: OverlayVisibilityMode.always,
-              controller: _nameController,
-              placeholder: 'Name',
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Include Birthday'),
-                CupertinoSwitch(
-                  value: _includeBirthday,
-                  onChanged: (bool value) {
-                    _includeBirthday = value;
-                    setState(() {
-                      _person.birthday =
-                          _includeBirthday ? DateTime.now() : null;
-                    });
-                  },
-                ),
-              ],
-            ),
-            if (_includeBirthday)
-              SizedBox(
-                height: 150,
-                child: CupertinoDatePicker(
-                  initialDateTime: _person.birthday,
-                  maximumYear: 2200,
-                  minimumYear: 1900,
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (DateTime value) {
-                    setState(() => _person.birthday = value);
-                  },
-                ),
-              )
-          ].vSpacing(10),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        CupertinoTextField(
+          clearButtonMode: OverlayVisibilityMode.always,
+          controller: _nameController,
+          placeholder: 'Name',
         ),
-      ),
-    );
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Include Birthday'),
+            _buildBirthdaySwitch(),
+          ],
+        ),
+        if (_includeBirthday) _buildDatePicker()
+      ].vSpacing(10),
+    ).center.padding(20);
   }
+
+  CupertinoSwitch _buildBirthdaySwitch() => CupertinoSwitch(
+        value: _includeBirthday,
+        onChanged: (bool value) {
+          _includeBirthday = value;
+          setState(() {
+            _person.birthday = _includeBirthday ? DateTime.now() : null;
+          });
+        },
+      );
+
+  SizedBox _buildDatePicker() => SizedBox(
+        height: 150,
+        child: CupertinoDatePicker(
+          initialDateTime: _person.birthday,
+          maximumYear: 2200,
+          minimumYear: 1900,
+          mode: CupertinoDatePickerMode.date,
+          onDateTimeChanged: (DateTime value) {
+            setState(() => _person.birthday = value);
+          },
+        ),
+      );
 }

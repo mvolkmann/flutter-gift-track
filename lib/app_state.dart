@@ -38,6 +38,7 @@ class AppState extends ChangeNotifier {
   }
 
   void addPerson(Person p) {
+    if (p.name.isEmpty) return;
     _people[p.id] = p;
     notifyListeners();
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
+import 'package:flutter/services.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
@@ -25,16 +26,41 @@ class _GiftPageState extends State<GiftPage> {
   late bool _purchased;
   late Gift _gift;
   late TextEditingController _nameController;
+  late TextEditingController _descriptionController;
+  late TextEditingController _locationController;
+  late TextEditingController _priceController;
 
   @override
   void initState() {
     super.initState();
     _isNew = widget.gift.id == 0;
     _gift = _isNew ? Gift(name: '') : widget.gift;
+
+    _descriptionController = TextEditingController(text: _gift.description);
+    _descriptionController.addListener(() {
+      setState(() => _gift.description = _descriptionController.text);
+    });
+
+    _locationController = TextEditingController(text: _gift.location);
+    _locationController.addListener(() {
+      setState(() => _gift.location = _locationController.text);
+    });
+
     _nameController = TextEditingController(text: _gift.name);
     _nameController.addListener(() {
       setState(() => _gift.name = _nameController.text);
     });
+
+    _priceController = TextEditingController(
+      text: (_gift.price ?? 0).toString(),
+    );
+    _priceController.addListener(() {
+      final text = _priceController.text;
+      print('gift_page.dart x: text = $text');
+      final price = text.isEmpty ? 0 : int.parse(text);
+      setState(() => _gift.price = price);
+    });
+
     _purchased = _gift.purchased;
   }
 
@@ -69,8 +95,24 @@ class _GiftPageState extends State<GiftPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildNameField(),
+          _buildTextField(
+            placeholder: 'Name',
+            controller: _nameController,
+          ),
+          _buildTextField(
+            placeholder: 'Description',
+            controller: _descriptionController,
+          ),
+          _buildTextField(
+            placeholder: 'Price',
+            controller: _priceController,
+            isInt: true,
+          ),
           _buildPurchasedRow(),
+          _buildTextField(
+            placeholder: 'Location',
+            controller: _locationController,
+          ),
         ],
       ).gap(10).center.padding(20),
     );
@@ -90,11 +132,22 @@ class _GiftPageState extends State<GiftPage> {
         ),
       );
 
-  CupertinoTextField _buildNameField() => CupertinoTextField(
-        clearButtonMode: OverlayVisibilityMode.always,
-        controller: _nameController,
-        placeholder: 'Name',
-      );
+  CupertinoTextField _buildTextField({
+    required String placeholder,
+    required TextEditingController controller,
+    bool isInt = false,
+  }) {
+    var formatters = <TextInputFormatter>[];
+    if (isInt) formatters.add(FilteringTextInputFormatter.digitsOnly);
+
+    return CupertinoTextField(
+      clearButtonMode: OverlayVisibilityMode.always,
+      controller: controller,
+      inputFormatters: formatters,
+      keyboardType: isInt ? TextInputType.number : null,
+      placeholder: placeholder,
+    );
+  }
 
   Widget _buildPurchasedRow() => Row(
         mainAxisAlignment: MainAxisAlignment.center,

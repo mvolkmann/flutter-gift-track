@@ -18,9 +18,6 @@ class PeoplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isLoaded = Provider.of<AppState>(context).isLoaded;
-    if (!isLoaded) return CircularProgressIndicator();
-
     return MyPage(
       title: 'People',
       child: _buildBody(context),
@@ -32,22 +29,19 @@ class PeoplePage extends StatelessWidget {
     var people = appState.people.values.toList();
     people.sort((p1, p2) => p1.name.compareTo(p2.name));
 
+    final body = appState.isLoaded
+        ? ListView.builder(
+            itemCount: people.length,
+            itemBuilder: (context, index) {
+              var person = people[index];
+              return _buildListTile(context, person);
+            },
+          )
+        : CircularProgressIndicator();
+
     return Scaffold(
       floatingActionButton: _buildFab(context),
-      body: Column(
-        children: [
-          Text('People Count: ${people.length}'),
-          Expanded(
-            child: ListView.builder(
-              itemCount: people.length,
-              itemBuilder: (context, index) {
-                var person = people[index];
-                return _buildListTile(context, person);
-              },
-            ),
-          ),
-        ],
-      ).center.padding(20),
+      body: body.center.padding(20),
     );
   }
 

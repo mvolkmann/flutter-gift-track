@@ -37,13 +37,17 @@ class AppState extends ChangeNotifier {
 
   Map<int, Person> get people => _people;
 
-  void addGift({
-    required Person person,
-    required Occasion occasion,
-    required Gift gift,
-  }) {
-    person.addGift(occasion: occasion, gift: gift);
-    notifyListeners();
+  void addGift(Gift g) async {
+    print('app_state.dart addGift: entered');
+    if (g.name.isEmpty) return;
+    try {
+      //person.addGift(occasion: occasion, gift: gift);
+      //await _giftService.create(g);
+      //_gifts[g.id] = g;
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
   }
 
   void addOccasion(Occasion o) async {
@@ -68,12 +72,9 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void deleteGift({
-    required Person person,
-    required Occasion occasion,
-    required Gift gift,
-  }) {
-    person.deleteGift(occasion: occasion, gift: gift);
+  void deleteGift(Gift gift) {
+    print('app_state.dart deleteGift: entered');
+    //person.deleteGift(occasion: occasion, gift: gift);
     notifyListeners();
   }
 
@@ -105,6 +106,18 @@ class AppState extends ChangeNotifier {
         content: Text('$error'),
       ),
     );
+  }
+
+  void updateGift(Gift g) {
+    try {
+      //_giftService.update(g);
+      //Gift gift = _gifts[g.id]!;
+      //gift.name = g.name;
+      //gift.purchased = g.purchased;
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
   }
 
   void updateOccasion(Occasion o) {

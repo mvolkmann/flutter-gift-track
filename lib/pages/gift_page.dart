@@ -1,16 +1,13 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
 import './my_page.dart';
 import '../models/gift.dart';
-import '../models/occasion.dart';
-import '../models/person.dart';
 import '../app_state.dart';
 import '../widgets/my_text_button.dart';
 
-//TODO: Modify to support both adding and editing an gift.
-//TODO: Get selected person from appState.
 class GiftPage extends StatefulWidget {
   static const route = '/gift';
 
@@ -23,89 +20,94 @@ class GiftPage extends StatefulWidget {
 }
 
 class _GiftPageState extends State<GiftPage> {
-  var occasion = Occasion(name: ''); // select from wheel
-  var person = Person(name: ''); // select from wheel
-
-  var _includeBirthday = false;
-  final _nameController = TextEditingController(text: '');
+  late AppState _appState;
+  late bool _isNew;
+  late bool _purchased;
+  late Gift _gift;
+  late TextEditingController _nameController;
 
   @override
   void initState() {
     super.initState();
+    _isNew = widget.gift.id == 0;
+    _gift = _isNew ? Gift(name: '') : widget.gift;
+    _nameController = TextEditingController(text: _gift.name);
     _nameController.addListener(() {
-      setState(() => widget.gift.name = _nameController.text);
+      setState(() => _gift.name = _nameController.text);
     });
+    _purchased = _gift.purchased;
   }
 
   @override
   Widget build(BuildContext context) {
-    var appState = Provider.of<AppState>(context);
-    final gift = widget.gift;
+    _appState = Provider.of<AppState>(context);
 
     return MyPage(
       title: 'Gift',
-      trailing: MyTextButton(
-        text: 'Done',
-        onPressed: () {
-          if (gift.name.isNotEmpty) {
-            appState.addGift(
-              person: person,
-              occasion: occasion,
-              gift: gift,
-            );
-          }
-          Navigator.pop(context);
-        },
-      ),
+      trailing: _buildAddUpdateButton(context),
       child: _buildBody(context),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
-    final gift = widget.gift;
-
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CupertinoTextField(
-              clearButtonMode: OverlayVisibilityMode.always,
-              controller: _nameController,
-              placeholder: 'Name',
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Include Birthday'),
-                CupertinoSwitch(
-                  value: _includeBirthday,
-                  onChanged: (value) {
-                    setState(() {
-                      _includeBirthday = value;
-                      if (!value) gift.date = DateTime.now();
-                    });
-                  },
-                ),
-              ],
-            ),
-            if (_includeBirthday)
-              SizedBox(
-                height: 150,
-                child: CupertinoDatePicker(
-                  initialDateTime: gift.date,
-                  maximumYear: 2200,
-                  minimumYear: 1900,
-                  mode: CupertinoDatePickerMode.date,
-                  onDateTimeChanged: (DateTime value) {
-                    setState(() => gift.date = value);
-                  },
-                ),
-              )
-          ].vSpacing(10),
-        ),
-      ),
+  MyTextButton _buildAddUpdateButton(BuildContext context) {
+    return MyTextButton(
+      text: _isNew ? 'Add' : 'Update',
+      onPressed: () {
+        if (_isNew) {
+          _appState.addGift(_gift);
+        } else {
+          _appState.updateGift(_gift);
+        }
+        Navigator.pop(context);
+      },
     );
   }
+
+  Widget _buildBody(BuildContext context) {
+    return Scaffold(
+      floatingActionButton: _buildFab(context),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildNameField(),
+          _buildPurchasedRow(),
+        ],
+      ).gap(10).center.padding(20),
+    );
+  }
+
+  Widget _buildFab(BuildContext context) => Padding(
+        // This moves the FloatingActionButton above bottom navigation area.
+        padding: const EdgeInsets.only(bottom: 47),
+        child: FloatingActionButton(
+          child: Icon(CupertinoIcons.delete),
+          backgroundColor: CupertinoColors.destructiveRed,
+          elevation: 200,
+          onPressed: () {
+            _appState.deleteGift(_gift);
+            Navigator.pop(context);
+          },
+        ),
+      );
+
+  CupertinoTextField _buildNameField() => CupertinoTextField(
+        clearButtonMode: OverlayVisibilityMode.always,
+        controller: _nameController,
+        placeholder: 'Name',
+      );
+
+  Widget _buildPurchasedRow() => Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Purchased?'),
+          CupertinoSwitch(
+            value: _purchased,
+            onChanged: (value) {
+              setState(() {
+                _purchased = value;
+              });
+            },
+          ),
+        ],
+      );
 }

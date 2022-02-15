@@ -77,17 +77,17 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteOccasion(Occasion o) async {
+  Future<void> deleteOccasion(Occasion o) async {
     try {
       await _occasionService.delete(o.id);
-      _occasions.remove(o);
+      _occasions.remove(o.id);
       notifyListeners();
     } catch (e) {
       showError(e);
     }
   }
 
-  void deletePerson(Person p) async {
+  Future<void> deletePerson(Person p) async {
     try {
       await _personService.delete(p.id);
       _people.remove(p.id);

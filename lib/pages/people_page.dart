@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 
@@ -18,6 +18,9 @@ class PeoplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isLoaded = Provider.of<AppState>(context).isLoaded;
+    if (!isLoaded) return CircularProgressIndicator();
+
     return MyPage(
       title: 'People',
       child: _buildBody(context),

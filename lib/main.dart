@@ -16,10 +16,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var state = AppState();
     return CupertinoApp(
       home: ChangeNotifierProvider(
-        create: (context) => state,
+        create: (context) => AppState(context: context),
         child: HomePage(),
       ),
       theme: CupertinoThemeData(

@@ -1,22 +1,36 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 import './models/gift.dart';
 import './models/occasion.dart';
 import './models/person.dart';
 import './services/database_service.dart';
+import './services/occasion_service.dart';
+import './services/person_service.dart';
 
 class AppState extends ChangeNotifier {
   var _occasions = <int, Occasion>{};
   var _people = <int, Person>{};
+  late OccasionService _occasionService;
+  late PersonService _personService;
+  BuildContext context;
+  var isLoaded = false;
 
-  AppState() {
+  AppState({required this.context}) {
     _loadData();
   }
 
   _loadData() async {
-    await DatabaseService.setup();
-    _people = await DatabaseService.personService.getAll();
-    _occasions = await DatabaseService.occasionService.getAll();
+    try {
+      await DatabaseService.setup();
+      _occasionService = DatabaseService.occasionService;
+      _occasions = await _occasionService.getAll();
+      _personService = DatabaseService.personService;
+      _people = await _personService.getAll();
+      isLoaded = true;
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
   }
 
   Map<int, Occasion> get occasions => _occasions;
@@ -34,16 +48,24 @@ class AppState extends ChangeNotifier {
 
   void addOccasion(Occasion o) async {
     if (o.name.isEmpty) return;
-    await DatabaseService.occasionService.create(o);
-    _occasions[o.id] = o;
-    notifyListeners();
+    try {
+      await _occasionService.create(o);
+      _occasions[o.id] = o;
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
   }
 
   void addPerson(Person p) async {
     if (p.name.isEmpty) return;
-    await DatabaseService.personService.create(p);
-    _people[p.id] = p;
-    notifyListeners();
+    try {
+      await _personService.create(p);
+      _people[p.id] = p;
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
   }
 
   void deleteGift({
@@ -56,22 +78,44 @@ class AppState extends ChangeNotifier {
   }
 
   void deleteOccasion(Occasion o) async {
-    await DatabaseService.occasionService.delete(o.id);
-    _occasions.remove(o);
-    notifyListeners();
+    try {
+      await _occasionService.delete(o.id);
+      _occasions.remove(o);
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
   }
 
   void deletePerson(Person p) async {
-    await DatabaseService.personService.delete(p.id);
-    _people.remove(p.id);
-    notifyListeners();
+    try {
+      await _personService.delete(p.id);
+      _people.remove(p.id);
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
+  }
+
+  void showError(error) {
+    showCupertinoDialog(
+      context: context,
+      builder: (_) => CupertinoAlertDialog(
+        title: Text('Data Setup Error'),
+        content: Text('$error'),
+      ),
+    );
   }
 
   void updatePerson(Person p) {
-    DatabaseService.personService.update(p);
-    Person person = _people[p.id]!;
-    person.name = p.name;
-    person.birthday = p.birthday;
-    notifyListeners();
+    try {
+      _personService.update(p);
+      Person person = _people[p.id]!;
+      person.name = p.name;
+      person.birthday = p.birthday;
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
   }
 }

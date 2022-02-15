@@ -37,8 +37,8 @@ class GiftsPage extends StatelessWidget {
       children: [
         Row(
           children: [
-            _buildPicker(people),
-            _buildPicker(occasions),
+            _buildPicker(context, 'Person', people),
+            _buildPicker(context, 'Occasion', occasions),
           ],
         ),
         Text('Add gift list here.'),
@@ -46,26 +46,33 @@ class GiftsPage extends StatelessWidget {
     );
   }
 
-  Flexible _buildPicker(List<Named> items) {
+  Flexible _buildPicker(BuildContext context, String title, List<Named> items) {
     const itemHeight = 30.0;
     const pickerHeight = 150.0;
     final decoration = BoxDecoration(
-      border: Border.all(color: CupertinoColors.destructiveRed),
+      border: Border.all(color: CupertinoColors.lightBackgroundGray),
     );
+    //var titleStyle = CupertinoTheme.of(context).textTheme.navTitleTextStyle;
+    var titleStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
 
     return Flexible(
-      child: Container(
-        child: CupertinoPicker.builder(
-          childCount: items.length,
-          itemBuilder: (_, index) => Text(items[index].name),
-          itemExtent: itemHeight,
-          onSelectedItemChanged: (index) {
-            //selectedPerson = people[index],
-            print('gifts_page.dart _buildBody: index = $index');
-          },
-        ),
-        decoration: decoration,
-        height: pickerHeight,
+      child: Column(
+        children: [
+          Text(title, style: titleStyle),
+          Container(
+            child: CupertinoPicker.builder(
+              childCount: items.length,
+              itemBuilder: (_, index) => Text(items[index].name),
+              itemExtent: itemHeight,
+              onSelectedItemChanged: (index) {
+                //selectedPerson = people[index],
+                print('gifts_page.dart _buildBody: index = $index');
+              },
+            ),
+            decoration: decoration,
+            height: pickerHeight,
+          ),
+        ],
       ),
     );
   }

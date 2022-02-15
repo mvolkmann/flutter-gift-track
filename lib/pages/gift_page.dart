@@ -14,14 +14,15 @@ import '../widgets/my_text_button.dart';
 class GiftPage extends StatefulWidget {
   static const route = '/gift';
 
-  const GiftPage({Key? key}) : super(key: key);
+  final Gift gift;
+
+  const GiftPage({required this.gift, Key? key}) : super(key: key);
 
   @override
   State<GiftPage> createState() => _GiftPageState();
 }
 
 class _GiftPageState extends State<GiftPage> {
-  var gift = Gift(name: '');
   var occasion = Occasion(name: ''); // select from wheel
   var person = Person(name: ''); // select from wheel
 
@@ -32,13 +33,14 @@ class _GiftPageState extends State<GiftPage> {
   void initState() {
     super.initState();
     _nameController.addListener(() {
-      setState(() => gift.name = _nameController.text);
+      setState(() => widget.gift.name = _nameController.text);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     var appState = Provider.of<AppState>(context);
+    final gift = widget.gift;
 
     return MyPage(
       title: 'Gift',
@@ -60,6 +62,8 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   Widget _buildBody(BuildContext context) {
+    final gift = widget.gift;
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: Center(

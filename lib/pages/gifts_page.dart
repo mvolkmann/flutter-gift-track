@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
 import 'package:provider/provider.dart';
 
 import './gift_page.dart';
 import './my_page.dart';
 import '../app_state.dart';
+import '../extensions/widget_extensions.dart';
+import '../models/gift.dart';
 import '../models/named.dart';
 import '../widgets/my_text_button.dart';
 
@@ -11,6 +14,15 @@ class GiftsPage extends StatelessWidget {
   static const route = '/gifts';
 
   GiftsPage({Key? key}) : super(key: key);
+
+  void _add(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => GiftPage(gift: Gift(name: '')),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,18 +45,31 @@ class GiftsPage extends StatelessWidget {
     occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
     people.sort((p1, p2) => p1.name.compareTo(p2.name));
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            _buildPicker(context, 'Person', people),
-            _buildPicker(context, 'Occasion', occasions),
-          ],
-        ),
-        Text('Add gift list here.'),
-      ],
+    return Scaffold(
+      floatingActionButton: _buildFab(context),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              _buildPicker(context, 'Person', people),
+              _buildPicker(context, 'Occasion', occasions),
+            ],
+          ),
+          Text('Add gift list here.'),
+        ],
+      ).center.padding(20),
     );
   }
+
+  Widget _buildFab(BuildContext context) => Padding(
+        // This moves the FloatingActionButton above bottom navigation area.
+        padding: const EdgeInsets.only(bottom: 47),
+        child: FloatingActionButton(
+          child: Icon(CupertinoIcons.add),
+          elevation: 200,
+          onPressed: () => _add(context),
+        ),
+      );
 
   Flexible _buildPicker(BuildContext context, String title, List<Named> items) {
     const itemHeight = 30.0;

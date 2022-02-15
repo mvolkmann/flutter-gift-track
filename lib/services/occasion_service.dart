@@ -7,14 +7,11 @@ class OccasionService {
 
   OccasionService({required this.database});
 
-  Future<Occasion> create(Occasion occasion) async {
-    final id = await database.insert(
-      'occasions',
-      occasion.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
+  Future<void> create(Occasion occasion) async {
+    final map = occasion.toMap();
+    map.remove('id');
+    final id = await database.insert('occasions', map);
     occasion.id = id;
-    return occasion;
   }
 
   Future<void> delete(int id) {

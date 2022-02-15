@@ -8,9 +8,9 @@ class PersonService {
   PersonService({required this.database});
 
   Future<void> create(Person person) async {
-    var map = person.toMap();
+    final map = person.toMap();
     map.remove('id');
-    var id = await database.insert('people', map);
+    final id = await database.insert('people', map);
     person.id = id;
   }
 

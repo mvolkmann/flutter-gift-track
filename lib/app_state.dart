@@ -107,6 +107,18 @@ class AppState extends ChangeNotifier {
     );
   }
 
+  void updateOccasion(Occasion o) {
+    try {
+      _occasionService.update(o);
+      Occasion occasion = _occasions[o.id]!;
+      occasion.name = o.name;
+      occasion.date = o.date;
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
+  }
+
   void updatePerson(Person p) {
     try {
       _personService.update(p);

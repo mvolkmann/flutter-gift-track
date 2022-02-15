@@ -9,6 +9,8 @@ import '../models/occasion.dart';
 import '../app_state.dart';
 import '../widgets/my_text_button.dart';
 
+const fakeYear = 1;
+
 class OccasionPage extends StatefulWidget {
   static const route = '/occasion';
 
@@ -89,7 +91,7 @@ class _OccasionPageState extends State<OccasionPage> {
               setState(() {
                 if (_includeDate) {
                   final now = DateTime.now();
-                  _occasion.date = DateTime(1, now.month, now.day);
+                  _occasion.date = DateTime(fakeYear, now.month, now.day);
                 } else {
                   _occasion.date = null;
                 }
@@ -103,12 +105,11 @@ class _OccasionPageState extends State<OccasionPage> {
         height: 150,
         child: CupertinoDatePicker(
           initialDateTime: _occasion.date,
-          maximumYear: 1,
-          minimumYear: 1,
+          maximumYear: fakeYear,
+          minimumYear: fakeYear,
           mode: CupertinoDatePickerMode.date,
           onDateTimeChanged: (DateTime value) {
-            // Set year to one.
-            value = DateTime(1, value.month, value.day);
+            value = DateTime(fakeYear, value.month, value.day);
             setState(() => _occasion.date = value);
           },
         ),

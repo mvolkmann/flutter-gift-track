@@ -2,7 +2,7 @@
 import 'package:intl/intl.dart' show DateFormat;
 
 String formatDate(DateTime date) {
-  final format = date.year == 0 ? 'M/d' : 'M/d/y';
+  final format = date.year <= 1 ? 'M/d' : 'M/d/y';
   return DateFormat(format).format(date);
 }
 

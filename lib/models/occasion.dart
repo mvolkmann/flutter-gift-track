@@ -1,13 +1,14 @@
-class Occasion {
+import './named.dart';
+
+class Occasion extends Named {
   DateTime? date;
   int id;
-  String name;
 
   Occasion({
-    required this.name,
+    required String name,
     this.id = 0,
     this.date,
-  });
+  }) : super(name: name);
 
   Map<String, dynamic> toMap() {
     return {

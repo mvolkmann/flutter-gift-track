@@ -1,19 +1,19 @@
 import './gift.dart';
+import './named.dart';
 import './occasion.dart';
 
-class Person {
+class Person extends Named {
   DateTime? birthday;
   int id;
-  String name;
 
   // key is occasion name.
   var giftMap = <String, List<Gift>>{};
 
   Person({
-    required this.name,
+    required String name,
     this.id = 0,
     this.birthday,
-  });
+  }) : super(name: name);
 
   void addGift({required Occasion occasion, required Gift gift}) {
     var giftList = giftMap[occasion.name];

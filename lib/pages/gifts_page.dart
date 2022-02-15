@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import './gift_page.dart';
 import './my_page.dart';
 import '../app_state.dart';
+import '../models/named.dart';
 import '../widgets/my_text_button.dart';
 
 class GiftsPage extends StatelessWidget {
@@ -26,12 +27,6 @@ class GiftsPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    const itemHeight = 30.0;
-    const pickerHeight = 150.0;
-    final decoration = BoxDecoration(
-      border: Border.all(color: CupertinoColors.destructiveRed),
-    );
-
     var appState = Provider.of<AppState>(context);
     var occasions = appState.occasions.values.toList();
     var people = appState.people.values.toList();
@@ -42,41 +37,36 @@ class GiftsPage extends StatelessWidget {
       children: [
         Row(
           children: [
-            Flexible(
-              child: Container(
-                child: CupertinoPicker.builder(
-                  childCount: people.length,
-                  itemBuilder: (_, index) => Text(people[index].name),
-                  itemExtent: itemHeight,
-                  onSelectedItemChanged: (index) {
-                    //selectedPerson = people[index],
-                    print('gifts_page.dart _buildBody: people index = $index');
-                  },
-                ),
-                decoration: decoration,
-                height: pickerHeight,
-              ),
-            ),
-            Flexible(
-              child: Container(
-                child: CupertinoPicker.builder(
-                  childCount: occasions.length,
-                  itemBuilder: (_, index) => Text(occasions[index].name),
-                  itemExtent: itemHeight,
-                  onSelectedItemChanged: (index) {
-                    //selectedOccasions = occasions[index],
-                    print(
-                        'gifts_page.dart _buildBody: occasions index = $index');
-                  },
-                ),
-                decoration: decoration,
-                height: pickerHeight,
-              ),
-            ),
+            _buildPicker(people),
+            _buildPicker(occasions),
           ],
         ),
         Text('Add gift list here.'),
       ],
+    );
+  }
+
+  Flexible _buildPicker(List<Named> items) {
+    const itemHeight = 30.0;
+    const pickerHeight = 150.0;
+    final decoration = BoxDecoration(
+      border: Border.all(color: CupertinoColors.destructiveRed),
+    );
+
+    return Flexible(
+      child: Container(
+        child: CupertinoPicker.builder(
+          childCount: items.length,
+          itemBuilder: (_, index) => Text(items[index].name),
+          itemExtent: itemHeight,
+          onSelectedItemChanged: (index) {
+            //selectedPerson = people[index],
+            print('gifts_page.dart _buildBody: index = $index');
+          },
+        ),
+        decoration: decoration,
+        height: pickerHeight,
+      ),
     );
   }
 }

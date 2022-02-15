@@ -16,6 +16,15 @@ class PeoplePage extends StatelessWidget {
 
   const PeoplePage({Key? key}) : super(key: key);
 
+  void _add(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => PersonPage(person: Person(name: '')),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return MyPage(
@@ -42,15 +51,6 @@ class PeoplePage extends StatelessWidget {
     return Scaffold(
       floatingActionButton: _buildFab(context),
       body: body.center.padding(20),
-    );
-  }
-
-  void _add(BuildContext context) {
-    Navigator.push(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => PersonPage(person: Person(name: '')),
-      ),
     );
   }
 

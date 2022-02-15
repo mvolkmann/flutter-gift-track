@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 
 import './my_page.dart';
-import '../models/occasion.dart';
 import './occasion_page.dart';
 import '../app_state.dart';
-import '../widgets/my_text_button.dart';
+import '../extensions/widget_extensions.dart';
+import '../models/occasion.dart';
+import '../util.dart' show formatDate;
+import '../widgets/my_text.dart';
 
 class OccasionsPage extends StatelessWidget {
   static const route = '/occasions';
@@ -27,12 +30,6 @@ class OccasionsPage extends StatelessWidget {
     return MyPage(
       title: 'Occasions',
       child: _buildBody(context),
-      trailing: MyTextButton(
-        text: 'Add',
-        onPressed: () {
-          Navigator.pushNamed(context, OccasionPage.route);
-        },
-      ),
     );
   }
 
@@ -41,16 +38,19 @@ class OccasionsPage extends StatelessWidget {
     var occasions = appState.occasions.values.toList();
     occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
 
-    return Padding(
-      padding: const EdgeInsets.all(20),
-      child: Center(
-        child: Column(
-          children: [
-            Text('Occasion Count: ${occasions.length}'),
-            for (var occasion in occasions) Text('name = ${occasion.name}')
-          ],
-        ),
-      ),
+    final body = appState.isLoaded
+        ? ListView.builder(
+            itemCount: occasions.length,
+            itemBuilder: (context, index) {
+              var occasion = occasions[index];
+              return _buildListTile(context, occasion);
+            },
+          )
+        : CircularProgressIndicator();
+
+    return Scaffold(
+      floatingActionButton: _buildFab(context),
+      body: body.center.padding(20),
     );
   }
 
@@ -63,4 +63,26 @@ class OccasionsPage extends StatelessWidget {
           onPressed: () => _add(context),
         ),
       );
+
+  Widget _buildListTile(BuildContext context, Occasion occasion) =>
+      CupertinoListTile(
+        //border: Border.all(color: Colors.green),
+        contentPadding: EdgeInsets.zero,
+        onTap: () => _edit(context, occasion),
+        title: MyText(occasion.name),
+        subtitle: occasion.date == null
+            ? null
+            : MyText(
+                formatDate(occasion.date!),
+              ),
+      );
+
+  void _edit(BuildContext context, Occasion occasion) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => OccasionPage(occasion: occasion),
+      ),
+    );
+  }
 }

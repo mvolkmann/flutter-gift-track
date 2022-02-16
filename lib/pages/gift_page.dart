@@ -56,7 +56,6 @@ class _GiftPageState extends State<GiftPage> {
     );
     _priceController.addListener(() {
       final text = _priceController.text;
-      print('gift_page.dart x: text = $text');
       final price = text.isEmpty ? 0 : int.parse(text);
       setState(() => _gift.price = price);
     });
@@ -67,10 +66,13 @@ class _GiftPageState extends State<GiftPage> {
   @override
   Widget build(BuildContext context) {
     _appState = Provider.of<AppState>(context);
+    final occasion = _appState.selectedOccasion!;
+    final person = _appState.selectedPerson!;
+    final name = _nameController.text;
 
     return MyPage(
-      title: 'Gift',
-      trailing: _buildAddUpdateButton(context),
+      title: '${occasion.name} Gift for ${person.name}',
+      trailing: name.isEmpty ? null : _buildAddUpdateButton(context),
       child: _buildBody(context),
     );
   }

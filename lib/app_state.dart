@@ -8,12 +8,16 @@ import './services/occasion_service.dart';
 import './services/person_service.dart';
 
 class AppState extends ChangeNotifier {
-  var _occasions = <int, Occasion>{};
-  var _people = <int, Person>{};
   late OccasionService _occasionService;
   late PersonService _personService;
+
+  var _occasions = <int, Occasion>{};
+  var _people = <int, Person>{};
+
   BuildContext context;
   var isLoaded = false;
+  Occasion? _selectedOccasion;
+  Person? _selectedPerson;
 
   AppState({required this.context}) {
     _loadData();
@@ -34,8 +38,9 @@ class AppState extends ChangeNotifier {
   }
 
   Map<int, Occasion> get occasions => _occasions;
-
   Map<int, Person> get people => _people;
+  Occasion? get selectedOccasion => _selectedOccasion;
+  Person? get selectedPerson => _selectedPerson;
 
   void addGift(Gift g) async {
     print('app_state.dart addGift: entered');
@@ -96,6 +101,16 @@ class AppState extends ChangeNotifier {
     } catch (e) {
       showError(e);
     }
+  }
+
+  void selectOccasion(Occasion o, {bool silent = false}) {
+    _selectedOccasion = o;
+    if (!silent) notifyListeners();
+  }
+
+  void selectPerson(Person p, {bool silent = false}) {
+    _selectedPerson = p;
+    if (!silent) notifyListeners();
   }
 
   void showError(error) {

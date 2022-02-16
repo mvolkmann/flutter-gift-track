@@ -8,6 +8,8 @@ import '../app_state.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/gift.dart';
 import '../models/named.dart';
+import '../models/occasion.dart';
+import '../models/person.dart';
 import '../widgets/my_text_button.dart';
 
 class GiftsPage extends StatelessWidget {
@@ -39,11 +41,17 @@ class GiftsPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    var appState = Provider.of<AppState>(context);
-    var occasions = appState.occasions.values.toList();
-    var people = appState.people.values.toList();
+    final appState = Provider.of<AppState>(context);
+    final occasions = appState.occasions.values.toList();
+    final people = appState.people.values.toList();
     occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
     people.sort((p1, p2) => p1.name.compareTo(p2.name));
+    if (occasions.isNotEmpty) {
+      appState.selectOccasion(occasions[0], silent: true);
+    }
+    if (people.isNotEmpty) {
+      appState.selectPerson(people[0], silent: true);
+    }
 
     return Scaffold(
       floatingActionButton: _buildFab(context),
@@ -90,8 +98,13 @@ class GiftsPage extends StatelessWidget {
               itemBuilder: (_, index) => Text(items[index].name),
               itemExtent: itemHeight,
               onSelectedItemChanged: (index) {
-                //selectedPerson = people[index],
-                print('gifts_page.dart _buildBody: index = $index');
+                final appState = Provider.of<AppState>(context);
+                if (title == 'Person') {
+                  appState.selectPerson(items[index] as Person);
+                }
+                if (title == 'Occasion') {
+                  appState.selectOccasion(items[index] as Occasion);
+                }
               },
             ),
             decoration: decoration,

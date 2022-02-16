@@ -14,10 +14,12 @@ class DatabaseService {
   static late GiftService giftService;
   static late OccasionService occasionService;
   static late PersonService personService;
+  static late Occasion _firstOccasion;
+  static late Person _firstPerson;
 
   // Set to true to recreate the database with initial data.
-  static var reset = false;
-  //static var reset = true;
+  //static var reset = false;
+  static var reset = true;
 
   static Future<void> setup() async {
     var db = await _getDatabase();
@@ -25,11 +27,7 @@ class DatabaseService {
     occasionService = OccasionService(database: db);
     personService = PersonService(database: db);
     if (reset) {
-      await personService.deleteAll();
-      await occasionService.deleteAll();
-      //TODO: Maybe this isn't needed if gifts are deleted through cascades.
-      //await giftService.deleteAll();
-
+      await _createTables(db);
       await _createPeople();
       await _createOccasions();
       await _createGifts();
@@ -37,26 +35,42 @@ class DatabaseService {
   }
 
   static Future<void> _createGifts() async {
-    _createGift(name: 'socks');
-    _createGift(name: 'laptop', description: 'MacBook Pro');
+    _createGift(
+      person: _firstPerson,
+      occasion: _firstOccasion,
+      name: 'socks',
+    );
+    _createGift(
+      person: _firstPerson,
+      occasion: _firstOccasion,
+      name: 'laptop',
+      description: 'MacBook Pro',
+    );
   }
 
   static Future<void> _createOccasions() async {
-    _createOccasion(name: 'Birthday');
+    _firstOccasion = await _createOccasion(name: 'Birthday');
     _createOccasion(name: 'Christmas', date: DateTime(0, 12, 25));
   }
 
   static Future<void> _createPeople() async {
-    _createPerson(name: 'Mark', birthday: DateTime(1961, 4, 16));
+    _firstPerson =
+        await _createPerson(name: 'Mark', birthday: DateTime(1961, 4, 16));
     _createPerson(name: 'Tami', birthday: DateTime(1961, 9, 9));
   }
 
   static Future<Gift> _createGift({
+    required Person person,
+    required Occasion occasion,
     required String name,
     String? description,
   }) async {
     var gift = Gift(description: description, name: name);
-    await giftService.create(gift);
+    await giftService.create(
+      person: person,
+      occasion: occasion,
+      gift: gift,
+    );
     return gift;
   }
 
@@ -83,11 +97,31 @@ class DatabaseService {
 
     return openDatabase(
       join(await getDatabasesPath(), 'dog.db'),
+      onConfigure: (db) async {
+        if (reset) {
+          final tables = ['gifts', 'occasions', 'people'];
+          for (var table in tables) {
+            await db.execute('drop table if exists $table');
+          }
+        }
+      },
       onCreate: (db, version) async {
         // This is only called if the database does not yet exist.
         reset = true;
+        _createTables(db);
+      },
+      // The version can be used to perform database upgrades and downgrades.
+      version: 1,
+    );
+  }
 
-        await db.execute('''
+  static Future<void> _createTables(Database db) async {
+    final tables = ['gifts', 'occasions', 'people'];
+    for (var table in tables) {
+      await db.execute('drop table if exists $table');
+    }
+
+    await db.execute('''
           create table gifts(
             id integer primary key autoincrement,
             date numeric,
@@ -95,30 +129,28 @@ class DatabaseService {
             imageUrl text,
             location text,
             name text,
+            occasionId integer,
+            personId integer,
             price integer,
             purchased numeric,
-            websiteUrl text
+            websiteUrl text,
+            foreign key(occasionId) references occasions(id),
+            foreign key(personId) references people(id)
           )
         ''');
-
-        await db.execute('''
+    await db.execute('''
           create table occasions(
             id integer primary key autoincrement,
             date numeric,
             name text
           )
         ''');
-
-        await db.execute('''
+    await db.execute('''
           create table people(
             id integer primary key autoincrement,
             birthday numeric,
             name text
           )
         ''');
-      },
-      // The version can be used to perform database upgrades and downgrades.
-      version: 1,
-    );
   }
 }

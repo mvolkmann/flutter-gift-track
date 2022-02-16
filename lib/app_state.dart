@@ -4,10 +4,12 @@ import './models/gift.dart';
 import './models/occasion.dart';
 import './models/person.dart';
 import './services/database_service.dart';
+import './services/gift_service.dart';
 import './services/occasion_service.dart';
 import './services/person_service.dart';
 
 class AppState extends ChangeNotifier {
+  late GiftService _giftService;
   late OccasionService _occasionService;
   late PersonService _personService;
 
@@ -30,6 +32,7 @@ class AppState extends ChangeNotifier {
       _occasions = await _occasionService.getAll();
       _personService = DatabaseService.personService;
       _people = await _personService.getAll();
+      _giftService = DatabaseService.giftService;
       isLoaded = true;
       notifyListeners();
     } catch (e) {
@@ -45,10 +48,21 @@ class AppState extends ChangeNotifier {
   void addGift(Gift g) async {
     print('app_state.dart addGift: entered');
     if (g.name.isEmpty) return;
+
+    if (_selectedPerson == null) {
+      throw 'GiftService addGift requires a selected person.';
+    }
+
+    if (_selectedOccasion == null) {
+      throw 'GiftService addGift requires a selected occasion.';
+    }
+
     try {
-      //person.addGift(occasion: occasion, gift: gift);
-      //await _giftService.create(g);
-      //_gifts[g.id] = g;
+      await _giftService.create(
+        person: _selectedPerson!,
+        occasion: _selectedOccasion!,
+        gift: g,
+      );
       notifyListeners();
     } catch (e) {
       showError(e);

@@ -115,9 +115,19 @@ class _GiftPageState extends State<GiftPage> {
             placeholder: 'Location',
             controller: _locationController,
           ),
+          _buildButtons(),
         ],
       ).gap(10).center.padding(20),
     );
+  }
+
+  Widget _buildButtons() {
+    return Row(
+      children: [
+        CupertinoButton.filled(child: Text('Move'), onPressed: _moveGift),
+        CupertinoButton.filled(child: Text('Copy'), onPressed: _copyGift),
+      ],
+    ).gap(10);
   }
 
   Widget _buildFab(BuildContext context) => Padding(
@@ -165,4 +175,12 @@ class _GiftPageState extends State<GiftPage> {
           ),
         ],
       );
+
+  void _copyGift() {
+    print('gift_page.dart copyGift: entered');
+  }
+
+  void _moveGift() {
+    print('gift_page.dart moveGift: entered');
+  }
 }

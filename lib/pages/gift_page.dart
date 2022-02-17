@@ -191,7 +191,8 @@ class _GiftPageState extends State<GiftPage> {
       context: context,
       onPressed: () {
         _appState.copyGift(_gift);
-        Navigator.pop(context);
+        Navigator.pop(context); // pops bottom sheet
+        Navigator.pop(context); // pops gift page
       },
     );
   }
@@ -203,7 +204,8 @@ class _GiftPageState extends State<GiftPage> {
       context: context,
       onPressed: () {
         _appState.moveGift(_gift);
-        Navigator.pop(context);
+        Navigator.pop(context); // pops bottom sheet
+        Navigator.pop(context); // pops gift page
       },
     );
   }

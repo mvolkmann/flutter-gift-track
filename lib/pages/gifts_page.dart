@@ -1,7 +1,6 @@
 import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import './gift_page.dart';
@@ -14,6 +13,7 @@ import '../models/occasion.dart';
 import '../models/person.dart';
 import '../widgets/my_text.dart';
 import '../widgets/my_text_button.dart';
+import '../util.dart' show formatPrice;
 
 class GiftsPage extends StatefulWidget {
   static const route = '/gifts';
@@ -25,7 +25,6 @@ class GiftsPage extends StatefulWidget {
 }
 
 class _GiftsPageState extends State<GiftsPage> {
-  final numberFormat = NumberFormat.decimalPattern();
   var _gifts = <Gift>[];
   var _occasions = <Occasion>[];
   var _people = <Person>[];
@@ -54,10 +53,6 @@ class _GiftsPageState extends State<GiftsPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final total = _gifts.fold(
-      0,
-      (int acc, Gift gift) => acc + (gift.price ?? 0),
-    );
     return Scaffold(
       floatingActionButton: _buildFab(context),
       body: FutureBuilder(
@@ -69,6 +64,7 @@ class _GiftsPageState extends State<GiftsPage> {
           if (snapshot.connectionState != ConnectionState.done) {
             return CircularProgressIndicator();
           }
+
           return Column(
             children: [
               Row(
@@ -81,7 +77,7 @@ class _GiftsPageState extends State<GiftsPage> {
               for (var gift in _gifts) _buildListTile(gift),
               Spacer(),
               Text(
-                'Total: \$${numberFormat.format(total)}',
+                'Total: ${formatPrice(_getTotal())}',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ).margin(EdgeInsets.only(bottom: 90)),
             ],
@@ -110,7 +106,7 @@ class _GiftsPageState extends State<GiftsPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           MyText(gift.name),
-          if (price != null) MyText('\$${numberFormat.format(price)}'),
+          MyText(formatPrice(price)),
         ],
       ),
     );
@@ -151,6 +147,9 @@ class _GiftsPageState extends State<GiftsPage> {
       ),
     );
   }
+
+  int _getTotal() =>
+      _gifts.fold(0, (int acc, Gift gift) => acc + (gift.price ?? 0));
 
   Future<void> _loadData(BuildContext context) async {
     final appState = Provider.of<AppState>(context);

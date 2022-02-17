@@ -44,6 +44,12 @@ class DatabaseService {
     await _createGift(
       person: _firstPerson,
       occasion: _firstOccasion,
+      name: 'book',
+      description: 'The Hobbit',
+    );
+    await _createGift(
+      person: _firstPerson,
+      occasion: _firstOccasion,
       name: 'laptop',
       description: 'MacBook Pro',
       price: 3000,

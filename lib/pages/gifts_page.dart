@@ -12,7 +12,6 @@ import '../models/named.dart';
 import '../models/occasion.dart';
 import '../models/person.dart';
 import '../widgets/my_text.dart';
-import '../widgets/my_text_button.dart';
 import '../util.dart' show formatPrice;
 
 class GiftsPage extends StatefulWidget {
@@ -43,12 +42,6 @@ class _GiftsPageState extends State<GiftsPage> {
     return MyPage(
       title: 'Gifts',
       child: _buildBody(context),
-      trailing: MyTextButton(
-        text: 'Add',
-        onPressed: () {
-          Navigator.pushNamed(context, GiftPage.route);
-        },
-      ),
     );
   }
 

@@ -98,10 +98,12 @@ class _GiftsPageState extends State<GiftsPage> {
       );
 
   Widget _buildListTile(Gift gift) {
+    final description = gift.description;
     final price = gift.price;
     return CupertinoListTile(
       contentPadding: EdgeInsets.zero,
       onTap: () => print('got tap'),
+      subtitle: description == null ? null : MyText(description),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -189,8 +189,8 @@ class _GiftPageState extends State<GiftPage> {
       buttonText: 'Copy',
       child: GiftPickers(),
       context: context,
-      onPressed: () {
-        _appState.copyGift(_gift);
+      onPressed: () async {
+        await _appState.copyGift(_gift);
         Navigator.pop(context); // pops bottom sheet
         Navigator.pop(context); // pops gift page
       },
@@ -202,8 +202,8 @@ class _GiftPageState extends State<GiftPage> {
       buttonText: 'Move',
       child: GiftPickers(),
       context: context,
-      onPressed: () {
-        _appState.moveGift(_gift);
+      onPressed: () async {
+        await _appState.moveGift(_gift);
         Navigator.pop(context); // pops bottom sheet
         Navigator.pop(context); // pops gift page
       },

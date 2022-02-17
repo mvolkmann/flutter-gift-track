@@ -35,8 +35,7 @@ class OccasionsPage extends StatelessWidget {
 
   Widget _buildBody(BuildContext context) {
     var appState = Provider.of<AppState>(context);
-    var occasions = appState.occasions.values.toList();
-    occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
+    var occasions = appState.sortedOccasions;
 
     final body = appState.isLoaded
         ? ListView.builder(

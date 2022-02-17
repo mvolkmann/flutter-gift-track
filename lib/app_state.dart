@@ -17,6 +17,10 @@ class AppState extends ChangeNotifier {
   var _occasions = <int, Occasion>{};
   var _people = <int, Person>{};
 
+  // These are used in gift_pickers.dart.
+  var _selectedOccasionIndex = 0;
+  var _selectedPersonIndex = 0;
+
   BuildContext context;
   var isLoading = false;
   var isLoaded = false;
@@ -48,7 +52,9 @@ class AppState extends ChangeNotifier {
   Map<int, Occasion> get occasions => _occasions;
   Map<int, Person> get people => _people;
   Occasion? get selectedOccasion => _selectedOccasion;
+  int get selectedOccasionIndex => _selectedOccasionIndex;
   Person? get selectedPerson => _selectedPerson;
+  int get selectedPersonIndex => _selectedPersonIndex;
 
   void addGift(Gift g) async {
     if (g.name.isEmpty) return;
@@ -123,9 +129,13 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  Future<void> selectOccasion(Occasion o, {bool silent = false}) async {
-    print('app_state.dart selectOccasion: o = $o');
+  Future<void> selectOccasion(
+    Occasion o, {
+    required int index,
+    bool silent = false,
+  }) async {
     _selectedOccasion = o;
+    _selectedOccasionIndex = index;
     if (_selectedPerson != null) {
       _gifts = await _giftService.get(
         person: _selectedPerson!,
@@ -135,8 +145,13 @@ class AppState extends ChangeNotifier {
     if (!silent) notifyListeners();
   }
 
-  Future<void> selectPerson(Person p, {bool silent = false}) async {
+  Future<void> selectPerson(
+    Person p, {
+    required int index,
+    bool silent = false,
+  }) async {
     _selectedPerson = p;
+    _selectedPersonIndex = index;
     if (_selectedOccasion != null) {
       _gifts = await _giftService.get(
         person: _selectedPerson!,
@@ -154,6 +169,18 @@ class AppState extends ChangeNotifier {
         content: Text('$error'),
       ),
     );
+  }
+
+  List<Occasion> get sortedOccasions {
+    var list = _occasions.values.toList();
+    list.sort((p1, p2) => p1.name.compareTo(p2.name));
+    return list;
+  }
+
+  List<Person> get sortedPeople {
+    var list = _people.values.toList();
+    list.sort((p1, p2) => p1.name.compareTo(p2.name));
+    return list;
   }
 
   void updateGift(Gift g) {

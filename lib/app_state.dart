@@ -136,7 +136,6 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> selectPerson(Person p, {bool silent = false}) async {
-    print('app_state.dart selectPerson: p = $p');
     _selectedPerson = p;
     if (_selectedOccasion != null) {
       _gifts = await _giftService.get(

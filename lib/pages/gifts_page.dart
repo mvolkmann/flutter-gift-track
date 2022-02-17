@@ -28,6 +28,8 @@ class _GiftsPageState extends State<GiftsPage> {
   var _gifts = <Gift>[];
   var _occasions = <Occasion>[];
   var _people = <Person>[];
+  var _selectedOccasionIndex = 0;
+  var _selectedPersonIndex = 0;
 
   void _add(BuildContext context) {
     Navigator.push(
@@ -65,8 +67,18 @@ class _GiftsPageState extends State<GiftsPage> {
             children: [
               Row(
                 children: [
-                  _buildPicker(context, 'Person', _people),
-                  _buildPicker(context, 'Occasion', _occasions),
+                  _buildPicker(
+                    context: context,
+                    items: _people,
+                    selectedIndex: _selectedPersonIndex,
+                    title: 'Person',
+                  ),
+                  _buildPicker(
+                    context: context,
+                    items: _occasions,
+                    selectedIndex: _selectedOccasionIndex,
+                    title: 'Occasion',
+                  ),
                 ],
               ),
               SizedBox(height: 10),
@@ -115,12 +127,19 @@ class _GiftsPageState extends State<GiftsPage> {
     );
   }
 
-  Flexible _buildPicker(BuildContext context, String title, List<Named> items) {
+  Flexible _buildPicker({
+    required BuildContext context,
+    required String title,
+    required List<Named> items,
+    required int selectedIndex,
+  }) {
     const itemHeight = 30.0;
     const pickerHeight = 150.0;
     final decoration = BoxDecoration(
       border: Border.all(color: CupertinoColors.lightBackgroundGray),
     );
+    final scrollController =
+        FixedExtentScrollController(initialItem: selectedIndex);
     //var titleStyle = CupertinoTheme.of(context).textTheme.navTitleTextStyle;
     var titleStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
@@ -135,12 +154,15 @@ class _GiftsPageState extends State<GiftsPage> {
               itemExtent: itemHeight,
               onSelectedItemChanged: (index) {
                 if (title == 'Person') {
+                  _selectedPersonIndex = index;
                   _appState.selectPerson(items[index] as Person);
                 }
                 if (title == 'Occasion') {
+                  _selectedOccasionIndex = index;
                   _appState.selectOccasion(items[index] as Occasion);
                 }
               },
+              scrollController: scrollController,
             ),
             decoration: decoration,
             height: pickerHeight,
@@ -154,16 +176,20 @@ class _GiftsPageState extends State<GiftsPage> {
       _gifts.fold(0, (int acc, Gift gift) => acc + (gift.price ?? 0));
 
   Future<void> _loadData(BuildContext context) async {
-    _occasions = _appState.occasions.values.toList();
-    _occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
-    if (_occasions.isNotEmpty) {
-      await _appState.selectOccasion(_occasions[0], silent: true);
+    if (_occasions.isEmpty) {
+      _occasions = _appState.occasions.values.toList();
+      _occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
+      if (_occasions.isNotEmpty) {
+        await _appState.selectOccasion(_occasions[0], silent: true);
+      }
     }
 
-    _people = _appState.people.values.toList();
-    _people.sort((p1, p2) => p1.name.compareTo(p2.name));
-    if (_people.isNotEmpty) {
-      await _appState.selectPerson(_people[0], silent: true);
+    if (_people.isEmpty) {
+      _people = _appState.people.values.toList();
+      _people.sort((p1, p2) => p1.name.compareTo(p2.name));
+      if (_people.isNotEmpty) {
+        await _appState.selectPerson(_people[0], silent: true);
+      }
     }
 
     _gifts = _appState.gifts.values.toList();

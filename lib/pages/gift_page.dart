@@ -220,29 +220,26 @@ class _GiftPageState extends State<GiftPage> {
       context: context,
       builder: (_) {
         return SafeArea(
-          child: SizedBox(
-            child: Column(
-              children: [
-                child,
-                Row(
-                  children: [
-                    CupertinoButton(
-                      child: Text(buttonText),
-                      onPressed: onPressed,
-                    ),
-                    CupertinoButton(
-                      child: Text('Close'),
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                  mainAxisAlignment: MainAxisAlignment.center,
-                )
-              ],
-              mainAxisSize: MainAxisSize.min,
-            ),
-            width: double.infinity,
+          child: Column(
+            children: [
+              child,
+              Row(
+                children: [
+                  CupertinoButton(
+                    child: Text(buttonText),
+                    onPressed: onPressed,
+                  ),
+                  CupertinoButton(
+                    child: Text('Close'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+                mainAxisAlignment: MainAxisAlignment.center,
+              )
+            ],
+            mainAxisSize: MainAxisSize.min,
           ).padding(20),
         );
       },

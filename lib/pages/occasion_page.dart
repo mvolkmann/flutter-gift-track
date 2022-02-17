@@ -103,15 +103,31 @@ class _OccasionPageState extends State<OccasionPage> {
 
   SizedBox _buildDatePicker() => SizedBox(
         height: 150,
-        child: CupertinoDatePicker(
-          initialDateTime: _occasion.date,
-          maximumYear: fakeYear,
-          minimumYear: fakeYear,
-          mode: CupertinoDatePickerMode.date,
-          onDateTimeChanged: (DateTime value) {
-            value = DateTime(fakeYear, value.month, value.day);
-            setState(() => _occasion.date = value);
-          },
+        child: Stack(
+          children: [
+            CupertinoDatePicker(
+              initialDateTime: _occasion.date,
+              maximumYear: fakeYear,
+              minimumYear: fakeYear,
+              mode: CupertinoDatePickerMode.date,
+              onDateTimeChanged: (DateTime value) {
+                value = DateTime(fakeYear, value.month, value.day);
+                setState(() => _occasion.date = value);
+              },
+            ),
+            // This covers the "1" for the fake year since
+            // currently there is no way to ask CupertinoDatePicker
+            // to only display wheels for month and day.
+            Positioned(
+              top: 55,
+              right: 8,
+              child: Container(
+                color: CupertinoColors.white,
+                height: 40,
+                width: 80,
+              ),
+            ),
+          ],
         ),
       );
 

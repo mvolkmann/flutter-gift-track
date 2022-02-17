@@ -102,7 +102,12 @@ class _GiftsPageState extends State<GiftsPage> {
     final price = gift.price;
     return CupertinoListTile(
       contentPadding: EdgeInsets.zero,
-      onTap: () => print('got tap'),
+      onTap: () => Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => GiftPage(gift: gift),
+        ),
+      ),
       subtitle: description == null ? null : MyText(description),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

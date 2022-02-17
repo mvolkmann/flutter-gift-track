@@ -39,6 +39,7 @@ class DatabaseService {
       person: _firstPerson,
       occasion: _firstOccasion,
       name: 'socks',
+      price: 10,
     );
     await _createGift(
       person: _firstPerson,
@@ -64,8 +65,9 @@ class DatabaseService {
     required Occasion occasion,
     required String name,
     String? description,
+    int? price,
   }) async {
-    var gift = Gift(description: description, name: name);
+    var gift = Gift(description: description, name: name, price: price);
     await giftService.create(
       person: person,
       occasion: occasion,

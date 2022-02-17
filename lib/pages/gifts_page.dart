@@ -1,3 +1,4 @@
+import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import '../models/gift.dart';
 import '../models/named.dart';
 import '../models/occasion.dart';
 import '../models/person.dart';
+import '../widgets/my_text.dart';
 import '../widgets/my_text_button.dart';
 
 class GiftsPage extends StatefulWidget {
@@ -69,7 +71,8 @@ class _GiftsPageState extends State<GiftsPage> {
                   _buildPicker(context, 'Occasion', _occasions),
                 ],
               ),
-              for (var gift in _gifts) Text(gift.name),
+              SizedBox(height: 10),
+              for (var gift in _gifts) _buildListTile(gift),
             ],
           );
         },
@@ -86,6 +89,21 @@ class _GiftsPageState extends State<GiftsPage> {
           onPressed: () => _add(context),
         ),
       );
+
+  Widget _buildListTile(Gift gift) {
+    final price = gift.price;
+    return CupertinoListTile(
+      contentPadding: EdgeInsets.zero,
+      onTap: () => print('got tap'),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          MyText(gift.name),
+          if (price != null) MyText('\$$price'),
+        ],
+      ),
+    );
+  }
 
   Flexible _buildPicker(BuildContext context, String title, List<Named> items) {
     const itemHeight = 30.0;

@@ -56,7 +56,7 @@ class _GiftsPageState extends State<GiftsPage> {
         future: _loadData(context),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Text('Error fetching data!');
+            return Text('Error fetching data: ${snapshot.error}');
           }
           if (snapshot.connectionState != ConnectionState.done) {
             return CircularProgressIndicator();

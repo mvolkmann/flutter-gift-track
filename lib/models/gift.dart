@@ -5,6 +5,8 @@ class Gift {
   String? imageUrl;
   String? location;
   String name;
+  int occasionId;
+  int personId;
   int? price;
   bool purchased;
   String? websiteUrl;
@@ -13,6 +15,8 @@ class Gift {
     required this.name,
     this.date,
     this.id = 0,
+    this.occasionId = 0,
+    this.personId = 0,
     this.price,
     this.purchased = false,
     this.description,

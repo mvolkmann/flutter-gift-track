@@ -9,13 +9,13 @@ class PersonService {
 
   Future<void> create(Person person) async {
     final map = person.toMap();
+    // Removing the id allows the insert to assign an id.
     map.remove('id');
     final id = await database.insert('people', map);
     person.id = id;
   }
 
   Future<void> delete(int id) {
-    print('person_service.dart delete: id = $id');
     //TODO: Need cascading delete of gifts.
     return database.delete(
       'people',

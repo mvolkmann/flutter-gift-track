@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './gift_page.dart';
@@ -12,10 +12,27 @@ import '../models/occasion.dart';
 import '../models/person.dart';
 import '../widgets/my_text_button.dart';
 
-class GiftsPage extends StatelessWidget {
+class GiftsPage extends StatefulWidget {
   static const route = '/gifts';
 
   GiftsPage({Key? key}) : super(key: key);
+
+  @override
+  State<GiftsPage> createState() => _GiftsPageState();
+}
+
+class _GiftsPageState extends State<GiftsPage> {
+  var _gifts = <Gift>[];
+  var _occasions = <Occasion>[];
+  var _people = <Person>[];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      _loadData();
+    });
+  }
 
   void _add(BuildContext context) {
     Navigator.push(
@@ -41,29 +58,17 @@ class GiftsPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
-    final occasions = appState.occasions.values.toList();
-    final people = appState.people.values.toList();
-    occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
-    people.sort((p1, p2) => p1.name.compareTo(p2.name));
-    if (occasions.isNotEmpty) {
-      appState.selectOccasion(occasions[0], silent: true);
-    }
-    if (people.isNotEmpty) {
-      appState.selectPerson(people[0], silent: true);
-    }
-
     return Scaffold(
       floatingActionButton: _buildFab(context),
       body: Column(
         children: [
           Row(
             children: [
-              _buildPicker(context, 'Person', people),
-              _buildPicker(context, 'Occasion', occasions),
+              _buildPicker(context, 'Person', _people),
+              _buildPicker(context, 'Occasion', _occasions),
             ],
           ),
-          Text('Add gift list here.'),
+          for (var gift in _gifts) Text(gift.name),
         ],
       ).center.padding(20),
     );
@@ -113,5 +118,25 @@ class GiftsPage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _loadData() async {
+    final appState = Provider.of<AppState>(context, listen: false);
+
+    _occasions = appState.occasions.values.toList();
+    _occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
+    if (_occasions.isNotEmpty) {
+      await appState.selectOccasion(_occasions[0], silent: true);
+    }
+
+    _people = appState.people.values.toList();
+    _people.sort((p1, p2) => p1.name.compareTo(p2.name));
+    if (_people.isNotEmpty) {
+      await appState.selectPerson(_people[0], silent: true);
+    }
+
+    _gifts = appState.gifts.values.toList();
+    print('gifts_page.dart _buildBody: _gifts = $_gifts');
+    setState(() {});
   }
 }

@@ -17,13 +17,9 @@ class GiftService {
     var map = gift.toMap();
     map['personId'] = person.id;
     map['occasionId'] = occasion.id;
-
-    final id = await database.insert(
-      'gifts',
-      map,
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    gift.id = id;
+    // Removing the id allows the insert to assign an id.
+    map.remove('id');
+    gift.id = await database.insert('gifts', map);
     return gift;
   }
 

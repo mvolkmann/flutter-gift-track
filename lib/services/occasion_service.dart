@@ -9,6 +9,7 @@ class OccasionService {
 
   Future<void> create(Occasion occasion) async {
     final map = occasion.toMap();
+    // Removing the id allows the insert to assign an id.
     map.remove('id');
     final id = await database.insert('occasions', map);
     occasion.id = id;

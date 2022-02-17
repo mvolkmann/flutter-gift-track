@@ -13,6 +13,7 @@ class AppState extends ChangeNotifier {
   late OccasionService _occasionService;
   late PersonService _personService;
 
+  var _gifts = <int, Gift>{};
   var _occasions = <int, Occasion>{};
   var _people = <int, Person>{};
 
@@ -40,13 +41,13 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  Map<int, Gift> get gifts => _gifts;
   Map<int, Occasion> get occasions => _occasions;
   Map<int, Person> get people => _people;
   Occasion? get selectedOccasion => _selectedOccasion;
   Person? get selectedPerson => _selectedPerson;
 
   void addGift(Gift g) async {
-    print('app_state.dart addGift: entered');
     if (g.name.isEmpty) return;
 
     if (_selectedPerson == null) {
@@ -58,11 +59,12 @@ class AppState extends ChangeNotifier {
     }
 
     try {
-      await _giftService.create(
+      final gift = await _giftService.create(
         person: _selectedPerson!,
         occasion: _selectedOccasion!,
         gift: g,
       );
+      _gifts[gift.id] = gift;
       notifyListeners();
     } catch (e) {
       showError(e);
@@ -117,13 +119,25 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void selectOccasion(Occasion o, {bool silent = false}) {
+  Future<void> selectOccasion(Occasion o, {bool silent = false}) async {
     _selectedOccasion = o;
+    if (_selectedPerson != null) {
+      _gifts = await _giftService.get(
+        person: _selectedPerson!,
+        occasion: _selectedOccasion!,
+      );
+    }
     if (!silent) notifyListeners();
   }
 
-  void selectPerson(Person p, {bool silent = false}) {
+  Future<void> selectPerson(Person p, {bool silent = false}) async {
     _selectedPerson = p;
+    if (_selectedOccasion != null) {
+      _gifts = await _giftService.get(
+        person: _selectedPerson!,
+        occasion: _selectedOccasion!,
+      );
+    }
     if (!silent) notifyListeners();
   }
 

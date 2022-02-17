@@ -35,12 +35,12 @@ class DatabaseService {
   }
 
   static Future<void> _createGifts() async {
-    _createGift(
+    await _createGift(
       person: _firstPerson,
       occasion: _firstOccasion,
       name: 'socks',
     );
-    _createGift(
+    await _createGift(
       person: _firstPerson,
       occasion: _firstOccasion,
       name: 'laptop',
@@ -50,13 +50,13 @@ class DatabaseService {
 
   static Future<void> _createOccasions() async {
     _firstOccasion = await _createOccasion(name: 'Birthday');
-    _createOccasion(name: 'Christmas', date: DateTime(0, 12, 25));
+    await _createOccasion(name: 'Christmas', date: DateTime(0, 12, 25));
   }
 
   static Future<void> _createPeople() async {
     _firstPerson =
         await _createPerson(name: 'Mark', birthday: DateTime(1961, 4, 16));
-    _createPerson(name: 'Tami', birthday: DateTime(1961, 9, 9));
+    await _createPerson(name: 'Tami', birthday: DateTime(1961, 9, 9));
   }
 
   static Future<Gift> _createGift({

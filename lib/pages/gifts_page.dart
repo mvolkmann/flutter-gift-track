@@ -71,9 +71,9 @@ class _GiftsPageState extends State<GiftsPage> {
               ),
               for (var gift in _gifts) Text(gift.name),
             ],
-          ).center.padding(20);
+          );
         },
-      ),
+      ).center.padding(20),
     );
   }
 

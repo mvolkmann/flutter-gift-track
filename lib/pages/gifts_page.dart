@@ -94,7 +94,7 @@ class _GiftsPageState extends State<GiftsPage> {
       border: Border.all(color: CupertinoColors.lightBackgroundGray),
     );
     //var titleStyle = CupertinoTheme.of(context).textTheme.navTitleTextStyle;
-    var titleStyle = TextStyle(fontSize: 24, fontWeight: FontWeight.bold);
+    var titleStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
     return Flexible(
       child: Column(

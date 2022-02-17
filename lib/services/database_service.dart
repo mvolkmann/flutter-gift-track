@@ -46,6 +46,7 @@ class DatabaseService {
       occasion: _firstOccasion,
       name: 'laptop',
       description: 'MacBook Pro',
+      price: 3000,
     );
   }
 

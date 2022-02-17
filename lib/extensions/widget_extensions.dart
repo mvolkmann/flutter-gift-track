@@ -51,6 +51,9 @@ extension WidgetExtension on Widget {
   /// Wraps a widget in an Expanded.
   Widget get expanded => Expanded(child: this);
 
+  /// Wraps a widget in a Container with a given margin.
+  Widget margin(EdgeInsets insets) => Container(child: this, margin: insets);
+
   /// Wraps a widget in a Row which can prevent
   /// expanding the width to match the parent width.
   Widget get row => Row(children: [this]);

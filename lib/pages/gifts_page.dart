@@ -26,14 +26,6 @@ class _GiftsPageState extends State<GiftsPage> {
   var _occasions = <Occasion>[];
   var _people = <Person>[];
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      _loadData();
-    });
-  }
-
   void _add(BuildContext context) {
     Navigator.push(
       context,
@@ -60,17 +52,28 @@ class _GiftsPageState extends State<GiftsPage> {
   Widget _buildBody(BuildContext context) {
     return Scaffold(
       floatingActionButton: _buildFab(context),
-      body: Column(
-        children: [
-          Row(
+      body: FutureBuilder(
+        future: _loadData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error fetching data!');
+          }
+          if (snapshot.connectionState != ConnectionState.done) {
+            return CircularProgressIndicator();
+          }
+          return Column(
             children: [
-              _buildPicker(context, 'Person', _people),
-              _buildPicker(context, 'Occasion', _occasions),
+              Row(
+                children: [
+                  _buildPicker(context, 'Person', _people),
+                  _buildPicker(context, 'Occasion', _occasions),
+                ],
+              ),
+              for (var gift in _gifts) Text(gift.name),
             ],
-          ),
-          for (var gift in _gifts) Text(gift.name),
-        ],
-      ).center.padding(20),
+          ).center.padding(20);
+        },
+      ),
     );
   }
 
@@ -121,6 +124,7 @@ class _GiftsPageState extends State<GiftsPage> {
   }
 
   Future<void> _loadData() async {
+    print('gifts_page.dart _loadData: entered');
     final appState = Provider.of<AppState>(context, listen: false);
 
     _occasions = appState.occasions.values.toList();
@@ -137,6 +141,5 @@ class _GiftsPageState extends State<GiftsPage> {
 
     _gifts = appState.gifts.values.toList();
     print('gifts_page.dart _buildBody: _gifts = $_gifts');
-    setState(() {});
   }
 }

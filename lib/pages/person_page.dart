@@ -7,6 +7,7 @@ import './my_page.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/person.dart';
 import '../app_state.dart';
+import '../util.dart' show confirm;
 import '../widgets/my_text_button.dart';
 
 class PersonPage extends StatefulWidget {
@@ -114,9 +115,11 @@ class _PersonPageState extends State<PersonPage> {
           child: Icon(CupertinoIcons.delete),
           backgroundColor: CupertinoColors.destructiveRed,
           elevation: 200,
-          onPressed: () {
-            _appState.deletePerson(_person);
-            Navigator.pop(context);
+          onPressed: () async {
+            if (await confirm(context, 'Really delete?')) {
+              _appState.deletePerson(_person);
+              Navigator.pop(context);
+            }
           },
         ),
       );

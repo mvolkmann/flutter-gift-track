@@ -7,6 +7,7 @@ import './my_page.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/occasion.dart';
 import '../app_state.dart';
+import '../util.dart' show confirm;
 import '../widgets/my_text_button.dart';
 
 const fakeYear = 1;
@@ -138,9 +139,11 @@ class _OccasionPageState extends State<OccasionPage> {
           child: Icon(CupertinoIcons.delete),
           backgroundColor: CupertinoColors.destructiveRed,
           elevation: 200,
-          onPressed: () {
-            _appState.deleteOccasion(_occasion);
-            Navigator.pop(context);
+          onPressed: () async {
+            if (await confirm(context, 'Really delete?')) {
+              _appState.deleteOccasion(_occasion);
+              Navigator.pop(context);
+            }
           },
         ),
       );

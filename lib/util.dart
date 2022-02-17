@@ -1,5 +1,43 @@
+import 'dart:async' show Completer;
+import 'package:flutter/cupertino.dart';
 // See https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
+
+import './extensions/widget_extensions.dart';
+
+Future<bool> confirm(BuildContext context, String question) {
+  final completer = Completer<bool>();
+  showCupertinoDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: Text(question),
+      content: Column(
+        children: [
+          Row(
+            children: [
+              CupertinoButton(
+                child: Text('Cancel'),
+                onPressed: () {
+                  completer.complete(false);
+                  Navigator.of(context).pop();
+                },
+              ),
+              CupertinoButton(
+                child: Text('OK'),
+                onPressed: () {
+                  completer.complete(true);
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+            mainAxisAlignment: MainAxisAlignment.center,
+          ).gap(10)
+        ],
+      ),
+    ),
+  );
+  return completer.future;
+}
 
 String formatDate(DateTime date) {
   final format = date.year <= 1 ? 'M/d' : 'M/d/y';

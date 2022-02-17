@@ -9,6 +9,7 @@ import './my_page.dart';
 import '../models/gift.dart';
 import '../app_state.dart';
 import '../widgets/gift_pickers.dart';
+import '../util.dart' show confirm;
 import '../widgets/my_text_button.dart';
 
 class GiftPage extends StatefulWidget {
@@ -145,9 +146,11 @@ class _GiftPageState extends State<GiftPage> {
           child: Icon(CupertinoIcons.delete),
           backgroundColor: CupertinoColors.destructiveRed,
           elevation: 200,
-          onPressed: () {
-            _appState.deleteGift(_gift);
-            Navigator.pop(context);
+          onPressed: () async {
+            if (await confirm(context, 'Really delete?')) {
+              _appState.deleteGift(_gift);
+              Navigator.pop(context);
+            }
           },
         ),
       );

@@ -98,7 +98,8 @@ class AppState extends ChangeNotifier {
 
   void deleteGift(Gift gift) {
     print('app_state.dart deleteGift: entered');
-    //person.deleteGift(occasion: occasion, gift: gift);
+    _giftService.delete(gift.id);
+    _gifts.remove(gift.id);
     notifyListeners();
   }
 
@@ -155,11 +156,10 @@ class AppState extends ChangeNotifier {
   }
 
   void updateGift(Gift g) {
+    print('app_state.dart updateGift: g = $g');
     try {
-      //_giftService.update(g);
-      //Gift gift = _gifts[g.id]!;
-      //gift.name = g.name;
-      //gift.purchased = g.purchased;
+      _giftService.update(g);
+      _gifts[g.id] = g;
       notifyListeners();
     } catch (e) {
       showError(e);

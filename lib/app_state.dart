@@ -102,11 +102,28 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void deleteGift(Gift gift) {
-    print('app_state.dart deleteGift: entered');
-    _giftService.delete(gift.id);
-    _gifts.remove(gift.id);
-    notifyListeners();
+  Future<void> copyGift(Gift gift) async {
+    final newGift = gift.clone();
+    try {
+      await _giftService.create(
+        person: _selectedPerson!,
+        occasion: _selectedOccasion!,
+        gift: newGift,
+      );
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
+  }
+
+  void deleteGift(Gift gift) async {
+    try {
+      await _giftService.delete(gift.id);
+      _gifts.remove(gift.id);
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
   }
 
   Future<void> deleteOccasion(Occasion o) async {
@@ -124,6 +141,18 @@ class AppState extends ChangeNotifier {
       await _personService.delete(p.id);
       _people.remove(p.id);
       notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
+  }
+
+  Future<void> moveGift(Gift gift) async {
+    gift.occasionId = _selectedOccasion!.id;
+    gift.personId = _selectedPerson!.id;
+    try {
+      await _giftService.update(gift);
+      notifyListeners();
+      print('app_state.dart moveGift: success');
     } catch (e) {
       showError(e);
     }

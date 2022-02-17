@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import './my_page.dart';
 import '../models/gift.dart';
 import '../app_state.dart';
+import '../widgets/gift_pickers.dart';
 import '../widgets/my_text_button.dart';
 
 class GiftPage extends StatefulWidget {
@@ -185,21 +186,33 @@ class _GiftPageState extends State<GiftPage> {
 
   void _copyGift(BuildContext context) {
     _showBottomSheet(
-      child: Text('I am a bottom sheet for copying.'),
+      buttonText: 'Copy',
+      child: GiftPickers(),
       context: context,
+      onPressed: () {
+        _appState.copyGift(_gift);
+        Navigator.pop(context);
+      },
     );
   }
 
   void _moveGift(BuildContext context) {
     _showBottomSheet(
-      child: Text('I am a bottom sheet for moving.'),
+      buttonText: 'Move',
+      child: GiftPickers(),
       context: context,
+      onPressed: () {
+        _appState.moveGift(_gift);
+        Navigator.pop(context);
+      },
     );
   }
 
   void _showBottomSheet({
+    required String buttonText,
     required BuildContext context,
     required Widget child,
+    required VoidCallback onPressed,
   }) {
     showCupertinoModalBottomSheet(
       context: context,
@@ -209,11 +222,20 @@ class _GiftPageState extends State<GiftPage> {
             child: Column(
               children: [
                 child,
-                CupertinoButton(
-                  child: Text('Close'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                Row(
+                  children: [
+                    CupertinoButton(
+                      child: Text(buttonText),
+                      onPressed: onPressed,
+                    ),
+                    CupertinoButton(
+                      child: Text('Close'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                  mainAxisAlignment: MainAxisAlignment.center,
                 )
               ],
               mainAxisSize: MainAxisSize.min,

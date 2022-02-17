@@ -12,18 +12,33 @@ class Gift {
   String? websiteUrl;
 
   Gift({
-    required this.name,
     this.date,
+    this.description,
     this.id = 0,
+    this.imageUrl,
+    this.location,
+    required this.name,
     this.occasionId = 0,
     this.personId = 0,
     this.price,
     this.purchased = false,
-    this.description,
-    this.imageUrl,
-    this.location,
     this.websiteUrl,
   });
+
+  Gift clone() {
+    return Gift(
+      date: date,
+      description: description,
+      imageUrl: imageUrl,
+      location: location,
+      name: name,
+      occasionId: occasionId,
+      personId: personId,
+      price: price,
+      purchased: purchased,
+      websiteUrl: websiteUrl,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -33,6 +48,8 @@ class Gift {
       'imageUrl': imageUrl,
       'location': location,
       'name': name,
+      'occasionId': occasionId,
+      'personId': personId,
       'price': price,
       'purchased': purchased ? 1 : 0,
       'websiteUrl': websiteUrl,

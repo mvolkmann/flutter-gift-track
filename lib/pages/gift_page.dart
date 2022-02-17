@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import './my_page.dart';
@@ -115,17 +116,23 @@ class _GiftPageState extends State<GiftPage> {
             placeholder: 'Location',
             controller: _locationController,
           ),
-          _buildButtons(),
+          _buildButtons(context),
         ],
       ).gap(10).center.padding(20),
     );
   }
 
-  Widget _buildButtons() {
+  Widget _buildButtons(BuildContext context) {
     return Row(
       children: [
-        CupertinoButton.filled(child: Text('Move'), onPressed: _moveGift),
-        CupertinoButton.filled(child: Text('Copy'), onPressed: _copyGift),
+        CupertinoButton.filled(
+          child: Text('Move'),
+          onPressed: () => _moveGift(context),
+        ),
+        CupertinoButton.filled(
+          child: Text('Copy'),
+          onPressed: () => _copyGift(context),
+        ),
       ],
     ).gap(10);
   }
@@ -176,11 +183,45 @@ class _GiftPageState extends State<GiftPage> {
         ],
       );
 
-  void _copyGift() {
-    print('gift_page.dart copyGift: entered');
+  void _copyGift(BuildContext context) {
+    _showBottomSheet(
+      child: Text('I am a bottom sheet for copying.'),
+      context: context,
+    );
   }
 
-  void _moveGift() {
-    print('gift_page.dart moveGift: entered');
+  void _moveGift(BuildContext context) {
+    _showBottomSheet(
+      child: Text('I am a bottom sheet for moving.'),
+      context: context,
+    );
+  }
+
+  void _showBottomSheet({
+    required BuildContext context,
+    required Widget child,
+  }) {
+    showCupertinoModalBottomSheet(
+      context: context,
+      builder: (_) {
+        return SafeArea(
+          child: SizedBox(
+            child: Column(
+              children: [
+                child,
+                CupertinoButton(
+                  child: Text('Close'),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
+              mainAxisSize: MainAxisSize.min,
+            ),
+            width: double.infinity,
+          ).padding(20),
+        );
+      },
+    );
   }
 }

@@ -24,6 +24,7 @@ class GiftsPage extends StatefulWidget {
 }
 
 class _GiftsPageState extends State<GiftsPage> {
+  late AppState _appState;
   var _gifts = <Gift>[];
   var _occasions = <Occasion>[];
   var _people = <Person>[];
@@ -39,6 +40,8 @@ class _GiftsPageState extends State<GiftsPage> {
 
   @override
   Widget build(BuildContext context) {
+    _appState = Provider.of<AppState>(context);
+
     return MyPage(
       title: 'Gifts',
       child: _buildBody(context),
@@ -131,12 +134,11 @@ class _GiftsPageState extends State<GiftsPage> {
               itemBuilder: (_, index) => Text(items[index].name),
               itemExtent: itemHeight,
               onSelectedItemChanged: (index) {
-                final appState = Provider.of<AppState>(context);
                 if (title == 'Person') {
-                  appState.selectPerson(items[index] as Person);
+                  _appState.selectPerson(items[index] as Person);
                 }
                 if (title == 'Occasion') {
-                  appState.selectOccasion(items[index] as Occasion);
+                  _appState.selectOccasion(items[index] as Occasion);
                 }
               },
             ),
@@ -152,20 +154,18 @@ class _GiftsPageState extends State<GiftsPage> {
       _gifts.fold(0, (int acc, Gift gift) => acc + (gift.price ?? 0));
 
   Future<void> _loadData(BuildContext context) async {
-    final appState = Provider.of<AppState>(context);
-
-    _occasions = appState.occasions.values.toList();
+    _occasions = _appState.occasions.values.toList();
     _occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
     if (_occasions.isNotEmpty) {
-      await appState.selectOccasion(_occasions[0], silent: true);
+      await _appState.selectOccasion(_occasions[0], silent: true);
     }
 
-    _people = appState.people.values.toList();
+    _people = _appState.people.values.toList();
     _people.sort((p1, p2) => p1.name.compareTo(p2.name));
     if (_people.isNotEmpty) {
-      await appState.selectPerson(_people[0], silent: true);
+      await _appState.selectPerson(_people[0], silent: true);
     }
 
-    _gifts = appState.gifts.values.toList();
+    _gifts = _appState.gifts.values.toList();
   }
 }

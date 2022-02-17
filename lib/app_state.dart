@@ -18,17 +18,20 @@ class AppState extends ChangeNotifier {
   var _people = <int, Person>{};
 
   BuildContext context;
+  var isLoading = false;
   var isLoaded = false;
   Occasion? _selectedOccasion;
   Person? _selectedPerson;
 
   AppState({required this.context}) {
-    _loadData();
+    if (!isLoading) {
+      isLoading = true;
+      _loadData();
+    }
   }
 
   _loadData() async {
     try {
-      await DatabaseService.setup();
       _occasionService = DatabaseService.occasionService;
       _occasions = await _occasionService.getAll();
       _personService = DatabaseService.personService;

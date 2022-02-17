@@ -8,8 +8,14 @@ import './pages/gifts_page.dart';
 import './pages/occasions_page.dart';
 import './pages/people_page.dart';
 import './pages/settings_page.dart';
+import './services/database_service.dart';
 
-void main() => runApp(const MyApp());
+//void main() => runApp(const MyApp());
+void main() {
+  DatabaseService.setup().then((_) {
+    runApp(const MyApp());
+  });
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

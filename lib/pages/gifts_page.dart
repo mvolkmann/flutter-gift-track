@@ -53,7 +53,7 @@ class _GiftsPageState extends State<GiftsPage> {
     return Scaffold(
       floatingActionButton: _buildFab(context),
       body: FutureBuilder(
-        future: _loadData(),
+        future: _loadData(context),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error fetching data!');
@@ -123,9 +123,8 @@ class _GiftsPageState extends State<GiftsPage> {
     );
   }
 
-  Future<void> _loadData() async {
-    print('gifts_page.dart _loadData: entered');
-    final appState = Provider.of<AppState>(context, listen: false);
+  Future<void> _loadData(BuildContext context) async {
+    final appState = Provider.of<AppState>(context);
 
     _occasions = appState.occasions.values.toList();
     _occasions.sort((o1, o2) => o1.name.compareTo(o2.name));
@@ -140,6 +139,5 @@ class _GiftsPageState extends State<GiftsPage> {
     }
 
     _gifts = appState.gifts.values.toList();
-    print('gifts_page.dart _buildBody: _gifts = $_gifts');
   }
 }

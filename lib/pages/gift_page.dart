@@ -1,15 +1,18 @@
+import 'dart:io' show File;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 
 import './my_page.dart';
 import '../models/gift.dart';
 import '../app_state.dart';
-import '../widgets/gift_pickers.dart';
+import '../extensions/widget_extensions.dart';
 import '../util.dart' show confirm;
+import '../widgets/gift_pickers.dart';
 import '../widgets/my_text_button.dart';
 
 class GiftPage extends StatefulWidget {
@@ -32,6 +35,7 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController _descriptionController;
   late TextEditingController _locationController;
   late TextEditingController _priceController;
+  XFile? _imageFile;
 
   @override
   void initState() {
@@ -114,6 +118,7 @@ class _GiftPageState extends State<GiftPage> {
             isInt: true,
           ),
           _buildPurchasedRow(),
+          _buildPhotoRow(),
           _buildTextField(
             placeholder: 'Location',
             controller: _locationController,
@@ -155,20 +160,25 @@ class _GiftPageState extends State<GiftPage> {
         ),
       );
 
-  CupertinoTextField _buildTextField({
-    required String placeholder,
-    required TextEditingController controller,
-    bool isInt = false,
-  }) {
-    var formatters = <TextInputFormatter>[];
-    if (isInt) formatters.add(FilteringTextInputFormatter.digitsOnly);
-
-    return CupertinoTextField(
-      clearButtonMode: OverlayVisibilityMode.always,
-      controller: controller,
-      inputFormatters: formatters,
-      keyboardType: isInt ? TextInputType.number : null,
-      placeholder: placeholder,
+  Widget _buildPhotoRow() {
+    return Row(
+      children: [
+        CupertinoButton(
+          child: Icon(CupertinoIcons.photo),
+          onPressed: () async {
+            final _picker = ImagePicker();
+            XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+            if (image != null) setState(() => _imageFile = image);
+          },
+          padding: EdgeInsets.only(right: 20),
+        ),
+        if (_imageFile != null)
+          Image(
+            image: FileImage(File(_imageFile!.path)),
+            height: 200,
+            width: 200,
+          ),
+      ],
     );
   }
 
@@ -186,6 +196,23 @@ class _GiftPageState extends State<GiftPage> {
           ),
         ],
       );
+
+  CupertinoTextField _buildTextField({
+    required String placeholder,
+    required TextEditingController controller,
+    bool isInt = false,
+  }) {
+    var formatters = <TextInputFormatter>[];
+    if (isInt) formatters.add(FilteringTextInputFormatter.digitsOnly);
+
+    return CupertinoTextField(
+      clearButtonMode: OverlayVisibilityMode.always,
+      controller: controller,
+      inputFormatters: formatters,
+      keyboardType: isInt ? TextInputType.number : null,
+      placeholder: placeholder,
+    );
+  }
 
   void _copyGift(BuildContext context) {
     _showBottomSheet(

@@ -19,14 +19,14 @@ Future<bool> confirm(BuildContext context, String question) {
                 child: Text('Cancel'),
                 onPressed: () {
                   completer.complete(false);
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               ),
               CupertinoButton(
                 child: Text('OK'),
                 onPressed: () {
                   completer.complete(true);
-                  Navigator.of(context).pop();
+                  Navigator.pop(context);
                 },
               ),
             ],

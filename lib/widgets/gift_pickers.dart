@@ -80,6 +80,9 @@ class _GiftPickersState extends State<GiftPickers> {
               itemExtent: itemHeight,
               onSelectedItemChanged: (i) {
                 index = i;
+                // The function passed to Debounce cannot be anonymous
+                // and cannot take arguments!
+                // See https://github.com/mhrst/just_debounce_it/issues/4.
                 Debounce.milliseconds(500, selectItem);
               },
               scrollController: scrollController,

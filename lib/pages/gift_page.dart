@@ -35,7 +35,7 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController _descriptionController;
   late TextEditingController _locationController;
   late TextEditingController _priceController;
-  XFile? _imageFile;
+  XFile? _photoFile;
 
   @override
   void initState() {
@@ -118,7 +118,7 @@ class _GiftPageState extends State<GiftPage> {
             isInt: true,
           ),
           _buildPurchasedRow(),
-          _buildPhotoRow(),
+          _buildImageRow(),
           _buildTextField(
             placeholder: 'Location',
             controller: _locationController,
@@ -160,25 +160,31 @@ class _GiftPageState extends State<GiftPage> {
         ),
       );
 
-  Widget _buildPhotoRow() {
+  Widget _buildImageRow() {
+    final image = FileImage(File(_photoFile!.path));
     return Row(
       children: [
-        CupertinoButton(
-          child: Icon(CupertinoIcons.photo),
-          onPressed: () async {
-            final _picker = ImagePicker();
-            XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-            if (image != null) setState(() => _imageFile = image);
-          },
-          padding: EdgeInsets.only(right: 20),
+        Column(
+          children: [
+            _buildImageButton(CupertinoIcons.camera, ImageSource.camera),
+            _buildImageButton(CupertinoIcons.photo, ImageSource.gallery),
+          ],
         ),
-        if (_imageFile != null)
-          Image(
-            image: FileImage(File(_imageFile!.path)),
-            height: 200,
-            width: 200,
-          ),
+        if (_photoFile != null) Image(image: image, height: 135, width: 200),
       ],
+    );
+  }
+
+  Widget _buildImageButton(IconData icon, ImageSource source) {
+    return CupertinoButton(
+      child: Icon(icon),
+      onPressed: () async {
+        final _picker = ImagePicker();
+        XFile? image = await _picker.pickImage(source: source);
+        if (image == null) return;
+        setState(() => _photoFile = image);
+      },
+      padding: EdgeInsets.only(right: 20),
     );
   }
 

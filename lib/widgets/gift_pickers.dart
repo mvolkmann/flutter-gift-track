@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:just_debounce_it/just_debounce_it.dart';
 import 'package:provider/provider.dart';
 
 import '../app_state.dart';
-import '../models/occasion.dart';
 import '../models/named.dart';
+import '../models/occasion.dart';
 import '../models/person.dart';
 
 class GiftPickers extends StatefulWidget {
@@ -58,6 +59,16 @@ class _GiftPickersState extends State<GiftPickers> {
     //var titleStyle = CupertinoTheme.of(context).textTheme.navTitleTextStyle;
     var titleStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
+    var index = selectedIndex;
+    void selectItem() {
+      final item = items[index];
+      if (title == 'Person') {
+        _appState.selectPerson(item as Person, index: index);
+      } else if (title == 'Occasion') {
+        _appState.selectOccasion(item as Occasion, index: index);
+      }
+    }
+
     return Flexible(
       child: Column(
         children: [
@@ -67,19 +78,9 @@ class _GiftPickersState extends State<GiftPickers> {
               childCount: items.length,
               itemBuilder: (_, index) => Text(items[index].name),
               itemExtent: itemHeight,
-              onSelectedItemChanged: (index) {
-                if (title == 'Person') {
-                  _appState.selectPerson(
-                    items[index] as Person,
-                    index: index,
-                  );
-                }
-                if (title == 'Occasion') {
-                  _appState.selectOccasion(
-                    items[index] as Occasion,
-                    index: index,
-                  );
-                }
+              onSelectedItemChanged: (i) {
+                index = i;
+                Debounce.milliseconds(500, selectItem);
               },
               scrollController: scrollController,
             ),

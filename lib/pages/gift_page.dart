@@ -103,11 +103,13 @@ class _GiftPageState extends State<GiftPage> {
 
   Widget _buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: MyFab(
-        backgroundColor: CupertinoColors.destructiveRed,
-        icon: CupertinoIcons.delete,
-        onPressed: _delete,
-      ),
+      floatingActionButton: _isNew
+          ? null
+          : MyFab(
+              backgroundColor: CupertinoColors.destructiveRed,
+              icon: CupertinoIcons.delete,
+              onPressed: _delete,
+            ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

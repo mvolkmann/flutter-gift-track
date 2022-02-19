@@ -70,11 +70,13 @@ class _PersonPageState extends State<PersonPage> {
 
   Widget _buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: MyFab(
-        backgroundColor: CupertinoColors.destructiveRed,
-        icon: CupertinoIcons.delete,
-        onPressed: _delete,
-      ),
+      floatingActionButton: _isNew
+          ? null
+          : MyFab(
+              backgroundColor: CupertinoColors.destructiveRed,
+              icon: CupertinoIcons.delete,
+              onPressed: _delete,
+            ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

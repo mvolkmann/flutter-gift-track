@@ -131,7 +131,7 @@ class DatabaseService {
     }
 
     await db.execute('''
-          create table gifts(
+          create table if not exists gifts(
             id integer primary key autoincrement,
             date numeric,
             description text,
@@ -149,14 +149,14 @@ class DatabaseService {
           )
         ''');
     await db.execute('''
-          create table occasions(
+          create table if not exists occasions(
             id integer primary key autoincrement,
             date numeric,
             name text
           )
         ''');
     await db.execute('''
-          create table people(
+          create table if not exists people(
             id integer primary key autoincrement,
             birthday numeric,
             name text

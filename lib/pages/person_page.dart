@@ -8,6 +8,7 @@ import '../extensions/widget_extensions.dart';
 import '../models/person.dart';
 import '../app_state.dart';
 import '../util.dart' show confirm;
+import '../widgets/cancel_button.dart';
 import '../widgets/my_text_button.dart';
 
 class PersonPage extends StatefulWidget {
@@ -45,13 +46,14 @@ class _PersonPageState extends State<PersonPage> {
     _appState = Provider.of<AppState>(context);
 
     return MyPage(
+      leading: CancelButton(),
       title: 'Person',
       trailing: _buildAddUpdateButton(context),
       child: _buildBody(context),
     );
   }
 
-  MyTextButton _buildAddUpdateButton(BuildContext context) {
+  Widget _buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: _isNew ? 'Add' : 'Update',
       onPressed: () {

@@ -13,6 +13,7 @@ import '../app_state.dart';
 import '../extensions/widget_extensions.dart';
 import '../util.dart' show confirm;
 import '../widgets/gift_pickers.dart';
+import '../widgets/cancel_button.dart';
 import '../widgets/my_text_button.dart';
 
 class GiftPage extends StatefulWidget {
@@ -78,13 +79,14 @@ class _GiftPageState extends State<GiftPage> {
     final name = _nameController.text;
 
     return MyPage(
+      leading: CancelButton(),
       title: '${occasion.name} Gift for ${person.name}',
       trailing: name.isEmpty ? null : _buildAddUpdateButton(context),
       child: _buildBody(context),
     );
   }
 
-  MyTextButton _buildAddUpdateButton(BuildContext context) {
+  Widget _buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: _isNew ? 'Add' : 'Update',
       onPressed: () async {

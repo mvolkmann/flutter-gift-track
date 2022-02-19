@@ -35,7 +35,7 @@ class _OccasionPageState extends State<OccasionPage> {
   void initState() {
     super.initState();
     _isNew = widget.occasion.id == 0;
-    _occasion = _isNew ? Occasion(name: '') : widget.occasion;
+    _occasion = _isNew ? Occasion(name: '') : widget.occasion.clone;
     _nameController = TextEditingController(text: _occasion.name);
     _nameController.addListener(() {
       setState(() => _occasion.name = _nameController.text);
@@ -57,7 +57,7 @@ class _OccasionPageState extends State<OccasionPage> {
 
   Widget _buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
-      text: _isNew ? 'Add' : 'Update',
+      text: 'Done',
       onPressed: () {
         if (_isNew) {
           _appState.addOccasion(_occasion);

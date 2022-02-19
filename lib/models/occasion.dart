@@ -10,6 +10,8 @@ class Occasion extends Named {
     this.date,
   }) : super(name: name);
 
+  Occasion get clone => Occasion(id: id, name: name, date: date);
+
   Map<String, dynamic> toMap() {
     return {
       'date': date?.millisecondsSinceEpoch,

@@ -27,21 +27,20 @@ class Gift {
     this.websiteUrl,
   });
 
-  Gift clone() {
-    return Gift(
-      date: date,
-      description: description,
-      imageUrl: imageUrl,
-      location: location,
-      name: name,
-      occasionId: occasionId,
-      personId: personId,
-      photo: photo,
-      price: price,
-      purchased: purchased,
-      websiteUrl: websiteUrl,
-    );
-  }
+  Gift get clone => Gift(
+        date: date,
+        description: description,
+        id: id,
+        imageUrl: imageUrl,
+        location: location,
+        name: name,
+        occasionId: occasionId,
+        personId: personId,
+        photo: photo,
+        price: price,
+        purchased: purchased,
+        websiteUrl: websiteUrl,
+      );
 
   Map<String, dynamic> toMap() {
     return {

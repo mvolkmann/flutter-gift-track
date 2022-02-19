@@ -61,8 +61,8 @@ class AppState extends ChangeNotifier {
       );
       _gifts[gift.id] = gift;
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -72,8 +72,8 @@ class AppState extends ChangeNotifier {
       await _occasionService.create(o);
       _occasions[o.id] = o;
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -83,13 +83,13 @@ class AppState extends ChangeNotifier {
       await _personService.create(p);
       _people[p.id] = p;
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
   Future<void> copyGift(Gift gift) async {
-    final newGift = gift.clone();
+    final newGift = gift.clone;
     try {
       await _giftService.create(
         person: _selectedPerson!,
@@ -98,8 +98,8 @@ class AppState extends ChangeNotifier {
       );
       await _setGifts();
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -108,8 +108,8 @@ class AppState extends ChangeNotifier {
       await _giftService.delete(gift.id);
       _gifts.remove(gift.id);
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -118,8 +118,8 @@ class AppState extends ChangeNotifier {
       await _occasionService.delete(o.id);
       _occasions.remove(o.id);
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -128,8 +128,8 @@ class AppState extends ChangeNotifier {
       await _personService.delete(p.id);
       _people.remove(p.id);
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -152,8 +152,8 @@ class AppState extends ChangeNotifier {
 
       isLoaded = true;
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -165,8 +165,8 @@ class AppState extends ChangeNotifier {
       await _setGifts();
       notifyListeners();
       print('app_state.dart moveGift: finished move');
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -200,12 +200,12 @@ class AppState extends ChangeNotifier {
     );
   }
 
-  void showError(error) {
+  void showError(error, stackTrace) {
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
         title: Text('Data Setup Error'),
-        content: Text('$error'),
+        content: Text('$error\n$stackTrace'),
       ),
     );
   }
@@ -227,8 +227,8 @@ class AppState extends ChangeNotifier {
       await _giftService.update(g);
       _gifts[g.id] = g;
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -239,8 +239,8 @@ class AppState extends ChangeNotifier {
       occasion.name = o.name;
       occasion.date = o.date;
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 
@@ -251,8 +251,8 @@ class AppState extends ChangeNotifier {
       person.name = p.name;
       person.birthday = p.birthday;
       notifyListeners();
-    } catch (e) {
-      showError(e);
+    } catch (e, s) {
+      showError(e, s);
     }
   }
 }

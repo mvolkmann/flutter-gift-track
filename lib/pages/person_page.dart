@@ -33,7 +33,7 @@ class _PersonPageState extends State<PersonPage> {
   void initState() {
     super.initState();
     _isNew = widget.person.id == 0;
-    _person = _isNew ? Person(name: '') : widget.person;
+    _person = _isNew ? Person(name: '') : widget.person.clone;
     _nameController = TextEditingController(text: _person.name);
     _nameController.addListener(() {
       setState(() => _person.name = _nameController.text);
@@ -55,7 +55,7 @@ class _PersonPageState extends State<PersonPage> {
 
   Widget _buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
-      text: _isNew ? 'Add' : 'Update',
+      text: 'Done',
       onPressed: () {
         if (_isNew) {
           _appState.addPerson(_person);

@@ -42,7 +42,7 @@ class _GiftPageState extends State<GiftPage> {
     super.initState();
 
     _isNew = widget.gift.id == 0;
-    _gift = _isNew ? Gift(name: '') : widget.gift;
+    _gift = _isNew ? Gift(name: '') : widget.gift.clone;
 
     _descriptionController = TextEditingController(text: _gift.description);
     _descriptionController.addListener(() {
@@ -88,7 +88,7 @@ class _GiftPageState extends State<GiftPage> {
 
   Widget _buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
-      text: _isNew ? 'Add' : 'Update',
+      text: 'Done',
       onPressed: () async {
         if (_isNew) {
           await _appState.addGift(_gift);

@@ -24,6 +24,8 @@ class Person extends Named {
     giftList.add(gift);
   }
 
+  Person get clone => Person(id: id, name: name, birthday: birthday);
+
   void deleteGift({required Occasion occasion, required Gift gift}) {
     final giftList = giftMap[occasion.name];
     if (giftList != null) giftList.remove(gift);

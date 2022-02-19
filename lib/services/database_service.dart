@@ -140,6 +140,7 @@ class DatabaseService {
             name text,
             occasionId integer,
             personId integer,
+            photo text,
             price integer,
             purchased numeric,
             websiteUrl text,

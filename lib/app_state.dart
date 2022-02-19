@@ -34,26 +34,6 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  _loadData() async {
-    try {
-      _occasionService = DatabaseService.occasionService;
-      _occasions = await _occasionService.getAll();
-      _selectedOccasion = sortedOccasions[_selectedOccasionIndex];
-
-      _personService = DatabaseService.personService;
-      _people = await _personService.getAll();
-      _selectedPerson = sortedPeople[_selectedPersonIndex];
-
-      _giftService = DatabaseService.giftService;
-      await _updateGifts();
-
-      isLoaded = true;
-      notifyListeners();
-    } catch (e) {
-      showError(e);
-    }
-  }
-
   Map<int, Gift> get gifts => _gifts;
   Map<int, Occasion> get occasions => _occasions;
   Map<int, Person> get people => _people;
@@ -62,7 +42,7 @@ class AppState extends ChangeNotifier {
   Person? get selectedPerson => _selectedPerson;
   int get selectedPersonIndex => _selectedPersonIndex;
 
-  void addGift(Gift g) async {
+  Future<void> addGift(Gift g) async {
     if (g.name.isEmpty) return;
 
     if (_selectedPerson == null) {
@@ -86,7 +66,7 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void addOccasion(Occasion o) async {
+  Future<void> addOccasion(Occasion o) async {
     if (o.name.isEmpty) return;
     try {
       await _occasionService.create(o);
@@ -97,7 +77,7 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void addPerson(Person p) async {
+  Future<void> addPerson(Person p) async {
     if (p.name.isEmpty) return;
     try {
       await _personService.create(p);
@@ -116,14 +96,14 @@ class AppState extends ChangeNotifier {
         occasion: _selectedOccasion!,
         gift: newGift,
       );
-      await _updateGifts();
+      await _setGifts();
       notifyListeners();
     } catch (e) {
       showError(e);
     }
   }
 
-  void deleteGift(Gift gift) async {
+  Future<void> deleteGift(Gift gift) async {
     try {
       await _giftService.delete(gift.id);
       _gifts.remove(gift.id);
@@ -153,12 +133,36 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  Future<void> _loadData() async {
+    try {
+      _occasionService = DatabaseService.occasionService;
+      _occasions = await _occasionService.getAll();
+      if (_occasions.isNotEmpty) {
+        _selectedOccasion = sortedOccasions[_selectedOccasionIndex];
+      }
+
+      _personService = DatabaseService.personService;
+      _people = await _personService.getAll();
+      if (_people.isNotEmpty) {
+        _selectedPerson = sortedPeople[_selectedPersonIndex];
+      }
+
+      _giftService = DatabaseService.giftService;
+      await _setGifts();
+
+      isLoaded = true;
+      notifyListeners();
+    } catch (e) {
+      showError(e);
+    }
+  }
+
   Future<void> moveGift(Gift gift) async {
     gift.occasionId = _selectedOccasion!.id;
     gift.personId = _selectedPerson!.id;
     try {
       await _giftService.update(gift);
-      await _updateGifts();
+      await _setGifts();
       notifyListeners();
       print('app_state.dart moveGift: finished move');
     } catch (e) {
@@ -173,7 +177,7 @@ class AppState extends ChangeNotifier {
   }) async {
     _selectedOccasion = o;
     _selectedOccasionIndex = index;
-    if (_selectedPerson != null) _updateGifts();
+    if (_selectedPerson != null) _setGifts();
     if (!silent) notifyListeners();
   }
 
@@ -184,8 +188,16 @@ class AppState extends ChangeNotifier {
   }) async {
     _selectedPerson = p;
     _selectedPersonIndex = index;
-    if (_selectedOccasion != null) _updateGifts();
+    if (_selectedOccasion != null) _setGifts();
     if (!silent) notifyListeners();
+  }
+
+  Future<void> _setGifts() async {
+    if (_selectedPerson == null || _selectedOccasion == null) return;
+    _gifts = await _giftService.get(
+      person: _selectedPerson!,
+      occasion: _selectedOccasion!,
+    );
   }
 
   void showError(error) {
@@ -210,10 +222,9 @@ class AppState extends ChangeNotifier {
     return list;
   }
 
-  void updateGift(Gift g) {
-    print('app_state.dart updateGift: g = $g');
+  Future<void> updateGift(Gift g) async {
     try {
-      _giftService.update(g);
+      await _giftService.update(g);
       _gifts[g.id] = g;
       notifyListeners();
     } catch (e) {
@@ -221,16 +232,9 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  Future<void> _updateGifts() async {
-    _gifts = await _giftService.get(
-      person: _selectedPerson!,
-      occasion: _selectedOccasion!,
-    );
-  }
-
-  void updateOccasion(Occasion o) {
+  Future<void> updateOccasion(Occasion o) async {
     try {
-      _occasionService.update(o);
+      await _occasionService.update(o);
       Occasion occasion = _occasions[o.id]!;
       occasion.name = o.name;
       occasion.date = o.date;
@@ -240,9 +244,9 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void updatePerson(Person p) {
+  Future<void> updatePerson(Person p) async {
     try {
-      _personService.update(p);
+      await _personService.update(p);
       Person person = _people[p.id]!;
       person.name = p.name;
       person.birthday = p.birthday;

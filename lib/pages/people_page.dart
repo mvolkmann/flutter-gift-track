@@ -41,7 +41,7 @@ class PeoplePage extends StatelessWidget {
         ? ListView.builder(
             itemCount: people.length,
             itemBuilder: (context, index) {
-              var person = people[index];
+              final person = people[index];
               return _buildListTile(context, person);
             },
           )

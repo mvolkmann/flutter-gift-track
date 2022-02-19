@@ -35,11 +35,11 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController _descriptionController;
   late TextEditingController _locationController;
   late TextEditingController _priceController;
-  XFile? _photoFile;
 
   @override
   void initState() {
     super.initState();
+
     _isNew = widget.gift.id == 0;
     _gift = _isNew ? Gift(name: '') : widget.gift;
 
@@ -87,11 +87,11 @@ class _GiftPageState extends State<GiftPage> {
   MyTextButton _buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: _isNew ? 'Add' : 'Update',
-      onPressed: () {
+      onPressed: () async {
         if (_isNew) {
-          _appState.addGift(_gift);
+          await _appState.addGift(_gift);
         } else {
-          _appState.updateGift(_gift);
+          await _appState.updateGift(_gift);
         }
         Navigator.pop(context);
       },
@@ -118,7 +118,7 @@ class _GiftPageState extends State<GiftPage> {
             isInt: true,
           ),
           _buildPurchasedRow(),
-          _buildImageRow(),
+          _buildPhotoRow(),
           _buildTextField(
             placeholder: 'Location',
             controller: _locationController,
@@ -160,31 +160,36 @@ class _GiftPageState extends State<GiftPage> {
         ),
       );
 
-  Widget _buildImageRow() {
-    final image = FileImage(File(_photoFile!.path));
-    return Row(
-      children: [
-        Column(
-          children: [
-            _buildImageButton(CupertinoIcons.camera, ImageSource.camera),
-            _buildImageButton(CupertinoIcons.photo, ImageSource.gallery),
-          ],
-        ),
-        if (_photoFile != null) Image(image: image, height: 135, width: 200),
-      ],
-    );
-  }
-
-  Widget _buildImageButton(IconData icon, ImageSource source) {
+  Widget _buildPhotoButton(IconData icon, ImageSource source) {
     return CupertinoButton(
       child: Icon(icon),
       onPressed: () async {
         final _picker = ImagePicker();
         XFile? image = await _picker.pickImage(source: source);
         if (image == null) return;
-        setState(() => _photoFile = image);
+        setState(() => _gift.photo = image.path);
       },
       padding: EdgeInsets.only(right: 20),
+    );
+  }
+
+  Widget _buildPhotoRow() {
+    final photo = _gift.photo;
+    return Row(
+      children: [
+        Column(
+          children: [
+            _buildPhotoButton(CupertinoIcons.camera, ImageSource.camera),
+            _buildPhotoButton(CupertinoIcons.photo, ImageSource.gallery),
+          ],
+        ),
+        if (photo != null)
+          Image(
+            image: FileImage(File(photo)),
+            height: 135,
+            width: 200,
+          ),
+      ],
     );
   }
 

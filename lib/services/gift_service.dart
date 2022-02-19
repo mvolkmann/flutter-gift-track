@@ -53,6 +53,9 @@ class GiftService {
           imageUrl: map['imageUrl'],
           location: map['location'],
           name: map['name'],
+          occasionId: map['occasionId'],
+          personId: map['personId'],
+          photo: map['photo'],
           price: map['price'],
           purchased: map['purchased'] == 1,
           websiteUrl: map['websiteUrl'],
@@ -60,7 +63,7 @@ class GiftService {
     };
   }
 
-  Future<void> update(Gift gift) {
+  Future<int> update(Gift gift) {
     return database.update(
       'gifts',
       gift.toMap(),

@@ -31,7 +31,6 @@ class PersonService {
 
   Future<Map<int, Person>> getAll() async {
     final List<Map<String, dynamic>> maps = await database.query('people');
-    //TODO: Also populate `giftMap` for each person.
     return <int, Person>{
       for (var map in maps)
         map['id']: Person(
@@ -42,7 +41,7 @@ class PersonService {
     };
   }
 
-  Future<void> update(Person person) {
+  Future<int> update(Person person) {
     return database.update(
       'people',
       person.toMap(),

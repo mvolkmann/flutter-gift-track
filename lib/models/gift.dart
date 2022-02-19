@@ -7,6 +7,7 @@ class Gift {
   String name;
   int occasionId;
   int personId;
+  String? photo;
   int? price;
   bool purchased;
   String? websiteUrl;
@@ -20,6 +21,7 @@ class Gift {
     required this.name,
     this.occasionId = 0,
     this.personId = 0,
+    this.photo,
     this.price,
     this.purchased = false,
     this.websiteUrl,
@@ -34,6 +36,7 @@ class Gift {
       name: name,
       occasionId: occasionId,
       personId: personId,
+      photo: photo,
       price: price,
       purchased: purchased,
       websiteUrl: websiteUrl,
@@ -50,6 +53,7 @@ class Gift {
       'name': name,
       'occasionId': occasionId,
       'personId': personId,
+      'photo': photo,
       'price': price,
       'purchased': purchased ? 1 : 0,
       'websiteUrl': websiteUrl,
@@ -58,6 +62,6 @@ class Gift {
 
   @override
   String toString() {
-    return 'Gift: $id $name - \$$price';
+    return 'Gift: $id/$personId/$occasionId $name photo=$photo';
   }
 }

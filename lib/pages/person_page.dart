@@ -9,6 +9,7 @@ import '../models/person.dart';
 import '../app_state.dart';
 import '../util.dart' show confirm;
 import '../widgets/cancel_button.dart';
+import '../widgets/my_date_picker.dart';
 import '../widgets/my_fab.dart';
 import '../widgets/my_text_button.dart';
 
@@ -82,7 +83,15 @@ class _PersonPageState extends State<PersonPage> {
         children: [
           buildNameField(),
           _buildBirthdayRow(),
-          if (includeBirthday) buildDatePicker()
+          if (includeBirthday)
+            MyDatePicker(
+              initialDate: person.birthday,
+              maxYear: 2200,
+              minYear: 1900,
+              onDateChanged: (date) {
+                setState(() => person.birthday = date);
+              },
+            ),
         ],
       ).gap(10).center.padding(20),
     );
@@ -102,19 +111,6 @@ class _PersonPageState extends State<PersonPage> {
             },
           ),
         ],
-      );
-
-  SizedBox buildDatePicker() => SizedBox(
-        height: 150,
-        child: CupertinoDatePicker(
-          initialDateTime: person.birthday,
-          maximumYear: 2200,
-          minimumYear: 1900,
-          mode: CupertinoDatePickerMode.date,
-          onDateTimeChanged: (DateTime value) {
-            setState(() => person.birthday = value);
-          },
-        ),
       );
 
   CupertinoTextField buildNameField() => CupertinoTextField(

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' show Scaffold;
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
+import 'package:flutter_gift_track/widgets/my_date_picker.dart';
 import 'package:provider/provider.dart';
 
 import './my_page.dart';
@@ -9,6 +10,7 @@ import '../models/occasion.dart';
 import '../app_state.dart';
 import '../util.dart' show confirm;
 import '../widgets/cancel_button.dart';
+import '../widgets/my_date_picker.dart';
 import '../widgets/my_fab.dart';
 import '../widgets/my_text_button.dart';
 
@@ -84,7 +86,16 @@ class _OccasionPageState extends State<OccasionPage> {
         children: [
           buildNameField(),
           buildDateRow(),
-          if (includeDate && occasion.date != null) buildDatePicker()
+          //if (includeDate && occasion.date != null) buildDatePicker()
+          if (includeDate && occasion.date != null)
+            MyDatePicker(
+              hideYear: true,
+              initialDate: occasion.date,
+              onDateChanged: (date) {
+                date = DateTime(fakeYear, date.month, date.day);
+                setState(() => occasion.date = date);
+              },
+            )
         ],
       ).gap(10).center.padding(20),
     );
@@ -109,36 +120,6 @@ class _OccasionPageState extends State<OccasionPage> {
             },
           ),
         ],
-      );
-
-  SizedBox buildDatePicker() => SizedBox(
-        height: 150,
-        child: Stack(
-          children: [
-            CupertinoDatePicker(
-              initialDateTime: occasion.date,
-              maximumYear: fakeYear,
-              minimumYear: fakeYear,
-              mode: CupertinoDatePickerMode.date,
-              onDateTimeChanged: (DateTime value) {
-                value = DateTime(fakeYear, value.month, value.day);
-                setState(() => occasion.date = value);
-              },
-            ),
-            // This covers the "1" for the fake year since
-            // currently there is no way to ask CupertinoDatePicker
-            // to only display wheels for month and day.
-            Positioned(
-              top: 55,
-              right: 8,
-              child: Container(
-                color: CupertinoColors.white,
-                height: 40,
-                width: 80,
-              ),
-            ),
-          ],
-        ),
       );
 
   CupertinoTextField buildNameField() => CupertinoTextField(

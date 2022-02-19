@@ -29,151 +29,151 @@ class GiftPage extends StatefulWidget {
 }
 
 class _GiftPageState extends State<GiftPage> {
-  late AppState _appState;
-  late bool _isNew;
-  late bool _purchased;
-  late Gift _gift;
-  late TextEditingController _nameController;
-  late TextEditingController _descriptionController;
-  late TextEditingController _locationController;
-  late TextEditingController _priceController;
+  late AppState appState;
+  late bool isNew;
+  late bool purchased;
+  late Gift gift;
+  late TextEditingController nameController;
+  late TextEditingController descriptionController;
+  late TextEditingController locationController;
+  late TextEditingController priceController;
 
   @override
   void initState() {
     super.initState();
 
-    _isNew = widget.gift.id == 0;
-    _gift = _isNew ? Gift(name: '') : widget.gift.clone;
+    isNew = widget.gift.id == 0;
+    gift = isNew ? Gift(name: '') : widget.gift.clone;
 
-    _descriptionController = TextEditingController(text: _gift.description);
-    _descriptionController.addListener(() {
-      setState(() => _gift.description = _descriptionController.text);
+    descriptionController = TextEditingController(text: gift.description);
+    descriptionController.addListener(() {
+      setState(() => gift.description = descriptionController.text);
     });
 
-    _locationController = TextEditingController(text: _gift.location);
-    _locationController.addListener(() {
-      setState(() => _gift.location = _locationController.text);
+    locationController = TextEditingController(text: gift.location);
+    locationController.addListener(() {
+      setState(() => gift.location = locationController.text);
     });
 
-    _nameController = TextEditingController(text: _gift.name);
-    _nameController.addListener(() {
-      setState(() => _gift.name = _nameController.text);
+    nameController = TextEditingController(text: gift.name);
+    nameController.addListener(() {
+      setState(() => gift.name = nameController.text);
     });
 
-    _priceController = TextEditingController(
-      text: (_gift.price ?? 0).toString(),
+    priceController = TextEditingController(
+      text: (gift.price ?? 0).toString(),
     );
-    _priceController.addListener(() {
-      final text = _priceController.text;
+    priceController.addListener(() {
+      final text = priceController.text;
       final price = text.isEmpty ? 0 : int.parse(text);
-      setState(() => _gift.price = price);
+      setState(() => gift.price = price);
     });
 
-    _purchased = _gift.purchased;
+    purchased = gift.purchased;
   }
 
   @override
   Widget build(BuildContext context) {
-    _appState = Provider.of<AppState>(context);
-    final occasion = _appState.selectedOccasion!;
-    final person = _appState.selectedPerson!;
-    final name = _nameController.text;
+    appState = Provider.of<AppState>(context);
+    final occasion = appState.selectedOccasion!;
+    final person = appState.selectedPerson!;
+    final name = nameController.text;
 
     return MyPage(
       leading: CancelButton(),
       title: '${occasion.name} Gift\nfor ${person.name}',
-      trailing: name.isEmpty ? null : _buildAddUpdateButton(context),
-      child: _buildBody(context),
+      trailing: name.isEmpty ? null : buildAddUpdateButton(context),
+      child: buildBody(context),
     );
   }
 
-  Widget _buildAddUpdateButton(BuildContext context) {
+  Widget buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: 'Done',
       onPressed: () async {
-        if (_isNew) {
-          await _appState.addGift(_gift);
+        if (isNew) {
+          await appState.addGift(gift);
         } else {
-          await _appState.updateGift(_gift);
+          await appState.updateGift(gift);
         }
         Navigator.pop(context);
       },
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _isNew
+      floatingActionButton: isNew
           ? null
           : MyFab(
               backgroundColor: CupertinoColors.destructiveRed,
               icon: CupertinoIcons.delete,
-              onPressed: _delete,
+              onPressed: delete,
             ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildTextField(
+          buildTextField(
             placeholder: 'Name',
-            controller: _nameController,
+            controller: nameController,
           ),
-          _buildTextField(
+          buildTextField(
             placeholder: 'Description',
-            controller: _descriptionController,
+            controller: descriptionController,
           ),
-          _buildTextField(
+          buildTextField(
             placeholder: 'Price',
-            controller: _priceController,
+            controller: priceController,
             isInt: true,
           ),
-          _buildPurchasedRow(),
-          _buildPhotoRow(),
-          _buildTextField(
+          buildPurchasedRow(),
+          buildPhotoRow(),
+          buildTextField(
             placeholder: 'Location',
-            controller: _locationController,
+            controller: locationController,
           ),
-          _buildButtons(context),
+          buildButtons(context),
         ],
       ).gap(10).center.padding(20),
     );
   }
 
-  Widget _buildButtons(BuildContext context) {
+  Widget buildButtons(BuildContext context) {
     return Row(
       children: [
         CupertinoButton.filled(
           child: Text('Move'),
-          onPressed: () => _moveGift(context),
+          onPressed: () => moveGift(context),
         ),
         CupertinoButton.filled(
           child: Text('Copy'),
-          onPressed: () => _copyGift(context),
+          onPressed: () => copyGift(context),
         ),
       ],
     ).gap(10);
   }
 
-  Widget _buildPhotoButton(IconData icon, ImageSource source) {
+  Widget buildPhotoButton(IconData icon, ImageSource source) {
     return CupertinoButton(
       child: Icon(icon),
       onPressed: () async {
-        final _picker = ImagePicker();
-        XFile? image = await _picker.pickImage(source: source);
+        final picker = ImagePicker();
+        XFile? image = await picker.pickImage(source: source);
         if (image == null) return;
-        setState(() => _gift.photo = image.path);
+        setState(() => gift.photo = image.path);
       },
       padding: EdgeInsets.only(right: 20),
     );
   }
 
-  Widget _buildPhotoRow() {
-    final photo = _gift.photo;
+  Widget buildPhotoRow() {
+    final photo = gift.photo;
     return Row(
       children: [
         Column(
           children: [
-            _buildPhotoButton(CupertinoIcons.camera, ImageSource.camera),
-            _buildPhotoButton(CupertinoIcons.photo, ImageSource.gallery),
+            buildPhotoButton(CupertinoIcons.camera, ImageSource.camera),
+            buildPhotoButton(CupertinoIcons.photo, ImageSource.gallery),
           ],
         ),
         if (photo != null)
@@ -186,22 +186,22 @@ class _GiftPageState extends State<GiftPage> {
     );
   }
 
-  Widget _buildPurchasedRow() => Row(
+  Widget buildPurchasedRow() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Purchased?'),
           CupertinoSwitch(
-            value: _purchased,
+            value: purchased,
             onChanged: (value) {
               setState(() {
-                _purchased = value;
+                purchased = value;
               });
             },
           ),
         ],
       );
 
-  CupertinoTextField _buildTextField({
+  CupertinoTextField buildTextField({
     required String placeholder,
     required TextEditingController controller,
     bool isInt = false,
@@ -218,40 +218,40 @@ class _GiftPageState extends State<GiftPage> {
     );
   }
 
-  void _copyGift(BuildContext context) {
-    _showBottomSheet(
+  void copyGift(BuildContext context) {
+    showBottomSheet(
       buttonText: 'Copy',
       child: GiftPickers(),
       context: context,
       onPressed: () async {
-        await _appState.copyGift(_gift);
+        await appState.copyGift(gift);
         Navigator.pop(context); // pops bottom sheet
         Navigator.pop(context); // pops gift page
       },
     );
   }
 
-  void _delete(BuildContext context) async {
+  void delete(BuildContext context) async {
     if (await confirm(context, 'Really delete?')) {
-      _appState.deleteGift(_gift);
+      appState.deleteGift(gift);
       Navigator.pop(context);
     }
   }
 
-  void _moveGift(BuildContext context) {
-    _showBottomSheet(
+  void moveGift(BuildContext context) {
+    showBottomSheet(
       buttonText: 'Move',
       child: GiftPickers(),
       context: context,
       onPressed: () async {
-        await _appState.moveGift(_gift);
+        await appState.moveGift(gift);
         Navigator.pop(context); // pops bottom sheet
         Navigator.pop(context); // pops gift page
       },
     );
   }
 
-  void _showBottomSheet({
+  void showBottomSheet({
     required String buttonText,
     required BuildContext context,
     required Widget child,
@@ -271,7 +271,7 @@ class _GiftPageState extends State<GiftPage> {
                     onPressed: onPressed,
                   ),
                   CupertinoButton(
-                    child: Text('Close'),
+                    child: Text('Cancel'),
                     onPressed: () {
                       Navigator.pop(context);
                     },

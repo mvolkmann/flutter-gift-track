@@ -16,11 +16,11 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return MyPage(
       title: 'Settings',
-      child: _buildBody(context),
+      child: buildBody(context),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Text('Settings go here.');
   }
 }

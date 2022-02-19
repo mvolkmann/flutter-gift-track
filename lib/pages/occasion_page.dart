@@ -26,84 +26,84 @@ class OccasionPage extends StatefulWidget {
 }
 
 class _OccasionPageState extends State<OccasionPage> {
-  late AppState _appState;
-  late bool _isNew;
-  late Occasion _occasion;
-  late TextEditingController _nameController;
-  var _includeDate = false;
+  late AppState appState;
+  late bool isNew;
+  late Occasion occasion;
+  late TextEditingController nameController;
+  var includeDate = false;
 
   @override
   void initState() {
     super.initState();
-    _isNew = widget.occasion.id == 0;
-    _occasion = _isNew ? Occasion(name: '') : widget.occasion.clone;
-    _nameController = TextEditingController(text: _occasion.name);
-    _nameController.addListener(() {
-      setState(() => _occasion.name = _nameController.text);
+    isNew = widget.occasion.id == 0;
+    occasion = isNew ? Occasion(name: '') : widget.occasion.clone;
+    nameController = TextEditingController(text: occasion.name);
+    nameController.addListener(() {
+      setState(() => occasion.name = nameController.text);
     });
-    _includeDate = _isNew ? false : _occasion.date != null;
+    includeDate = isNew ? false : occasion.date != null;
   }
 
   @override
   Widget build(BuildContext context) {
-    _appState = Provider.of<AppState>(context);
+    appState = Provider.of<AppState>(context);
 
     return MyPage(
       leading: CancelButton(),
       title: 'Occasion',
-      trailing: _buildAddUpdateButton(context),
-      child: _buildBody(context),
+      trailing: buildAddUpdateButton(context),
+      child: buildBody(context),
     );
   }
 
-  Widget _buildAddUpdateButton(BuildContext context) {
+  Widget buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: 'Done',
       onPressed: () {
-        if (_isNew) {
-          _appState.addOccasion(_occasion);
+        if (isNew) {
+          appState.addOccasion(occasion);
         } else {
-          _appState.updateOccasion(_occasion);
+          appState.updateOccasion(occasion);
         }
         Navigator.pop(context);
       },
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _isNew
+      floatingActionButton: isNew
           ? null
           : MyFab(
               backgroundColor: CupertinoColors.destructiveRed,
               icon: CupertinoIcons.delete,
-              onPressed: _delete,
+              onPressed: delete,
             ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildNameField(),
-          _buildDateRow(),
-          if (_includeDate && _occasion.date != null) _buildDatePicker()
+          buildNameField(),
+          buildDateRow(),
+          if (includeDate && occasion.date != null) buildDatePicker()
         ],
       ).gap(10).center.padding(20),
     );
   }
 
-  Widget _buildDateRow() => Row(
+  Widget buildDateRow() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Include Date'),
           CupertinoSwitch(
-            value: _includeDate,
+            value: includeDate,
             onChanged: (bool value) {
-              _includeDate = value;
+              includeDate = value;
               setState(() {
-                if (_includeDate) {
+                if (includeDate) {
                   final now = DateTime.now();
-                  _occasion.date = DateTime(fakeYear, now.month, now.day);
+                  occasion.date = DateTime(fakeYear, now.month, now.day);
                 } else {
-                  _occasion.date = null;
+                  occasion.date = null;
                 }
               });
             },
@@ -111,18 +111,18 @@ class _OccasionPageState extends State<OccasionPage> {
         ],
       );
 
-  SizedBox _buildDatePicker() => SizedBox(
+  SizedBox buildDatePicker() => SizedBox(
         height: 150,
         child: Stack(
           children: [
             CupertinoDatePicker(
-              initialDateTime: _occasion.date,
+              initialDateTime: occasion.date,
               maximumYear: fakeYear,
               minimumYear: fakeYear,
               mode: CupertinoDatePickerMode.date,
               onDateTimeChanged: (DateTime value) {
                 value = DateTime(fakeYear, value.month, value.day);
-                setState(() => _occasion.date = value);
+                setState(() => occasion.date = value);
               },
             ),
             // This covers the "1" for the fake year since
@@ -141,15 +141,15 @@ class _OccasionPageState extends State<OccasionPage> {
         ),
       );
 
-  CupertinoTextField _buildNameField() => CupertinoTextField(
+  CupertinoTextField buildNameField() => CupertinoTextField(
         clearButtonMode: OverlayVisibilityMode.always,
-        controller: _nameController,
+        controller: nameController,
         placeholder: 'Name',
       );
 
-  void _delete(BuildContext context) async {
+  void delete(BuildContext context) async {
     if (await confirm(context, 'Really delete?')) {
-      _appState.deleteOccasion(_occasion);
+      appState.deleteOccasion(occasion);
       Navigator.pop(context);
     }
   }

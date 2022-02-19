@@ -17,7 +17,7 @@ class GiftPickers extends StatefulWidget {
 }
 
 class _GiftPickersState extends State<GiftPickers> {
-  late AppState _appState;
+  late AppState appState;
 
   @override
   void initState() {
@@ -26,25 +26,25 @@ class _GiftPickersState extends State<GiftPickers> {
 
   @override
   Widget build(BuildContext context) {
-    _appState = Provider.of<AppState>(context);
+    appState = Provider.of<AppState>(context);
 
     return Row(
       children: [
-        _buildPicker(
-          items: _appState.sortedPeople,
-          selectedIndex: _appState.selectedPersonIndex,
+        buildPicker(
+          items: appState.sortedPeople,
+          selectedIndex: appState.selectedPersonIndex,
           title: 'Person',
         ),
-        _buildPicker(
-          items: _appState.sortedOccasions,
-          selectedIndex: _appState.selectedOccasionIndex,
+        buildPicker(
+          items: appState.sortedOccasions,
+          selectedIndex: appState.selectedOccasionIndex,
           title: 'Occasion',
         ),
       ],
     );
   }
 
-  Flexible _buildPicker({
+  Flexible buildPicker({
     required String title,
     required List<Named> items,
     required int selectedIndex,
@@ -64,9 +64,9 @@ class _GiftPickersState extends State<GiftPickers> {
     void selectItem() {
       final item = items[index];
       if (title == 'Person') {
-        _appState.selectPerson(item as Person, index: index);
+        appState.selectPerson(item as Person, index: index);
       } else if (title == 'Occasion') {
-        _appState.selectOccasion(item as Occasion, index: index);
+        appState.selectOccasion(item as Occasion, index: index);
       }
     }
 

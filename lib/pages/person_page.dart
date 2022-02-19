@@ -24,65 +24,65 @@ class PersonPage extends StatefulWidget {
 }
 
 class _PersonPageState extends State<PersonPage> {
-  late AppState _appState;
-  late bool _isNew;
-  late Person _person;
-  late TextEditingController _nameController;
-  var _includeBirthday = false;
+  late AppState appState;
+  late bool isNew;
+  late Person person;
+  late TextEditingController nameController;
+  var includeBirthday = false;
 
   @override
   void initState() {
     super.initState();
-    _isNew = widget.person.id == 0;
-    _person = _isNew ? Person(name: '') : widget.person.clone;
-    _nameController = TextEditingController(text: _person.name);
-    _nameController.addListener(() {
-      setState(() => _person.name = _nameController.text);
+    isNew = widget.person.id == 0;
+    person = isNew ? Person(name: '') : widget.person.clone;
+    nameController = TextEditingController(text: person.name);
+    nameController.addListener(() {
+      setState(() => person.name = nameController.text);
     });
-    _includeBirthday = _isNew ? false : _person.birthday != null;
+    includeBirthday = isNew ? false : person.birthday != null;
   }
 
   @override
   Widget build(BuildContext context) {
-    _appState = Provider.of<AppState>(context);
+    appState = Provider.of<AppState>(context);
 
     return MyPage(
       leading: CancelButton(),
       title: 'Person',
-      trailing: _buildAddUpdateButton(context),
-      child: _buildBody(context),
+      trailing: buildAddUpdateButton(context),
+      child: buildBody(context),
     );
   }
 
-  Widget _buildAddUpdateButton(BuildContext context) {
+  Widget buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: 'Done',
       onPressed: () {
-        if (_isNew) {
-          _appState.addPerson(_person);
+        if (isNew) {
+          appState.addPerson(person);
         } else {
-          _appState.updatePerson(_person);
+          appState.updatePerson(person);
         }
         Navigator.pop(context);
       },
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _isNew
+      floatingActionButton: isNew
           ? null
           : MyFab(
               backgroundColor: CupertinoColors.destructiveRed,
               icon: CupertinoIcons.delete,
-              onPressed: _delete,
+              onPressed: delete,
             ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          _buildNameField(),
+          buildNameField(),
           _buildBirthdayRow(),
-          if (_includeBirthday) _buildDatePicker()
+          if (includeBirthday) buildDatePicker()
         ],
       ).gap(10).center.padding(20),
     );
@@ -93,39 +93,39 @@ class _PersonPageState extends State<PersonPage> {
         children: [
           Text('Include Birthday'),
           CupertinoSwitch(
-            value: _includeBirthday,
+            value: includeBirthday,
             onChanged: (bool value) {
-              _includeBirthday = value;
+              includeBirthday = value;
               setState(() {
-                _person.birthday = _includeBirthday ? DateTime.now() : null;
+                person.birthday = includeBirthday ? DateTime.now() : null;
               });
             },
           ),
         ],
       );
 
-  SizedBox _buildDatePicker() => SizedBox(
+  SizedBox buildDatePicker() => SizedBox(
         height: 150,
         child: CupertinoDatePicker(
-          initialDateTime: _person.birthday,
+          initialDateTime: person.birthday,
           maximumYear: 2200,
           minimumYear: 1900,
           mode: CupertinoDatePickerMode.date,
           onDateTimeChanged: (DateTime value) {
-            setState(() => _person.birthday = value);
+            setState(() => person.birthday = value);
           },
         ),
       );
 
-  CupertinoTextField _buildNameField() => CupertinoTextField(
+  CupertinoTextField buildNameField() => CupertinoTextField(
         clearButtonMode: OverlayVisibilityMode.always,
-        controller: _nameController,
+        controller: nameController,
         placeholder: 'Name',
       );
 
-  void _delete(BuildContext context) async {
+  void delete(BuildContext context) async {
     if (await confirm(context, 'Really delete?')) {
-      _appState.deletePerson(_person);
+      appState.deletePerson(person);
       Navigator.pop(context);
     }
   }

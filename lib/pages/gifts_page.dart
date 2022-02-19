@@ -129,5 +129,6 @@ class _GiftsPageState extends State<GiftsPage> {
     }
 
     _gifts = _appState.gifts.values.toList();
+    print('gifts_page.dart _loadData: _gift = $_gifts');
   }
 }

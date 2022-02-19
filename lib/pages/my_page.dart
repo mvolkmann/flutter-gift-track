@@ -22,7 +22,11 @@ class MyPage extends StatelessWidget {
       navigationBar: CupertinoNavigationBar(
         backgroundColor: CupertinoColors.systemBlue,
         leading: leading,
-        middle: MyText(title, color: CupertinoColors.white),
+        middle: MyText(
+          title,
+          color: CupertinoColors.white,
+          textAlign: TextAlign.center,
+        ),
         trailing: trailing,
       ),
       child: Center(child: child),

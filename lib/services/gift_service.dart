@@ -14,7 +14,7 @@ class GiftService {
     required Occasion occasion,
     required Gift gift,
   }) async {
-    var map = gift.toMap();
+    final map = gift.toMap();
     map['personId'] = person.id;
     map['occasionId'] = occasion.id;
     // Removing the id allows the insert to assign an id.

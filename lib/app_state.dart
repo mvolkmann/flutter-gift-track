@@ -211,13 +211,13 @@ class AppState extends ChangeNotifier {
   }
 
   List<Occasion> get sortedOccasions {
-    var list = _occasions.values.toList();
+    final list = _occasions.values.toList();
     list.sort((p1, p2) => p1.name.compareTo(p2.name));
     return list;
   }
 
   List<Person> get sortedPeople {
-    var list = _people.values.toList();
+    final list = _people.values.toList();
     list.sort((p1, p2) => p1.name.compareTo(p2.name));
     return list;
   }

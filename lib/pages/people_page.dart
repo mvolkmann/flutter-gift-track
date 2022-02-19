@@ -34,8 +34,8 @@ class PeoplePage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    var appState = Provider.of<AppState>(context);
-    var people = appState.sortedPeople;
+    final appState = Provider.of<AppState>(context);
+    final people = appState.sortedPeople;
 
     final body = appState.isLoaded
         ? ListView.builder(

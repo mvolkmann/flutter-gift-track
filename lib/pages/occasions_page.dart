@@ -34,14 +34,14 @@ class OccasionsPage extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    var appState = Provider.of<AppState>(context);
-    var occasions = appState.sortedOccasions;
+    final appState = Provider.of<AppState>(context);
+    final occasions = appState.sortedOccasions;
 
     final body = appState.isLoaded
         ? ListView.builder(
             itemCount: occasions.length,
             itemBuilder: (context, index) {
-              var occasion = occasions[index];
+              final occasion = occasions[index];
               return _buildListTile(context, occasion);
             },
           )

@@ -22,7 +22,7 @@ class DatabaseService {
   //static var reset = true;
 
   static Future<void> setup() async {
-    var db = await _getDatabase();
+    final db = await _getDatabase();
     giftService = GiftService(database: db);
     occasionService = OccasionService(database: db);
     personService = PersonService(database: db);
@@ -74,7 +74,7 @@ class DatabaseService {
     String? description,
     int? price,
   }) async {
-    var gift = Gift(description: description, name: name, price: price);
+    final gift = Gift(description: description, name: name, price: price);
     await giftService.create(
       person: person,
       occasion: occasion,
@@ -87,7 +87,7 @@ class DatabaseService {
     required String name,
     DateTime? date,
   }) async {
-    var occasion = Occasion(date: date, name: name);
+    final occasion = Occasion(date: date, name: name);
     await occasionService.create(occasion);
     return occasion;
   }
@@ -96,7 +96,7 @@ class DatabaseService {
     required String name,
     required DateTime birthday,
   }) async {
-    var person = Person(birthday: birthday, name: name);
+    final person = Person(birthday: birthday, name: name);
     await personService.create(person);
     return person;
   }

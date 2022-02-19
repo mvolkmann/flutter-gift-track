@@ -56,10 +56,11 @@ class _GiftPickersState extends State<GiftPickers> {
     );
     final scrollController =
         FixedExtentScrollController(initialItem: selectedIndex);
-    //var titleStyle = CupertinoTheme.of(context).textTheme.navTitleTextStyle;
-    var titleStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
+    //final titleStyle = CupertinoTheme.of(context).textTheme.navTitleTextStyle;
+    final titleStyle = TextStyle(fontSize: 20, fontWeight: FontWeight.bold);
 
     var index = selectedIndex;
+
     void selectItem() {
       final item = items[index];
       if (title == 'Person') {

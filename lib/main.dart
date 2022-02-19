@@ -47,20 +47,14 @@ class PageDescriptor {
   PageDescriptor(this.title, this.icon, this.page);
 }
 
-var aboutIcon = CupertinoIcons.info;
-var peopleIcon = CupertinoIcons.person_3_fill;
-var occasionsIcon = Icons.cake_rounded;
-var giftsIcon = CupertinoIcons.gift_fill;
-var settingsIcon = CupertinoIcons.gear_solid;
-
 //TODO: Why aren't constructor tear-offs working?
 //TODO: Why can't the type here be replaced by var?
 List<PageDescriptor> pages = <PageDescriptor>[
-  PageDescriptor('About', aboutIcon, AboutPage()),
-  PageDescriptor('People', peopleIcon, PeoplePage()),
-  PageDescriptor('Occasions', occasionsIcon, OccasionsPage()),
-  PageDescriptor('Gifts', giftsIcon, GiftsPage()),
-  PageDescriptor('Settings', settingsIcon, SettingsPage()),
+  PageDescriptor('About', CupertinoIcons.info, AboutPage()),
+  PageDescriptor('People', CupertinoIcons.person_3_fill, PeoplePage()),
+  PageDescriptor('Occasions', Icons.cake_rounded, OccasionsPage()),
+  PageDescriptor('Gifts', CupertinoIcons.gift_fill, GiftsPage()),
+  PageDescriptor('Settings', CupertinoIcons.gear_solid, SettingsPage()),
 ];
 
 class HomePage extends StatelessWidget {
@@ -70,7 +64,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var items = pages
+    final items = pages
         .map(
           (page) => BottomNavigationBarItem(
             icon: Icon(page.icon),

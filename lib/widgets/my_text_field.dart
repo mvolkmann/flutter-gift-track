@@ -28,7 +28,6 @@ class MyTextField extends StatefulWidget {
 class _MyTextFieldState extends State<MyTextField> {
   @override
   Widget build(BuildContext context) {
-    var validator = widget.validator;
     return TextFormField(
       decoration: InputDecoration(
         border: OutlineInputBorder(),
@@ -40,7 +39,7 @@ class _MyTextFieldState extends State<MyTextField> {
       initialValue: widget.initialValue,
       obscureText: widget.obscureText,
       onChanged: (String value) => widget.onChanged(value),
-      validator: validator,
+      validator: widget.validator,
     ).padding(10);
   }
 }

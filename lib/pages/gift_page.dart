@@ -213,7 +213,7 @@ class _GiftPageState extends State<GiftPage> {
     required TextEditingController controller,
     bool isInt = false,
   }) {
-    var formatters = <TextInputFormatter>[];
+    final formatters = <TextInputFormatter>[];
     if (isInt) formatters.add(FilteringTextInputFormatter.digitsOnly);
 
     return CupertinoTextField(

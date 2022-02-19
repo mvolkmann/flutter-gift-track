@@ -12,8 +12,6 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  var adding = false;
-
   @override
   Widget build(BuildContext context) {
     return MyPage(

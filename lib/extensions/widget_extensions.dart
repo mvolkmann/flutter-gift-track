@@ -34,7 +34,7 @@ extension WidgetExtension on Widget {
     /*
     // This is an attempt to avoid nesting Containers in Containers.
     // It doesn't work because all the Container properties are final.
-    var container =
+    final container =
         runtimeType == Container ? this as Container : Container(child: this);
     container.decoration = BoxDecoration(border: Border.all(color: color));
     return container;

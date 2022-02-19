@@ -9,6 +9,7 @@ import '../app_state.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/occasion.dart';
 import '../util.dart' show formatDate;
+import '../widgets/my_fab.dart';
 import '../widgets/my_text.dart';
 
 class OccasionsPage extends StatelessWidget {
@@ -48,20 +49,10 @@ class OccasionsPage extends StatelessWidget {
         : CircularProgressIndicator();
 
     return Scaffold(
-      floatingActionButton: _buildFab(context),
+      floatingActionButton: MyFab(icon: CupertinoIcons.add, onPressed: _add),
       body: body.center.padding(20),
     );
   }
-
-  Widget _buildFab(BuildContext context) => Padding(
-        // This moves the FloatingActionButton above bottom navigation area.
-        padding: const EdgeInsets.only(bottom: 47),
-        child: FloatingActionButton(
-          child: Icon(CupertinoIcons.add),
-          elevation: 200,
-          onPressed: () => _add(context),
-        ),
-      );
 
   Widget _buildListTile(BuildContext context, Occasion occasion) =>
       CupertinoListTile(

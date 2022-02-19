@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show FloatingActionButton, Scaffold;
+import 'package:flutter/material.dart' show Scaffold;
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:provider/provider.dart';
 
@@ -9,6 +9,7 @@ import '../models/person.dart';
 import '../app_state.dart';
 import '../util.dart' show confirm;
 import '../widgets/cancel_button.dart';
+import '../widgets/my_fab.dart';
 import '../widgets/my_text_button.dart';
 
 class PersonPage extends StatefulWidget {
@@ -69,7 +70,11 @@ class _PersonPageState extends State<PersonPage> {
 
   Widget _buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _buildFab(context),
+      floatingActionButton: MyFab(
+        backgroundColor: CupertinoColors.destructiveRed,
+        icon: CupertinoIcons.delete,
+        onPressed: _delete,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -110,25 +115,16 @@ class _PersonPageState extends State<PersonPage> {
         ),
       );
 
-  Widget _buildFab(BuildContext context) => Padding(
-        // This moves the FloatingActionButton above bottom navigation area.
-        padding: const EdgeInsets.only(bottom: 47),
-        child: FloatingActionButton(
-          child: Icon(CupertinoIcons.delete),
-          backgroundColor: CupertinoColors.destructiveRed,
-          elevation: 200,
-          onPressed: () async {
-            if (await confirm(context, 'Really delete?')) {
-              _appState.deletePerson(_person);
-              Navigator.pop(context);
-            }
-          },
-        ),
-      );
-
   CupertinoTextField _buildNameField() => CupertinoTextField(
         clearButtonMode: OverlayVisibilityMode.always,
         controller: _nameController,
         placeholder: 'Name',
       );
+
+  void _delete(BuildContext context) async {
+    if (await confirm(context, 'Really delete?')) {
+      _appState.deletePerson(_person);
+      Navigator.pop(context);
+    }
+  }
 }

@@ -11,6 +11,7 @@ import '../models/gift.dart';
 import '../models/occasion.dart';
 import '../models/person.dart';
 import '../widgets/gift_pickers.dart';
+import '../widgets/my_fab.dart';
 import '../widgets/my_text.dart';
 import '../util.dart' show formatPrice;
 
@@ -50,7 +51,7 @@ class _GiftsPageState extends State<GiftsPage> {
 
   Widget _buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _buildFab(context),
+      floatingActionButton: MyFab(icon: CupertinoIcons.add, onPressed: _add),
       body: FutureBuilder(
         future: _loadData(context),
         builder: (context, snapshot) {
@@ -77,16 +78,6 @@ class _GiftsPageState extends State<GiftsPage> {
       ).center.padding(20),
     );
   }
-
-  Widget _buildFab(BuildContext context) => Padding(
-        // This moves the FloatingActionButton above bottom navigation area.
-        padding: const EdgeInsets.only(bottom: 47),
-        child: FloatingActionButton(
-          child: Icon(CupertinoIcons.add),
-          elevation: 200,
-          onPressed: () => _add(context),
-        ),
-      );
 
   Widget _buildListTile(Gift gift) {
     final description = gift.description;

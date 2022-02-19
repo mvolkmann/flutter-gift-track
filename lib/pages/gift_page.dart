@@ -14,6 +14,7 @@ import '../extensions/widget_extensions.dart';
 import '../util.dart' show confirm;
 import '../widgets/gift_pickers.dart';
 import '../widgets/cancel_button.dart';
+import '../widgets/my_fab.dart';
 import '../widgets/my_text_button.dart';
 
 class GiftPage extends StatefulWidget {
@@ -102,7 +103,11 @@ class _GiftPageState extends State<GiftPage> {
 
   Widget _buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: _buildFab(context),
+      floatingActionButton: MyFab(
+        backgroundColor: CupertinoColors.destructiveRed,
+        icon: CupertinoIcons.delete,
+        onPressed: _delete,
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -145,22 +150,6 @@ class _GiftPageState extends State<GiftPage> {
       ],
     ).gap(10);
   }
-
-  Widget _buildFab(BuildContext context) => Padding(
-        // This moves the FloatingActionButton above bottom navigation area.
-        padding: const EdgeInsets.only(bottom: 47),
-        child: FloatingActionButton(
-          child: Icon(CupertinoIcons.delete),
-          backgroundColor: CupertinoColors.destructiveRed,
-          elevation: 200,
-          onPressed: () async {
-            if (await confirm(context, 'Really delete?')) {
-              _appState.deleteGift(_gift);
-              Navigator.pop(context);
-            }
-          },
-        ),
-      );
 
   Widget _buildPhotoButton(IconData icon, ImageSource source) {
     return CupertinoButton(
@@ -238,6 +227,13 @@ class _GiftPageState extends State<GiftPage> {
         Navigator.pop(context); // pops gift page
       },
     );
+  }
+
+  void _delete(BuildContext context) async {
+    if (await confirm(context, 'Really delete?')) {
+      _appState.deleteGift(_gift);
+      Navigator.pop(context);
+    }
   }
 
   void _moveGift(BuildContext context) {

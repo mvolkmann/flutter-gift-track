@@ -1,45 +1,29 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gift_track/extensions/widget_extensions.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
-typedef ValidatorFn = String? Function(String?);
-
-class MyTextField extends StatefulWidget {
-  final String hintText;
-  final String initialValue;
-  final String labelText;
-  final bool obscureText;
-  final void Function(String) onChanged;
-  final ValidatorFn? validator;
+class MyTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final String? placeholder;
+  final bool isInt;
 
   const MyTextField({
     Key? key,
-    this.hintText = '',
-    this.initialValue = '',
-    this.labelText = '',
-    this.obscureText = false,
-    this.validator,
-    required this.onChanged,
+    required this.controller,
+    this.isInt = false,
+    this.placeholder,
   }) : super(key: key);
 
   @override
-  _MyTextFieldState createState() => _MyTextFieldState();
-}
-
-class _MyTextFieldState extends State<MyTextField> {
-  @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        // Note how "widget" is used to access
-        // properties in the StatefulWidget above.
-        hintText: widget.hintText,
-        labelText: widget.labelText,
-      ),
-      initialValue: widget.initialValue,
-      obscureText: widget.obscureText,
-      onChanged: (String value) => widget.onChanged(value),
-      validator: widget.validator,
-    ).padding(10);
+    final formatters = <TextInputFormatter>[];
+    if (isInt) formatters.add(FilteringTextInputFormatter.digitsOnly);
+
+    return CupertinoTextField(
+      clearButtonMode: OverlayVisibilityMode.always,
+      controller: controller,
+      inputFormatters: formatters,
+      keyboardType: isInt ? TextInputType.number : null,
+      placeholder: placeholder,
+    );
   }
 }

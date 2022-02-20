@@ -1,7 +1,6 @@
 import 'dart:io' show File;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -17,6 +16,7 @@ import '../widgets/cancel_button.dart';
 import '../widgets/my_fab.dart';
 import '../widgets/my_switch.dart';
 import '../widgets/my_text_button.dart';
+import '../widgets/my_text_field.dart';
 
 class GiftPage extends StatefulWidget {
   static const route = '/gift';
@@ -114,19 +114,11 @@ class _GiftPageState extends State<GiftPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          buildTextField(
-            placeholder: 'Name',
-            controller: nameController,
-          ),
-          buildTextField(
-            placeholder: 'Description',
-            controller: descriptionController,
-          ),
-          buildTextField(
-            placeholder: 'Price',
-            controller: priceController,
-            isInt: true,
-          ),
+          MyTextField(controller: nameController, placeholder: 'Name'),
+          MyTextField(
+              controller: descriptionController, placeholder: 'Description'),
+          MyTextField(
+              controller: priceController, placeholder: 'Price', isInt: true),
           MySwitch(
             label: 'Purchased?',
             value: purchased,
@@ -135,10 +127,7 @@ class _GiftPageState extends State<GiftPage> {
             },
           ),
           buildPhotoRow(),
-          buildTextField(
-            placeholder: 'Location',
-            controller: locationController,
-          ),
+          MyTextField(controller: locationController, placeholder: 'Location'),
           buildButtons(context),
         ],
       ).gap(10).center.padding(20),
@@ -190,23 +179,6 @@ class _GiftPageState extends State<GiftPage> {
             width: 200,
           ),
       ],
-    );
-  }
-
-  CupertinoTextField buildTextField({
-    required String placeholder,
-    required TextEditingController controller,
-    bool isInt = false,
-  }) {
-    final formatters = <TextInputFormatter>[];
-    if (isInt) formatters.add(FilteringTextInputFormatter.digitsOnly);
-
-    return CupertinoTextField(
-      clearButtonMode: OverlayVisibilityMode.always,
-      controller: controller,
-      inputFormatters: formatters,
-      keyboardType: isInt ? TextInputType.number : null,
-      placeholder: placeholder,
     );
   }
 

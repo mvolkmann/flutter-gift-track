@@ -13,6 +13,7 @@ import '../widgets/my_date_picker.dart';
 import '../widgets/my_fab.dart';
 import '../widgets/my_switch.dart';
 import '../widgets/my_text_button.dart';
+import '../widgets/my_text_field.dart';
 
 class PersonPage extends StatefulWidget {
   static const route = '/person';
@@ -82,7 +83,7 @@ class _PersonPageState extends State<PersonPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          buildNameField(),
+          MyTextField(controller: nameController, placeholder: 'Name'),
           MySwitch(
               label: 'Include Birthday',
               value: includeBirthday,
@@ -105,12 +106,6 @@ class _PersonPageState extends State<PersonPage> {
       ).gap(10).center.padding(20),
     );
   }
-
-  CupertinoTextField buildNameField() => CupertinoTextField(
-        clearButtonMode: OverlayVisibilityMode.always,
-        controller: nameController,
-        placeholder: 'Name',
-      );
 
   void delete(BuildContext context) async {
     if (await confirm(context, 'Really delete?')) {

@@ -39,7 +39,8 @@ Future<bool> confirm(BuildContext context, String question) {
   return completer.future;
 }
 
-String formatDate(DateTime date) {
+String? formatDate(DateTime? date) {
+  if (date == null) return null;
   final format = date.year <= 1 ? 'M/d' : 'M/d/y';
   return DateFormat(format).format(date);
 }

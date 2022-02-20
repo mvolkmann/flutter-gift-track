@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 
 import './my_page.dart';
 import './person_page.dart';
@@ -10,7 +9,7 @@ import '../extensions/widget_extensions.dart';
 import '../models/person.dart';
 import '../util.dart' show formatDate;
 import '../widgets/my_fab.dart';
-import '../widgets/my_text.dart';
+import '../widgets/my_list_tile.dart';
 
 class PeoplePage extends StatelessWidget {
   static const route = '/people';
@@ -43,7 +42,11 @@ class PeoplePage extends StatelessWidget {
             itemCount: people.length,
             itemBuilder: (context, index) {
               final person = people[index];
-              return _buildListTile(context, person);
+              return MyListTile(
+                onTap: () => _edit(context, person),
+                title: person.name,
+                subtitle: formatDate(person.birthday),
+              );
             },
           )
         : CircularProgressIndicator();
@@ -53,18 +56,6 @@ class PeoplePage extends StatelessWidget {
       body: body.center.padding(20),
     );
   }
-
-  Widget _buildListTile(BuildContext context, Person person) =>
-      CupertinoListTile(
-        contentPadding: EdgeInsets.zero,
-        onTap: () => _edit(context, person),
-        title: MyText(person.name),
-        subtitle: person.birthday == null
-            ? null
-            : MyText(
-                formatDate(person.birthday!),
-              ),
-      );
 
   void _edit(BuildContext context, Person person) {
     Navigator.push(

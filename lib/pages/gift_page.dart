@@ -15,6 +15,7 @@ import '../util.dart' show confirm;
 import '../widgets/gift_pickers.dart';
 import '../widgets/cancel_button.dart';
 import '../widgets/my_fab.dart';
+import '../widgets/my_switch.dart';
 import '../widgets/my_text_button.dart';
 
 class GiftPage extends StatefulWidget {
@@ -126,7 +127,13 @@ class _GiftPageState extends State<GiftPage> {
             controller: priceController,
             isInt: true,
           ),
-          buildPurchasedRow(),
+          MySwitch(
+            label: 'Purchased?',
+            value: purchased,
+            onChanged: (value) {
+              setState(() => purchased = gift.purchased = value);
+            },
+          ),
           buildPhotoRow(),
           buildTextField(
             placeholder: 'Location',
@@ -185,21 +192,6 @@ class _GiftPageState extends State<GiftPage> {
       ],
     );
   }
-
-  Widget buildPurchasedRow() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Purchased?'),
-          CupertinoSwitch(
-            value: purchased,
-            onChanged: (value) {
-              setState(() {
-                purchased = value;
-              });
-            },
-          ),
-        ],
-      );
 
   CupertinoTextField buildTextField({
     required String placeholder,

@@ -12,6 +12,7 @@ import '../util.dart' show confirm;
 import '../widgets/cancel_button.dart';
 import '../widgets/my_date_picker.dart';
 import '../widgets/my_fab.dart';
+import '../widgets/my_switch.dart';
 import '../widgets/my_text_button.dart';
 
 const fakeYear = 1;
@@ -85,8 +86,21 @@ class _OccasionPageState extends State<OccasionPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           buildNameField(),
-          buildDateRow(),
-          //if (includeDate && occasion.date != null) buildDatePicker()
+          MySwitch(
+            label: 'Include date',
+            value: includeDate,
+            onChanged: (value) {
+              includeDate = value;
+              setState(() {
+                if (includeDate) {
+                  final now = DateTime.now();
+                  occasion.date = DateTime(fakeYear, now.month, now.day);
+                } else {
+                  occasion.date = null;
+                }
+              });
+            },
+          ),
           if (includeDate && occasion.date != null)
             MyDatePicker(
               hideYear: true,
@@ -100,27 +114,6 @@ class _OccasionPageState extends State<OccasionPage> {
       ).gap(10).center.padding(20),
     );
   }
-
-  Widget buildDateRow() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Include Date'),
-          CupertinoSwitch(
-            value: includeDate,
-            onChanged: (bool value) {
-              includeDate = value;
-              setState(() {
-                if (includeDate) {
-                  final now = DateTime.now();
-                  occasion.date = DateTime(fakeYear, now.month, now.day);
-                } else {
-                  occasion.date = null;
-                }
-              });
-            },
-          ),
-        ],
-      );
 
   CupertinoTextField buildNameField() => CupertinoTextField(
         clearButtonMode: OverlayVisibilityMode.always,

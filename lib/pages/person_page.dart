@@ -11,6 +11,7 @@ import '../util.dart' show confirm;
 import '../widgets/cancel_button.dart';
 import '../widgets/my_date_picker.dart';
 import '../widgets/my_fab.dart';
+import '../widgets/my_switch.dart';
 import '../widgets/my_text_button.dart';
 
 class PersonPage extends StatefulWidget {
@@ -82,7 +83,15 @@ class _PersonPageState extends State<PersonPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           buildNameField(),
-          buildBirthdayRow(),
+          MySwitch(
+              label: 'Include Birthday',
+              value: includeBirthday,
+              onChanged: (value) {
+                includeBirthday = value;
+                setState(() {
+                  person.birthday = includeBirthday ? DateTime.now() : null;
+                });
+              }),
           if (includeBirthday)
             MyDatePicker(
               initialDate: person.birthday,
@@ -96,22 +105,6 @@ class _PersonPageState extends State<PersonPage> {
       ).gap(10).center.padding(20),
     );
   }
-
-  Widget buildBirthdayRow() => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text('Include Birthday'),
-          CupertinoSwitch(
-            value: includeBirthday,
-            onChanged: (bool value) {
-              includeBirthday = value;
-              setState(() {
-                person.birthday = includeBirthday ? DateTime.now() : null;
-              });
-            },
-          ),
-        ],
-      );
 
   CupertinoTextField buildNameField() => CupertinoTextField(
         clearButtonMode: OverlayVisibilityMode.always,

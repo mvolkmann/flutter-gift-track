@@ -23,11 +23,11 @@ class MyListTile extends StatelessWidget {
     final Widget titleWidget = trailing == null
         ? MyText(title)
         : Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               MyText(title),
               MyText(trailing!),
             ],
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
           );
     return CupertinoListTile(
       contentPadding: EdgeInsets.zero,

@@ -1,5 +1,7 @@
 import 'dart:io' show File;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show Factory;
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
 import 'package:geolocator/geolocator.dart';
@@ -175,21 +177,25 @@ class _GiftPageState extends State<GiftPage> {
       markerId: MarkerId('my-location'),
       position: latLng,
     );
+    final gestureRecognizers = {
+      new Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
+    };
     return SizedBox(
       //TODO: Cannot scroll on this because it is inside a ListView
       //TODO: which grabs all scrolling events.
       child: GoogleMap(
+        gestureRecognizers: gestureRecognizers,
         initialCameraPosition: cameraPosition,
-        mapToolbarEnabled: true,
+        //mapToolbarEnabled: true,
         //mapType: MapType.hybrid,
         mapType: MapType.normal,
         //mapType: MapType.satellite,
         markers: {marker},
-        myLocationEnabled: true,
+        //myLocationEnabled: true,
         //myLocationButtonEnabled: true,
-        scrollGesturesEnabled: true,
-        zoomControlsEnabled: true,
-        zoomGesturesEnabled: true,
+        //scrollGesturesEnabled: true,
+        //zoomControlsEnabled: true,
+        //zoomGesturesEnabled: true,
       ),
       height: 200,
       width: double.infinity,

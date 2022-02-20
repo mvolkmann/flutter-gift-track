@@ -82,7 +82,7 @@ class _PersonPageState extends State<PersonPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           buildNameField(),
-          _buildBirthdayRow(),
+          buildBirthdayRow(),
           if (includeBirthday)
             MyDatePicker(
               initialDate: person.birthday,
@@ -97,7 +97,7 @@ class _PersonPageState extends State<PersonPage> {
     );
   }
 
-  Widget _buildBirthdayRow() => Row(
+  Widget buildBirthdayRow() => Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Include Birthday'),

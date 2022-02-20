@@ -1,4 +1,3 @@
-import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +11,7 @@ import '../models/occasion.dart';
 import '../models/person.dart';
 import '../widgets/gift_pickers.dart';
 import '../widgets/my_fab.dart';
-import '../widgets/my_text.dart';
+import '../widgets/my_list_tile.dart';
 import '../util.dart' show formatPrice;
 
 class GiftsPage extends StatefulWidget {
@@ -30,7 +29,7 @@ class _GiftsPageState extends State<GiftsPage> {
   var occasions = <Occasion>[];
   var people = <Person>[];
 
-  void _add(BuildContext context) {
+  void add(BuildContext context) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -51,7 +50,7 @@ class _GiftsPageState extends State<GiftsPage> {
 
   Widget buildBody(BuildContext context) {
     return Scaffold(
-      floatingActionButton: MyFab(icon: CupertinoIcons.add, onPressed: _add),
+      floatingActionButton: MyFab(icon: CupertinoIcons.add, onPressed: add),
       body: FutureBuilder(
         future: loadData(context),
         builder: (context, snapshot) {
@@ -66,10 +65,10 @@ class _GiftsPageState extends State<GiftsPage> {
             children: [
               GiftPickers(),
               SizedBox(height: 10),
-              for (var gift in gifts) _buildListTile(gift),
+              for (var gift in gifts) buildListTile(gift),
               Spacer(),
               Text(
-                'Total: ${formatPrice(_getTotal())}',
+                'Total: ${formatPrice(getTotal())}',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ).margin(EdgeInsets.only(bottom: 90)),
             ],
@@ -79,29 +78,19 @@ class _GiftsPageState extends State<GiftsPage> {
     );
   }
 
-  Widget _buildListTile(Gift gift) {
-    final description = gift.description;
-    final price = gift.price;
-    return CupertinoListTile(
-      contentPadding: EdgeInsets.zero,
-      onTap: () => Navigator.push(
-        context,
-        CupertinoPageRoute(
-          builder: (context) => GiftPage(gift: gift),
+  Widget buildListTile(Gift gift) => MyListTile(
+        onTap: () => Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (context) => GiftPage(gift: gift),
+          ),
         ),
-      ),
-      subtitle: description == null ? null : MyText(description),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          MyText(gift.name),
-          MyText(formatPrice(price)),
-        ],
-      ),
-    );
-  }
+        subtitle: gift.description,
+        title: gift.name,
+        trailing: formatPrice(gift.price),
+      );
 
-  int _getTotal() =>
+  int getTotal() =>
       gifts.fold(0, (int acc, Gift gift) => acc + (gift.price ?? 0));
 
   Future<void> loadData(BuildContext context) async {

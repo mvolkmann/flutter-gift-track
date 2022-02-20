@@ -1,3 +1,4 @@
+import 'dart:async' show Completer;
 import 'dart:io' show File;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show Factory;
@@ -44,6 +45,7 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController descriptionController;
   late TextEditingController locationController;
   late TextEditingController priceController;
+  final Completer<GoogleMapController> _controller = Completer();
 
   Position? position;
 
@@ -181,11 +183,10 @@ class _GiftPageState extends State<GiftPage> {
       new Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
     };
     return SizedBox(
-      //TODO: Cannot scroll on this because it is inside a ListView
-      //TODO: which grabs all scrolling events.
       child: GoogleMap(
         gestureRecognizers: gestureRecognizers,
         initialCameraPosition: cameraPosition,
+        onMapCreated: onMapCreated,
         //mapToolbarEnabled: true,
         //mapType: MapType.hybrid,
         mapType: MapType.normal,
@@ -195,11 +196,15 @@ class _GiftPageState extends State<GiftPage> {
         //myLocationButtonEnabled: true,
         //scrollGesturesEnabled: true,
         //zoomControlsEnabled: true,
-        //zoomGesturesEnabled: true,
+        zoomGesturesEnabled: true,
       ),
       height: 200,
       width: double.infinity,
     );
+  }
+
+  void onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
   }
 
   Widget buildPhotoButton(IconData icon, ImageSource source) {

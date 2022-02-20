@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
 
 import './extensions/widget_extensions.dart';
+import './widgets/my_button.dart';
 
 Future<bool> confirm(BuildContext context, String question) {
   final completer = Completer<bool>();
@@ -15,15 +16,15 @@ Future<bool> confirm(BuildContext context, String question) {
         children: [
           Row(
             children: [
-              CupertinoButton(
-                child: Text('Cancel'),
+              MyButton(
+                text: 'Cancel',
                 onPressed: () {
                   completer.complete(false);
                   Navigator.pop(context);
                 },
               ),
-              CupertinoButton(
-                child: Text('OK'),
+              MyButton(
+                text: 'OK',
                 onPressed: () {
                   completer.complete(true);
                   Navigator.pop(context);

@@ -13,6 +13,7 @@ import '../extensions/widget_extensions.dart';
 import '../util.dart' show confirm;
 import '../widgets/gift_pickers.dart';
 import '../widgets/cancel_button.dart';
+import '../widgets/my_button.dart';
 import '../widgets/my_fab.dart';
 import '../widgets/my_switch.dart';
 import '../widgets/my_text_button.dart';
@@ -137,12 +138,14 @@ class _GiftPageState extends State<GiftPage> {
   Widget buildButtons(BuildContext context) {
     return Row(
       children: [
-        CupertinoButton.filled(
-          child: Text('Move'),
+        MyButton(
+          filled: true,
+          text: 'Move',
           onPressed: () => moveGift(context),
         ),
-        CupertinoButton.filled(
-          child: Text('Copy'),
+        MyButton(
+          filled: true,
+          text: 'Copy',
           onPressed: () => copyGift(context),
         ),
       ],
@@ -150,8 +153,8 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   Widget buildPhotoButton(IconData icon, ImageSource source) {
-    return CupertinoButton(
-      child: Icon(icon),
+    return MyButton(
+      icon: icon,
       onPressed: () async {
         final picker = ImagePicker();
         XFile? image = await picker.pickImage(source: source);
@@ -230,15 +233,10 @@ class _GiftPageState extends State<GiftPage> {
               child,
               Row(
                 children: [
-                  CupertinoButton(
-                    child: Text(buttonText),
-                    onPressed: onPressed,
-                  ),
-                  CupertinoButton(
-                    child: Text('Cancel'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                  MyButton(text: buttonText, onPressed: onPressed),
+                  MyButton(
+                    text: 'Cancel',
+                    onPressed: () => Navigator.pop(context),
                   ),
                 ],
                 mainAxisAlignment: MainAxisAlignment.center,

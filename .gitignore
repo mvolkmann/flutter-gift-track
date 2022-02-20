@@ -9,6 +9,10 @@
 .history
 .svn/
 
+# These files contain API keys.
+android/app/src/main/AndroidManifest.xml
+ios/Runner/AppDelegate.swift
+
 # IntelliJ related
 *.iml
 *.ipr

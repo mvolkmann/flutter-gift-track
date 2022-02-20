@@ -2,6 +2,8 @@ import 'dart:io' show File;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +20,7 @@ import '../widgets/my_fab.dart';
 import '../widgets/my_switch.dart';
 import '../widgets/my_text_button.dart';
 import '../widgets/my_text_field.dart';
+import '../geolocation.dart';
 
 class GiftPage extends StatefulWidget {
   static const route = '/gift';
@@ -40,9 +43,18 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController locationController;
   late TextEditingController priceController;
 
+  Position? position;
+
   @override
   void initState() {
     super.initState();
+
+    getPermission().then((havePermission) async {
+      if (havePermission) {
+        var p = await Geolocator.getCurrentPosition();
+        setState(() => position = p);
+      }
+    });
 
     isNew = widget.gift.id == 0;
     gift = isNew ? Gift(name: '') : widget.gift.clone;
@@ -112,26 +124,27 @@ class _GiftPageState extends State<GiftPage> {
               icon: CupertinoIcons.delete,
               onPressed: delete,
             ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          MyTextField(controller: nameController, placeholder: 'Name'),
-          MyTextField(
-              controller: descriptionController, placeholder: 'Description'),
-          MyTextField(
-              controller: priceController, placeholder: 'Price', isInt: true),
-          MySwitch(
-            label: 'Purchased?',
-            value: purchased,
-            onChanged: (value) {
-              setState(() => purchased = gift.purchased = value);
-            },
-          ),
-          buildPhotoRow(),
-          MyTextField(controller: locationController, placeholder: 'Location'),
-          buildButtons(context),
-        ],
-      ).gap(10).center.padding(20),
+      body: ListView(
+          children: [
+            MyTextField(controller: nameController, placeholder: 'Name'),
+            MyTextField(
+                controller: descriptionController, placeholder: 'Description'),
+            MyTextField(
+                controller: priceController, placeholder: 'Price', isInt: true),
+            MySwitch(
+              label: 'Purchased?',
+              value: purchased,
+              onChanged: (value) {
+                setState(() => purchased = gift.purchased = value);
+              },
+            ),
+            buildPhotoRow(),
+            MyTextField(
+                controller: locationController, placeholder: 'Location'),
+            if (position != null) buildMap(),
+            buildButtons(context),
+          ].vSpacing(20),
+          padding: EdgeInsets.all(20)),
     );
   }
 
@@ -150,6 +163,37 @@ class _GiftPageState extends State<GiftPage> {
         ),
       ],
     ).gap(10);
+  }
+
+  Widget buildMap() {
+    final latLng = LatLng(position!.latitude, position!.longitude);
+    final cameraPosition = CameraPosition(
+      target: latLng,
+      zoom: 11.5, // max is usually 21
+    );
+    final marker = Marker(
+      markerId: MarkerId('my-location'),
+      position: latLng,
+    );
+    return SizedBox(
+      //TODO: Cannot scroll on this because it is inside a ListView
+      //TODO: which grabs all scrolling events.
+      child: GoogleMap(
+        initialCameraPosition: cameraPosition,
+        mapToolbarEnabled: true,
+        //mapType: MapType.hybrid,
+        mapType: MapType.normal,
+        //mapType: MapType.satellite,
+        markers: {marker},
+        myLocationEnabled: true,
+        //myLocationButtonEnabled: true,
+        scrollGesturesEnabled: true,
+        zoomControlsEnabled: true,
+        zoomGesturesEnabled: true,
+      ),
+      height: 200,
+      width: double.infinity,
+    );
   }
 
   Widget buildPhotoButton(IconData icon, ImageSource source) {

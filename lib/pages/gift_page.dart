@@ -143,7 +143,7 @@ class _GiftPageState extends State<GiftPage> {
                 controller: locationController, placeholder: 'Location'),
             if (position != null) buildMap(),
             buildButtons(context),
-          ].vSpacing(20),
+          ].vSpacing(10),
           padding: EdgeInsets.all(20)),
     );
   }

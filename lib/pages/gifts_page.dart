@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Scaffold;
 import 'package:provider/provider.dart';
 
 import './gift_page.dart';
@@ -58,7 +58,7 @@ class _GiftsPageState extends State<GiftsPage> {
             return Text('Error fetching data: ${snapshot.error}');
           }
           if (snapshot.connectionState != ConnectionState.done) {
-            return CircularProgressIndicator();
+            return CupertinoActivityIndicator();
           }
 
           return Column(

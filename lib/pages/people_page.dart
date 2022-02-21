@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show Scaffold;
 import 'package:provider/provider.dart';
 
 import './my_page.dart';
@@ -49,7 +49,7 @@ class PeoplePage extends StatelessWidget {
               );
             },
           )
-        : CircularProgressIndicator();
+        : CupertinoActivityIndicator();
 
     return Scaffold(
       floatingActionButton: MyFab(icon: CupertinoIcons.add, onPressed: _add),

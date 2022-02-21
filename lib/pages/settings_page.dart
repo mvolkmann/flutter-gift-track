@@ -14,6 +14,9 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  static const pages = ['About', 'People', 'Occasions', 'Gifts', 'Settings'];
+  var selectedPage = 'About';
+
   @override
   Widget build(BuildContext context) {
     return MyPage(
@@ -23,27 +26,36 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget buildBody(BuildContext context) {
+    final picker = CupertinoPicker(
+      children: pages.map((page) => Text(page)).toList(),
+      itemExtent: 30,
+      onSelectedItemChanged: (index) {
+        setState(() => selectedPage = pages[index]);
+      },
+    );
+    final textStyle = TextStyle(fontWeight: FontWeight.bold);
+
     return Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Background Color'),
+            Text('Background Color', style: textStyle),
             Text('Picker goes here'),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Title Color'),
+            Text('Title Color', style: textStyle),
             Text('Picker goes here'),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Start Page'),
-            Text('Picker goes here'),
+            Text('Start Page', style: textStyle),
+            SizedBox(child: picker, height: 130, width: 110),
           ],
         ),
         MyButton(

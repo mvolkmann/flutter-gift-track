@@ -7,7 +7,8 @@ class AboutPage extends StatelessWidget {
   static const route = '/about';
 
   static const intro = 'This app tracks gift ideas and purchased gifts for '
-      'multiple people and multiple occasions throughout the year.';
+      'multiple people and multiple occasions throughout the year. '
+      'To use it, follow the steps below:';
 
   static const inAppPurchase = '''
 You are using the free version of the app which is limited
@@ -22,24 +23,26 @@ unlimited number of people and occasions.
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text('Gift Track',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-        const Text(''),
-        const Text(intro),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('To use it, follow the steps below:'),
-          Text(''),
-          Text('1. Tap \'People\' and add people.'),
-          Text('2. Tap \'Occasions\' and add occasions.'),
-          Text('3. Tap \'Gifts\' and add gifts '
-              'for specific people and occasions.'),
-          Text(''),
-          Text(inAppPurchase.replaceAll('\n', ' ')),
-        ]),
-      ],
-    ).padding(20).backgroundColor(CupertinoColors.activeBlue);
+    return DefaultTextStyle(
+      style: TextStyle(color: Colors.white),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Gift Track',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          const Text(''),
+          const Text(intro),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(''),
+            Text('1. Tap \'People\' and add people.'),
+            Text('2. Tap \'Occasions\' and add occasions.'),
+            Text('3. Tap \'Gifts\' and add gifts '
+                'for specific people and occasions.'),
+            Text(''),
+            Text(inAppPurchase.replaceAll('\n', ' ')),
+          ]),
+        ],
+      ).padding(20).backgroundColor(CupertinoColors.activeBlue),
+    );
   }
 }

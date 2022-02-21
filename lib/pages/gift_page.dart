@@ -38,19 +38,16 @@ class GiftPage extends StatefulWidget {
 
 class _GiftPageState extends State<GiftPage> {
   late AppState appState;
+  final controllerCompleter = Completer<GoogleMapController>();
   late bool isNew;
   late bool purchased;
   late Gift gift;
+  LatLng? location;
   late TextEditingController nameController;
   late TextEditingController descriptionController;
   late TextEditingController locationController;
   late TextEditingController priceController;
-
-  final controllerCompleter = Completer<GoogleMapController>();
-
   var zoom = 12.0;
-
-  Position? location;
 
   @override
   void initState() {
@@ -58,6 +55,10 @@ class _GiftPageState extends State<GiftPage> {
 
     isNew = widget.gift.id == 0;
     gift = isNew ? Gift(name: '') : widget.gift.clone;
+
+    if (!isNew && gift.latitude != null && gift.longitude != null) {
+      location = LatLng(gift.latitude!, gift.longitude!);
+    }
 
     descriptionController = TextEditingController(text: gift.description);
     descriptionController.addListener(() {
@@ -168,9 +169,9 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   Widget buildMap() {
-    final latLng = LatLng(location!.latitude, location!.longitude);
-    final cameraPosition = CameraPosition(target: latLng, zoom: zoom);
-    final marker = Marker(markerId: MarkerId('my-location'), position: latLng);
+    final cameraPosition = CameraPosition(target: location!, zoom: zoom);
+    final marker =
+        Marker(markerId: MarkerId('my-location'), position: location!);
 
     // This allows the GoogleMap widget to process gestures for
     // panning and zooming the map even if it is inside a ListView
@@ -210,7 +211,8 @@ class _GiftPageState extends State<GiftPage> {
           Positioned(
             child: FloatingActionButton.small(
               child: Icon(Icons.add),
-              onPressed: () => changeCamera(latLng, ++zoom),
+              heroTag: 'gift-page-zoom-in',
+              onPressed: () => changeCamera(location!, ++zoom),
             ),
             bottom: 45,
             right: 0,
@@ -218,7 +220,8 @@ class _GiftPageState extends State<GiftPage> {
           Positioned(
             child: FloatingActionButton.small(
               child: Icon(Icons.remove),
-              onPressed: () => changeCamera(latLng, --zoom),
+              heroTag: 'gift-page-zoom-ou',
+              onPressed: () => changeCamera(location!, --zoom),
             ),
             bottom: 0,
             right: 0,
@@ -302,7 +305,7 @@ class _GiftPageState extends State<GiftPage> {
       if (havePermission) {
         final position = await Geolocator.getCurrentPosition();
         setState(() {
-          location = position;
+          location = LatLng(position.latitude, position.longitude);
           gift.latitude = position.latitude;
           gift.longitude = position.longitude;
         });

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
+import '../extensions/widget_extensions.dart';
+import '../widgets/my_button.dart';
 import './my_page.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -21,6 +23,35 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget buildBody(BuildContext context) {
-    return Text('Settings go here.');
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Background Color'),
+            Text('Picker goes here'),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Title Color'),
+            Text('Picker goes here'),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Start Page'),
+            Text('Picker goes here'),
+          ],
+        ),
+        MyButton(
+          filled: true,
+          text: 'Reset',
+          onPressed: () {},
+        )
+      ],
+    ).gap(10).padding(20);
   }
 }

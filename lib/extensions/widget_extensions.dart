@@ -27,6 +27,10 @@ extension WidgetExtension on Widget {
     return Container(alignment: alignment, child: this);
   }
 
+  Widget backgroundColor(Color color) {
+    return Container(color: color, child: this);
+  }
+
   /// Wraps a widget in a Container that has a border.
   /// This is very useful for debugging.
   /// It is similar to the CSS property "outline: 1px solid red;".

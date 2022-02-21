@@ -40,6 +40,6 @@ unlimited number of people and occasions.
           Text(inAppPurchase.replaceAll('\n', ' ')),
         ]),
       ],
-    ).padding(20);
+    ).padding(20).backgroundColor(CupertinoColors.activeBlue);
   }
 }

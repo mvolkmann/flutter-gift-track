@@ -50,18 +50,11 @@ class _GiftPageState extends State<GiftPage> {
 
   var zoom = 12.0;
 
-  Position? position;
+  Position? location;
 
   @override
   void initState() {
     super.initState();
-
-    getPermission().then((havePermission) async {
-      if (havePermission) {
-        var p = await Geolocator.getCurrentPosition();
-        setState(() => position = p);
-      }
-    });
 
     isNew = widget.gift.id == 0;
     gift = isNew ? Gift(name: '') : widget.gift.clone;
@@ -148,7 +141,9 @@ class _GiftPageState extends State<GiftPage> {
             buildPhotoRow(),
             MyTextField(
                 controller: locationController, placeholder: 'Location'),
-            if (position != null) buildMap(),
+            if (location == null)
+              MyButton(filled: true, text: 'Save Map', onPressed: saveLocation),
+            if (location != null) buildMap(),
             buildButtons(context),
           ].vSpacing(10),
           padding: EdgeInsets.all(20)),
@@ -173,7 +168,7 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   Widget buildMap() {
-    final latLng = LatLng(position!.latitude, position!.longitude);
+    final latLng = LatLng(location!.latitude, location!.longitude);
     final cameraPosition = CameraPosition(target: latLng, zoom: zoom);
     final marker = Marker(markerId: MarkerId('my-location'), position: latLng);
 
@@ -203,6 +198,14 @@ class _GiftPageState extends State<GiftPage> {
             //scrollGesturesEnabled: true,
             //zoomControlsEnabled: true,
             //zoomGesturesEnabled: true,
+          ),
+          Positioned(
+            child: MyButton(
+              icon: CupertinoIcons.clear,
+              onPressed: clearLocation,
+            ),
+            top: 0,
+            right: 0,
           ),
           Positioned(
             child: FloatingActionButton.small(
@@ -266,6 +269,14 @@ class _GiftPageState extends State<GiftPage> {
     );
   }
 
+  void clearLocation() {
+    setState(() {
+      location = null;
+      gift.latitude = null;
+      gift.longitude = null;
+    });
+  }
+
   void copyGift(BuildContext context) {
     showBottomSheet(
       buttonText: 'Copy',
@@ -284,6 +295,19 @@ class _GiftPageState extends State<GiftPage> {
       appState.deleteGift(gift);
       Navigator.pop(context);
     }
+  }
+
+  void saveLocation() {
+    getPermission().then((havePermission) async {
+      if (havePermission) {
+        final position = await Geolocator.getCurrentPosition();
+        setState(() {
+          location = position;
+          gift.latitude = position.latitude;
+          gift.longitude = position.longitude;
+        });
+      }
+    });
   }
 
   void moveGift(BuildContext context) {

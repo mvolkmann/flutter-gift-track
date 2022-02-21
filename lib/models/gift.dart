@@ -3,7 +3,9 @@ class Gift {
   String? description;
   int id;
   String? imageUrl;
+  double? latitude;
   String? location;
+  double? longitude;
   String name;
   int occasionId;
   int personId;
@@ -17,7 +19,9 @@ class Gift {
     this.description,
     this.id = 0,
     this.imageUrl,
+    this.latitude,
     this.location,
+    this.longitude,
     required this.name,
     this.occasionId = 0,
     this.personId = 0,
@@ -32,7 +36,9 @@ class Gift {
         description: description,
         id: id,
         imageUrl: imageUrl,
+        latitude: latitude,
         location: location,
+        longitude: longitude,
         name: name,
         occasionId: occasionId,
         personId: personId,
@@ -48,7 +54,9 @@ class Gift {
       'description': description,
       'id': id,
       'imageUrl': imageUrl,
+      'latitude': latitude,
       'location': location,
+      'longitude': longitude,
       'name': name,
       'occasionId': occasionId,
       'personId': personId,

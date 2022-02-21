@@ -6,23 +6,22 @@ import 'package:flutter/widgets.dart';
 class AboutPage extends StatelessWidget {
   static const route = '/about';
 
-  const AboutPage({Key? key}) : super(key: key);
+  static const intro = 'This app tracks gift ideas and purchased gifts for '
+      'multiple people and multiple occasions throughout the year.';
 
-  @override
-  Widget build(BuildContext context) {
-    const intro = 'This app tracks gift ideas and purchased gifts for '
-        'multiple people and multiple occasions throughout the year.';
-
-    final inAppPurchase = '''
+  static const inAppPurchase = '''
 You are using the free version of the app which is limited
 to tracking gifts for two people and two occasions.
 If you attempt to add more people or occassions,
 you will be prompted to make an in-app purchase
 which enables tracking gifts for an
 unlimited number of people and occasions.
-'''
-        .replaceAll('\n', ' ');
+''';
 
+  const AboutPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.all(20),
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -38,7 +37,7 @@ unlimited number of people and occasions.
             Text('3. Tap \'Gifts\' and add gifts '
                 'for specific people and occasions.'),
             Text(''),
-            Text(inAppPurchase),
+            Text(inAppPurchase.replaceAll('\n', ' ')),
           ]),
         ]));
   }

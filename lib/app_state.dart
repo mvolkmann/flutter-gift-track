@@ -11,7 +11,7 @@ import './services/person_service.dart';
 
 class AppState extends ChangeNotifier {
   // The first to hex characters in these colors are the opacity.
-  static const defaultBackgroundColor = Color(0xff7affff); // blue
+  static const defaultBackgroundColor = Color(0xff007aff); // blue
   static const defaultStartPageIndex = 0;
   static const defaultTitleColor = Color(0xffffffff); // white
 

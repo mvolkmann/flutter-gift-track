@@ -19,12 +19,12 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   static const pages = ['About', 'People', 'Occasions', 'Gifts', 'Settings'];
   var selectedPage = pages[0];
+  late FixedExtentScrollController scrollController;
 
   late AppState appState;
 
   @override
   Widget build(BuildContext context) {
-    appState = Provider.of<AppState>(context);
     return MyPage(
       title: 'Settings',
       child: buildBody(context),
@@ -32,6 +32,10 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget buildBody(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    scrollController = FixedExtentScrollController(
+      initialItem: appState.startPageIndex,
+    );
     final picker = CupertinoPicker.builder(
       childCount: pages.length,
       itemBuilder: (_, index) => Text(pages[index]),
@@ -39,7 +43,9 @@ class _SettingsPageState extends State<SettingsPage> {
       onSelectedItemChanged: (index) {
         appState.startPageIndex = index;
       },
+      scrollController: scrollController,
     );
+
     final textStyle = TextStyle(fontWeight: FontWeight.bold);
 
     return Column(

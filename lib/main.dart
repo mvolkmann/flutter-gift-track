@@ -71,8 +71,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
-    print('main.dart build: appState = $appState');
+    //final appState = Provider.of<AppState>(context);
 
     final items = pages
         .map(

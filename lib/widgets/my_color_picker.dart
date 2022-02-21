@@ -20,10 +20,20 @@ class MyColorPicker extends StatelessWidget {
   Widget build(BuildContext context) {
     return CupertinoButton(
       child: Container(
+        decoration: BoxDecoration(
+          color: initialColor,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey,
+              offset: Offset(2, 2),
+              blurRadius: 2,
+            ),
+          ],
+          shape: BoxShape.circle,
+        ),
         height: 20,
         width: 20,
-        color: initialColor,
-      ).border(color: Colors.black),
+      ),
       onPressed: () async {
         final newColor = await pickColor(
           context: context,

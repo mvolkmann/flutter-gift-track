@@ -46,7 +46,7 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController locationController;
   late TextEditingController priceController;
 
-  final _controller = Completer<GoogleMapController>();
+  final controllerCompleter = Completer<GoogleMapController>();
 
   var zoom = 12.0;
 
@@ -176,9 +176,14 @@ class _GiftPageState extends State<GiftPage> {
     final latLng = LatLng(position!.latitude, position!.longitude);
     final cameraPosition = CameraPosition(target: latLng, zoom: zoom);
     final marker = Marker(markerId: MarkerId('my-location'), position: latLng);
+
+    // This allows the GoogleMap widget to process gestures for
+    // panning and zooming the map even if it is inside a ListView
+    // which would otherwise capture all of those gestures.
     final gestureRecognizers = {
       Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
     };
+
     return SizedBox(
       child: Stack(
         children: [
@@ -186,7 +191,7 @@ class _GiftPageState extends State<GiftPage> {
             gestureRecognizers: gestureRecognizers,
             initialCameraPosition: cameraPosition,
             onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
+              controllerCompleter.complete(controller);
             },
             //mapToolbarEnabled: true,
             //mapType: MapType.hybrid,
@@ -223,7 +228,7 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   void changeCamera(LatLng latLng, double zoom) async {
-    final controller = await _controller.future;
+    final controller = await controllerCompleter.future;
     controller.moveCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: latLng, zoom: zoom)));
   }

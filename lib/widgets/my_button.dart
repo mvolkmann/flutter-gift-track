@@ -1,4 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
+
+import '../app_state.dart';
 
 class MyButton extends StatelessWidget {
   final bool filled;
@@ -18,17 +21,16 @@ class MyButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final child = icon == null ? Text(text ?? '') : Icon(icon);
-    return filled
-        ? CupertinoButton.filled(
-            child: child,
-            onPressed: onPressed,
-            padding: padding,
-          )
-        : CupertinoButton(
-            child: child,
-            onPressed: onPressed,
-            padding: padding,
-          );
+    final appState = Provider.of<AppState>(context);
+
+    final child = icon == null
+        ? Text(text ?? '', style: TextStyle(color: appState.titleColor))
+        : Icon(icon);
+    return CupertinoButton(
+      child: child,
+      color: filled ? appState.backgroundColor : null,
+      onPressed: onPressed,
+      padding: padding,
+    );
   }
 }

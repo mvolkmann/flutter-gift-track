@@ -78,6 +78,10 @@ extension WidgetExtension on Widget {
     return Padding(child: this, padding: EdgeInsets.all(size));
   }
 
+  Widget textColor(Color color) {
+    return DefaultTextStyle(style: TextStyle(color: color), child: this);
+  }
+
   /// Wraps a widget in a Padding with a given horizontal padding.
   Widget vPadding(double size) {
     return Padding(child: this, padding: EdgeInsets.symmetric(vertical: size));

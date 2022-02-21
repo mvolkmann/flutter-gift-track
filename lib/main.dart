@@ -27,6 +27,12 @@ class MyApp extends StatelessWidget {
         create: (context) => AppState(context: context),
         child: HomePage(),
       ),
+      // This is needed to allow using some Material widgets
+      // such as ColorPicker.
+      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+        DefaultMaterialLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
+      ],
       theme: CupertinoThemeData(
         brightness: Brightness.light,
         // This sets the color of the back button icon in the app bar.

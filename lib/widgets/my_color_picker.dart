@@ -48,7 +48,9 @@ class MyColorPicker extends StatelessWidget {
         title: Text(title ?? 'Color Picker'),
         content: Column(
           children: [
-            Card(
+            // ColorPicker must be wrapped in Material to avoid
+            // "Exception cauto by widgets library...No Material widget found."
+            Material(
               child: ColorPicker(
                 pickerColor: color,
                 onColorChanged: (color) => selectedColor = color,

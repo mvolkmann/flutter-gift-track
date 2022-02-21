@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './models/gift.dart';
 import './models/occasion.dart';
@@ -9,6 +10,16 @@ import './services/occasion_service.dart';
 import './services/person_service.dart';
 
 class AppState extends ChangeNotifier {
+  // The first to hex characters in these colors are the opacity.
+  static const defaultBackgroundColor = Color(0xff7affff); // blue
+  static const defaultStartPageIndex = 0;
+  static const defaultTitleColor = Color(0xffffffff); // white
+
+  late SharedPreferences prefs;
+  var _backgroundColor = defaultBackgroundColor;
+  var _startPageIndex = defaultStartPageIndex;
+  var _titleColor = defaultTitleColor;
+
   late GiftService _giftService;
   late OccasionService _occasionService;
   late PersonService _personService;
@@ -34,6 +45,7 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  Color get backgroundColor => _backgroundColor;
   Map<int, Gift> get gifts => _gifts;
   Map<int, Occasion> get occasions => _occasions;
   Map<int, Person> get people => _people;
@@ -41,6 +53,8 @@ class AppState extends ChangeNotifier {
   int get selectedOccasionIndex => _selectedOccasionIndex;
   Person? get selectedPerson => _selectedPerson;
   int get selectedPersonIndex => _selectedPersonIndex;
+  int get startPageIndex => _startPageIndex;
+  Color get titleColor => _titleColor;
 
   Future<void> addGift(Gift g) async {
     if (g.name.isEmpty) return;
@@ -135,6 +149,15 @@ class AppState extends ChangeNotifier {
 
   Future<void> _loadData() async {
     try {
+      // Get preferences from SharedPreferences.
+      prefs = await SharedPreferences.getInstance();
+      int? color = prefs.getInt('backgroundColor');
+      if (color != null) _backgroundColor = Color(color);
+      var index = prefs.getInt('startPageIndex');
+      if (index != null) _startPageIndex = index;
+      color = prefs.getInt('titleColor');
+      if (color != null) _titleColor = Color(color);
+
       _occasionService = DatabaseService.occasionService;
       _occasions = await _occasionService.getAll();
       if (_occasions.isNotEmpty) {
@@ -170,6 +193,12 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  void resetSettings() {
+    backgroundColor = AppState.defaultBackgroundColor;
+    startPageIndex = AppState.defaultStartPageIndex;
+    titleColor = AppState.defaultTitleColor;
+  }
+
   Future<void> selectOccasion(
     Occasion o, {
     required int index,
@@ -198,6 +227,24 @@ class AppState extends ChangeNotifier {
       person: _selectedPerson!,
       occasion: _selectedOccasion!,
     );
+  }
+
+  set backgroundColor(Color color) {
+    prefs.setInt('backgroundColor', color.value);
+    _backgroundColor = color;
+    notifyListeners();
+  }
+
+  set startPageIndex(int index) {
+    prefs.setInt('startPageIndex', index);
+    _startPageIndex = index;
+    notifyListeners();
+  }
+
+  set titleColor(Color color) {
+    prefs.setInt('titleColor', color.value);
+    _titleColor = color;
+    notifyListeners();
   }
 
   void showError(error, stackTrace) {

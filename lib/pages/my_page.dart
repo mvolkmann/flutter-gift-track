@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:provider/provider.dart';
 
+import '../app_state.dart';
 import '../widgets/my_text.dart';
 
 class MyPage extends StatelessWidget {
@@ -18,9 +20,11 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.systemBlue,
+        backgroundColor: appState.backgroundColor,
         leading: leading,
         middle: MyText(
           title,

@@ -37,6 +37,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         // This sets the color of the back button icon in the app bar.
         textTheme: CupertinoTextThemeData(
+          //TODO: Get titleColor from appState.
           primaryColor: CupertinoColors.white,
         ),
       ),
@@ -70,6 +71,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    print('main.dart build: appState = $appState');
+
     final items = pages
         .map(
           (page) => BottomNavigationBarItem(
@@ -79,16 +83,9 @@ class HomePage extends StatelessWidget {
         )
         .toList();
 
-    // Notes for blog:
-    // - See CupertinoColors.
-    // - Change page background to CupertinoColors.activeBlue?
-    // - style argument can be set to
-    //   CupertinoTheme.of(context).textTheme.navLargeTitleTextStyle.
-    // - Material has a single Scaffold class, but Cupertino has two:
-    //   CupertinoPageScaffold and CupertinoTabScaffold.
-    //   It is common to use the first inside the second.
-
     return CupertinoTabScaffold(
+      //controller: CupertinoTabController(initialIndex: appState.startPageIndex),
+      //controller: CupertinoTabController(initialIndex: 0),
       tabBar: CupertinoTabBar(items: items),
       tabBuilder: (context, index) => CupertinoTabView(
         builder: (BuildContext context) => pages[index].page,

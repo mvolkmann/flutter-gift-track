@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart' show Colors;
+import 'package:provider/provider.dart';
 
+import './my_page.dart';
+import '../app_state.dart';
 import '../extensions/widget_extensions.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_color_picker.dart';
-import './my_page.dart';
 
 class SettingsPage extends StatefulWidget {
   static const route = '/settings';
@@ -19,11 +20,11 @@ class _SettingsPageState extends State<SettingsPage> {
   static const pages = ['About', 'People', 'Occasions', 'Gifts', 'Settings'];
   var selectedPage = pages[0];
 
-  Color backgroundColor = Colors.blue;
-  Color titleColor = Colors.white;
+  late AppState appState;
 
   @override
   Widget build(BuildContext context) {
+    appState = Provider.of<AppState>(context);
     return MyPage(
       title: 'Settings',
       child: buildBody(context),
@@ -36,7 +37,7 @@ class _SettingsPageState extends State<SettingsPage> {
       itemBuilder: (_, index) => Text(pages[index]),
       itemExtent: 30,
       onSelectedItemChanged: (index) {
-        setState(() => selectedPage = pages[index]);
+        appState.startPageIndex = index;
       },
     );
     final textStyle = TextStyle(fontWeight: FontWeight.bold);
@@ -48,10 +49,10 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Text('Background Color', style: textStyle),
             MyColorPicker(
-              initialColor: backgroundColor,
+              initialColor: appState.backgroundColor,
               title: 'Background Color',
               onSelected: (color) {
-                setState(() => backgroundColor = color);
+                appState.backgroundColor = color;
               },
             ),
           ],
@@ -61,10 +62,10 @@ class _SettingsPageState extends State<SettingsPage> {
           children: [
             Text('Title Color', style: textStyle),
             MyColorPicker(
-              initialColor: titleColor,
+              initialColor: appState.titleColor,
               title: 'Title Color',
               onSelected: (color) {
-                setState(() => titleColor = color);
+                appState.titleColor = color;
               },
             ),
           ],
@@ -79,7 +80,7 @@ class _SettingsPageState extends State<SettingsPage> {
         MyButton(
           filled: true,
           text: 'Reset',
-          onPressed: () {},
+          onPressed: () => appState.resetSettings(),
         )
       ],
     ).gap(10).padding(20);

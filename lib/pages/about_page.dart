@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart'; // defines Colors
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import '../extensions/widget_extensions.dart';
+
+import '../app_state.dart';
 
 class AboutPage extends StatelessWidget {
   static const route = '/about';
@@ -23,6 +24,8 @@ unlimited number of people and occasions.
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -43,6 +46,6 @@ unlimited number of people and occasions.
     )
         .padding(20)
         .textColor(CupertinoColors.white)
-        .backgroundColor(CupertinoColors.activeBlue);
+        .backgroundColor(appState.backgroundColor);
   }
 }

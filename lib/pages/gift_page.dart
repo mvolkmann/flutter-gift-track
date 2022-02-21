@@ -37,8 +37,6 @@ class GiftPage extends StatefulWidget {
 }
 
 class _GiftPageState extends State<GiftPage> {
-  static const defaultZoom = 14.0;
-
   late AppState appState;
   late TextEditingController descriptionController;
   late Gift gift;
@@ -49,7 +47,6 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController nameController;
   late TextEditingController priceController;
   late bool purchased;
-  var zoom = defaultZoom;
 
   @override
   void initState() {
@@ -60,7 +57,6 @@ class _GiftPageState extends State<GiftPage> {
 
     if (!isNew && gift.latitude != null && gift.longitude != null) {
       location = LatLng(gift.latitude!, gift.longitude!);
-      zoom = gift.zoom!;
     }
 
     descriptionController = TextEditingController(text: gift.description);
@@ -120,7 +116,6 @@ class _GiftPageState extends State<GiftPage> {
     return MyTextButton(
       text: 'Done',
       onPressed: () async {
-        gift.zoom = zoom;
         if (isNew) {
           await appState.addGift(gift);
         } else {
@@ -184,7 +179,7 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   Widget buildMap() {
-    final cameraPosition = CameraPosition(target: location!, zoom: zoom);
+    final cameraPosition = CameraPosition(target: location!, zoom: gift.zoom);
     final marker =
         Marker(markerId: MarkerId('my-location'), position: location!);
 
@@ -228,7 +223,7 @@ class _GiftPageState extends State<GiftPage> {
             child: FloatingActionButton.small(
               child: Icon(Icons.add),
               heroTag: 'gift-page-zoom-in',
-              onPressed: () => changeCamera(location!, ++zoom),
+              onPressed: () => changeCamera(location!, gift.zoom++),
             ),
             bottom: 45,
             right: 0,
@@ -237,7 +232,7 @@ class _GiftPageState extends State<GiftPage> {
             child: FloatingActionButton.small(
               child: Icon(Icons.remove),
               heroTag: 'gift-page-zoom-ou',
-              onPressed: () => changeCamera(location!, --zoom),
+              onPressed: () => changeCamera(location!, gift.zoom--),
             ),
             bottom: 0,
             right: 0,
@@ -293,7 +288,7 @@ class _GiftPageState extends State<GiftPage> {
       location = null;
       gift.latitude = null;
       gift.longitude = null;
-      gift.zoom = null;
+      gift.zoom = Gift.defaultZoom;
     });
   }
 

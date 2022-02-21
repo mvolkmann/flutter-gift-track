@@ -1,4 +1,6 @@
 class Gift {
+  static const defaultZoom = 14.0;
+
   DateTime? date;
   String? description;
   int id;
@@ -13,7 +15,7 @@ class Gift {
   int? price;
   bool purchased;
   String? websiteUrl;
-  double? zoom;
+  double zoom;
 
   Gift({
     this.date,
@@ -30,7 +32,7 @@ class Gift {
     this.price,
     this.purchased = false,
     this.websiteUrl,
-    this.zoom,
+    this.zoom = defaultZoom,
   });
 
   Gift get clone => Gift(

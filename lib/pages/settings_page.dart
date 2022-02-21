@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart' show Colors;
 
 import '../extensions/widget_extensions.dart';
 import '../widgets/my_button.dart';
 import './my_page.dart';
+import '../util.dart' show pickColor;
 
 class SettingsPage extends StatefulWidget {
   static const route = '/settings';
@@ -16,6 +18,9 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   static const pages = ['About', 'People', 'Occasions', 'Gifts', 'Settings'];
   var selectedPage = pages[0];
+
+  Color backgroundColor = Colors.blue;
+  Color titleColor = Colors.white;
 
   @override
   Widget build(BuildContext context) {
@@ -42,14 +47,28 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Background Color', style: textStyle),
-            Text('Picker goes here'),
+            MyButton(
+              text: 'Pick',
+              onPressed: () => pickColor(
+                context: context,
+                title: 'Background Color',
+                color: backgroundColor,
+              ),
+            ),
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Title Color', style: textStyle),
-            Text('Picker goes here'),
+            MyButton(
+              text: 'Pick',
+              onPressed: () => pickColor(
+                context: context,
+                title: 'Title Color',
+                color: titleColor,
+              ),
+            ),
           ],
         ),
         Row(

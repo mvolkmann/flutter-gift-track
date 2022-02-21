@@ -3,8 +3,8 @@ import 'package:flutter/material.dart' show Colors;
 
 import '../extensions/widget_extensions.dart';
 import '../widgets/my_button.dart';
+import '../widgets/my_color_picker.dart';
 import './my_page.dart';
-import '../util.dart' show pickColor;
 
 class SettingsPage extends StatefulWidget {
   static const route = '/settings';
@@ -47,18 +47,10 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Background Color', style: textStyle),
-            CupertinoButton(
-              child: Container(
-                height: 20,
-                width: 20,
-                color: backgroundColor,
-              ).border(color: Colors.black),
-              onPressed: () async {
-                final color = await pickColor(
-                  context: context,
-                  title: 'Background Color',
-                  color: backgroundColor,
-                );
+            MyColorPicker(
+              initialColor: backgroundColor,
+              title: 'Background Color',
+              onSelected: (color) {
                 setState(() => backgroundColor = color);
               },
             ),
@@ -68,15 +60,10 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Title Color', style: textStyle),
-            Container(height: 20, width: 20, color: titleColor).border(),
-            MyButton(
-              text: 'Pick',
-              onPressed: () async {
-                final color = await pickColor(
-                  context: context,
-                  title: 'Title Color',
-                  color: titleColor,
-                );
+            MyColorPicker(
+              initialColor: titleColor,
+              title: 'Title Color',
+              onSelected: (color) {
                 setState(() => titleColor = color);
               },
             ),

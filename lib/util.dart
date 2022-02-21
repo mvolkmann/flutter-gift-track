@@ -1,9 +1,7 @@
 import 'dart:async' show Completer;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 // See https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
-import 'package:flutter/material.dart' show Card;
 
 import './extensions/widget_extensions.dart';
 import './widgets/my_button.dart';
@@ -55,36 +53,3 @@ String formatPrice(int? price) {
 
 DateTime? msToDateTime(int? ms) =>
     ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
-
-Future<Color> pickColor({
-  required BuildContext context,
-  String? title,
-  required Color color,
-}) {
-  final completer = Completer<Color>();
-  var selectedColor = color;
-  showCupertinoDialog(
-    context: context,
-    builder: (context) => CupertinoAlertDialog(
-      title: Text(title ?? 'Color Picker'),
-      content: Column(
-        children: [
-          Card(
-            child: ColorPicker(
-              pickerColor: color,
-              onColorChanged: (color) => selectedColor = color,
-            ),
-          ),
-          MyButton(
-            text: 'Select Color',
-            onPressed: () {
-              completer.complete(selectedColor);
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    ),
-  );
-  return completer.future;
-}

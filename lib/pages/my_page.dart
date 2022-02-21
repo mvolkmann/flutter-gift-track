@@ -28,7 +28,9 @@ class MyPage extends StatelessWidget {
         leading: leading,
         middle: MyText(
           title,
-          color: CupertinoColors.white,
+          bold: true,
+          color: appState.titleColor,
+          size: 24,
           textAlign: TextAlign.center,
         ),
         trailing: trailing,

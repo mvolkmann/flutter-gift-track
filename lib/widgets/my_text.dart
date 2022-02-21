@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class MyText extends StatelessWidget {
   final bool bold;
   final Color? color;
+  final double size;
   final String text;
   final TextAlign? textAlign;
 
@@ -11,6 +12,7 @@ class MyText extends StatelessWidget {
     Key? key,
     this.bold = false,
     this.color,
+    this.size = 14,
     this.textAlign,
   }) : super(key: key);
 
@@ -21,7 +23,7 @@ class MyText extends StatelessWidget {
     FontWeight weight = bold ? FontWeight.bold : FontWeight.normal;
     return Text(
       text,
-      style: TextStyle(color: theColor, fontWeight: weight),
+      style: TextStyle(color: theColor, fontSize: size, fontWeight: weight),
       textAlign: textAlign,
     );
   }

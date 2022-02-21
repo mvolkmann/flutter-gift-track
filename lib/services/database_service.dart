@@ -146,6 +146,7 @@ class DatabaseService {
             price integer,
             purchased numeric,
             websiteUrl text,
+            zoom real,
             foreign key(occasionId) references occasions(id),
             foreign key(personId) references people(id)
           )

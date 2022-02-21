@@ -37,6 +37,8 @@ class GiftPage extends StatefulWidget {
 }
 
 class _GiftPageState extends State<GiftPage> {
+  static const defaultZoom = 14.0;
+
   late AppState appState;
   late TextEditingController descriptionController;
   late Gift gift;
@@ -47,7 +49,7 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController nameController;
   late TextEditingController priceController;
   late bool purchased;
-  var zoom = 12.0;
+  var zoom = defaultZoom;
 
   @override
   void initState() {
@@ -58,6 +60,7 @@ class _GiftPageState extends State<GiftPage> {
 
     if (!isNew && gift.latitude != null && gift.longitude != null) {
       location = LatLng(gift.latitude!, gift.longitude!);
+      zoom = gift.zoom!;
     }
 
     descriptionController = TextEditingController(text: gift.description);
@@ -117,6 +120,7 @@ class _GiftPageState extends State<GiftPage> {
     return MyTextButton(
       text: 'Done',
       onPressed: () async {
+        gift.zoom = zoom;
         if (isNew) {
           await appState.addGift(gift);
         } else {
@@ -200,6 +204,7 @@ class _GiftPageState extends State<GiftPage> {
             onMapCreated: (GoogleMapController controller) {
               mapControllerCompleter.complete(controller);
             },
+            //TODO: What do these commented-out options do?
             //mapToolbarEnabled: true,
             //mapType: MapType.hybrid,
             mapType: MapType.normal,
@@ -288,6 +293,7 @@ class _GiftPageState extends State<GiftPage> {
       location = null;
       gift.latitude = null;
       gift.longitude = null;
+      gift.zoom = null;
     });
   }
 

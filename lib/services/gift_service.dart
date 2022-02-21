@@ -61,6 +61,7 @@ class GiftService {
           price: map['price'],
           purchased: map['purchased'] == 1,
           websiteUrl: map['websiteUrl'],
+          zoom: map['zoom'],
         )
     };
   }

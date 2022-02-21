@@ -13,6 +13,7 @@ class Gift {
   int? price;
   bool purchased;
   String? websiteUrl;
+  double? zoom;
 
   Gift({
     this.date,
@@ -29,6 +30,7 @@ class Gift {
     this.price,
     this.purchased = false,
     this.websiteUrl,
+    this.zoom,
   });
 
   Gift get clone => Gift(
@@ -46,6 +48,7 @@ class Gift {
         price: price,
         purchased: purchased,
         websiteUrl: websiteUrl,
+        zoom: zoom,
       );
 
   Map<String, dynamic> toMap() {
@@ -64,6 +67,7 @@ class Gift {
       'price': price,
       'purchased': purchased ? 1 : 0,
       'websiteUrl': websiteUrl,
+      'zoom': zoom,
     };
   }
 

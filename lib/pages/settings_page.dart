@@ -15,7 +15,7 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   static const pages = ['About', 'People', 'Occasions', 'Gifts', 'Settings'];
-  var selectedPage = 'About';
+  var selectedPage = pages[0];
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +26,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Widget buildBody(BuildContext context) {
-    final picker = CupertinoPicker(
-      children: pages.map((page) => Text(page)).toList(),
+    final picker = CupertinoPicker.builder(
+      childCount: pages.length,
+      itemBuilder: (_, index) => Text(pages[index]),
       itemExtent: 30,
       onSelectedItemChanged: (index) {
         setState(() => selectedPage = pages[index]);

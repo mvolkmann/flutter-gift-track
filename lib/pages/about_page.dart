@@ -23,8 +23,10 @@ unlimited number of people and occasions.
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
           const Text('Gift Track',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           const Text(''),
@@ -39,6 +41,8 @@ unlimited number of people and occasions.
             Text(''),
             Text(inAppPurchase.replaceAll('\n', ' ')),
           ]),
-        ]));
+        ],
+      ),
+    );
   }
 }

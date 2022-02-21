@@ -45,7 +45,10 @@ class _GiftPageState extends State<GiftPage> {
   late TextEditingController descriptionController;
   late TextEditingController locationController;
   late TextEditingController priceController;
-  final Completer<GoogleMapController> _controller = Completer();
+
+  final _controller = Completer<GoogleMapController>();
+
+  var zoom = 12.0;
 
   Position? position;
 
@@ -171,40 +174,58 @@ class _GiftPageState extends State<GiftPage> {
 
   Widget buildMap() {
     final latLng = LatLng(position!.latitude, position!.longitude);
-    final cameraPosition = CameraPosition(
-      target: latLng,
-      zoom: 11.5, // max is usually 21
-    );
-    final marker = Marker(
-      markerId: MarkerId('my-location'),
-      position: latLng,
-    );
+    final cameraPosition = CameraPosition(target: latLng, zoom: zoom);
+    final marker = Marker(markerId: MarkerId('my-location'), position: latLng);
     final gestureRecognizers = {
-      new Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
+      Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
     };
     return SizedBox(
-      child: GoogleMap(
-        gestureRecognizers: gestureRecognizers,
-        initialCameraPosition: cameraPosition,
-        onMapCreated: onMapCreated,
-        //mapToolbarEnabled: true,
-        //mapType: MapType.hybrid,
-        mapType: MapType.normal,
-        //mapType: MapType.satellite,
-        markers: {marker},
-        //myLocationEnabled: true,
-        //myLocationButtonEnabled: true,
-        //scrollGesturesEnabled: true,
-        //zoomControlsEnabled: true,
-        zoomGesturesEnabled: true,
+      child: Stack(
+        children: [
+          GoogleMap(
+            gestureRecognizers: gestureRecognizers,
+            initialCameraPosition: cameraPosition,
+            onMapCreated: (GoogleMapController controller) {
+              _controller.complete(controller);
+            },
+            //mapToolbarEnabled: true,
+            //mapType: MapType.hybrid,
+            mapType: MapType.normal,
+            //mapType: MapType.satellite,
+            markers: {marker},
+            //myLocationEnabled: true,
+            myLocationButtonEnabled: false, // hides provided lower-right button
+            //scrollGesturesEnabled: true,
+            //zoomControlsEnabled: true,
+            //zoomGesturesEnabled: true,
+          ),
+          Positioned(
+            child: FloatingActionButton.small(
+              child: Icon(Icons.add),
+              onPressed: () => changeCamera(latLng, ++zoom),
+            ),
+            bottom: 45,
+            right: 0,
+          ),
+          Positioned(
+            child: FloatingActionButton.small(
+              child: Icon(Icons.remove),
+              onPressed: () => changeCamera(latLng, --zoom),
+            ),
+            bottom: 0,
+            right: 0,
+          ),
+        ],
       ),
       height: 200,
       width: double.infinity,
     );
   }
 
-  void onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
+  void changeCamera(LatLng latLng, double zoom) async {
+    final controller = await _controller.future;
+    controller.animateCamera(CameraUpdate.newCameraPosition(
+        CameraPosition(target: latLng, zoom: zoom)));
   }
 
   Widget buildPhotoButton(IconData icon, ImageSource source) {

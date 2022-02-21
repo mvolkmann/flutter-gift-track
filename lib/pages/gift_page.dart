@@ -224,7 +224,7 @@ class _GiftPageState extends State<GiftPage> {
 
   void changeCamera(LatLng latLng, double zoom) async {
     final controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(
+    controller.moveCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: latLng, zoom: zoom)));
   }
 

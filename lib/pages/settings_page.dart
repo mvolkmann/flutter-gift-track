@@ -47,13 +47,20 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Background Color', style: textStyle),
-            MyButton(
-              text: 'Pick',
-              onPressed: () => pickColor(
-                context: context,
-                title: 'Background Color',
+            CupertinoButton(
+              child: Container(
+                height: 20,
+                width: 20,
                 color: backgroundColor,
-              ),
+              ).border(color: Colors.black),
+              onPressed: () async {
+                final color = await pickColor(
+                  context: context,
+                  title: 'Background Color',
+                  color: backgroundColor,
+                );
+                setState(() => backgroundColor = color);
+              },
             ),
           ],
         ),
@@ -61,13 +68,17 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Title Color', style: textStyle),
+            Container(height: 20, width: 20, color: titleColor).border(),
             MyButton(
               text: 'Pick',
-              onPressed: () => pickColor(
-                context: context,
-                title: 'Title Color',
-                color: titleColor,
-              ),
+              onPressed: () async {
+                final color = await pickColor(
+                  context: context,
+                  title: 'Title Color',
+                  color: titleColor,
+                );
+                setState(() => titleColor = color);
+              },
             ),
           ],
         ),

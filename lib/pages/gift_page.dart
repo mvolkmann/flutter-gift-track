@@ -38,15 +38,15 @@ class GiftPage extends StatefulWidget {
 
 class _GiftPageState extends State<GiftPage> {
   late AppState appState;
-  final controllerCompleter = Completer<GoogleMapController>();
-  late bool isNew;
-  late bool purchased;
-  late Gift gift;
-  LatLng? location;
-  late TextEditingController nameController;
   late TextEditingController descriptionController;
+  late Gift gift;
+  late bool isNew;
+  LatLng? location;
   late TextEditingController locationController;
+  final mapControllerCompleter = Completer<GoogleMapController>();
+  late TextEditingController nameController;
   late TextEditingController priceController;
+  late bool purchased;
   var zoom = 12.0;
 
   @override
@@ -85,6 +85,16 @@ class _GiftPageState extends State<GiftPage> {
     });
 
     purchased = gift.purchased;
+  }
+
+  @override
+  void dispose() {
+    descriptionController.dispose();
+    locationController.dispose();
+    mapControllerCompleter.future.then((controller) => controller.dispose());
+    nameController.dispose();
+    priceController.dispose();
+    super.dispose();
   }
 
   @override
@@ -187,7 +197,7 @@ class _GiftPageState extends State<GiftPage> {
             gestureRecognizers: gestureRecognizers,
             initialCameraPosition: cameraPosition,
             onMapCreated: (GoogleMapController controller) {
-              controllerCompleter.complete(controller);
+              mapControllerCompleter.complete(controller);
             },
             //mapToolbarEnabled: true,
             //mapType: MapType.hybrid,
@@ -234,7 +244,7 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   void changeCamera(LatLng latLng, double zoom) async {
-    final controller = await controllerCompleter.future;
+    final controller = await mapControllerCompleter.future;
     controller.moveCamera(CameraUpdate.newCameraPosition(
         CameraPosition(target: latLng, zoom: zoom)));
   }

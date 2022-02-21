@@ -107,6 +107,7 @@ class _GiftPageState extends State<GiftPage> {
     return MyPage(
       leading: CancelButton(),
       title: '${occasion.name} Gift\nfor ${person.name}',
+      titleSize: 18,
       trailing: name.isEmpty ? null : buildAddUpdateButton(context),
       child: buildBody(context),
     );

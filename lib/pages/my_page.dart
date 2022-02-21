@@ -8,6 +8,7 @@ class MyPage extends StatelessWidget {
   final Widget child;
   final Widget? leading;
   final String title;
+  final double titleSize;
   final Widget? trailing;
 
   const MyPage({
@@ -15,6 +16,7 @@ class MyPage extends StatelessWidget {
     required this.child,
     this.leading,
     required this.title,
+    this.titleSize = 24,
     this.trailing,
   }) : super(key: key);
 
@@ -30,7 +32,7 @@ class MyPage extends StatelessWidget {
           title,
           bold: true,
           color: appState.titleColor,
-          size: 24,
+          size: titleSize,
           textAlign: TextAlign.center,
         ),
         trailing: trailing,

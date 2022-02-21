@@ -54,13 +54,25 @@ class MyColorPicker extends StatelessWidget {
                 onColorChanged: (color) => selectedColor = color,
               ),
             ),
-            CupertinoButton(
-              child: Text('Select Color'),
-              onPressed: () {
-                completer.complete(selectedColor);
-                Navigator.pop(context);
-              },
-            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CupertinoButton(
+                  child: Text('Cancel'),
+                  onPressed: () {
+                    completer.complete(initialColor);
+                    Navigator.pop(context);
+                  },
+                ),
+                CupertinoButton(
+                  child: Text('Select'),
+                  onPressed: () {
+                    completer.complete(selectedColor);
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ).gap(10)
           ],
         ),
       ),

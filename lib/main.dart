@@ -71,7 +71,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //final appState = Provider.of<AppState>(context);
+    final appState = Provider.of<AppState>(context);
+    final controller =
+        CupertinoTabController(initialIndex: appState.startPageIndex);
 
     final items = pages
         .map(
@@ -83,8 +85,7 @@ class HomePage extends StatelessWidget {
         .toList();
 
     return CupertinoTabScaffold(
-      //controller: CupertinoTabController(initialIndex: appState.startPageIndex),
-      //controller: CupertinoTabController(initialIndex: 0),
+      controller: controller,
       tabBar: CupertinoTabBar(items: items),
       tabBuilder: (context, index) => CupertinoTabView(
         builder: (BuildContext context) => pages[index].page,

@@ -237,8 +237,8 @@ class AppState extends ChangeNotifier {
 
   set startPageIndex(int index) {
     prefs.setInt('startPageIndex', index);
-    _startPageIndex = index;
-    notifyListeners();
+    // We do not want to updaet _startPageIndex or call notifyListeners here
+    // because we don't want to jump to the selected page now.
   }
 
   set titleColor(Color color) {

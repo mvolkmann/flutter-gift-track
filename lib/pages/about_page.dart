@@ -29,8 +29,12 @@ unlimited number of people and occasions.
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text('Gift Track',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        Text('Gift Track',
+            style: TextStyle(
+              color: appState.titleColor,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            )),
         const Text(''),
         const Text(intro),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

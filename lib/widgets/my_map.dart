@@ -50,8 +50,6 @@ class _MyMapState extends State<MyMap> {
 
   @override
   Widget build(BuildContext context) {
-    print('my_map.dart build: zoom = $zoom');
-
     return SizedBox(
       child: Stack(
         children: [
@@ -67,8 +65,16 @@ class _MyMapState extends State<MyMap> {
             //myLocationEnabled: true,
             myLocationButtonEnabled: false, // hides provided lower-right button
             onMapCreated: (GoogleMapController controller) {
-              print('my_map.dart onMapCreated: entered');
               mapControllerCompleter.complete(controller);
+            },
+            onCameraMove: (position) {
+              if (position.zoom == zoom) {
+                widget.onLocationChanged(position.target);
+              } else {
+                if (position.zoom % 1 == 0) {
+                  changeZoom(position.zoom);
+                }
+              }
             },
             //scrollGesturesEnabled: true,
             //zoomControlsEnabled: true,

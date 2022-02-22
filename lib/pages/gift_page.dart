@@ -218,7 +218,6 @@ class _GiftPageState extends State<GiftPage> {
   }
 
   void changeMapLocation(LatLng location) {
-    print('gift_page.dart changeMapLocation: location = $location');
     setState(() {
       gift.latitude = location.latitude;
       gift.longitude = location.longitude;

@@ -1,11 +1,8 @@
 import 'dart:async' show Completer;
 import 'dart:io' show File;
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart' show Factory;
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gift_track/extensions/widget_extensions.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -20,6 +17,7 @@ import '../widgets/gift_pickers.dart';
 import '../widgets/cancel_button.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_fab.dart';
+import '../widgets/my_map.dart';
 import '../widgets/my_switch.dart';
 import '../widgets/my_text_button.dart';
 import '../widgets/my_text_field.dart';
@@ -155,7 +153,14 @@ class _GiftPageState extends State<GiftPage> {
                 controller: locationController, placeholder: 'Location'),
             if (location == null)
               MyButton(filled: true, text: 'Save Map', onPressed: saveLocation),
-            if (location != null) buildMap(),
+            if (location != null)
+              MyMap(
+                initialZoom: gift.zoom,
+                location: location!,
+                onCleared: clearMap,
+                onLocationChanged: changeMapLocation,
+                onZoomChanged: changeMapZoom,
+              ),
             buildButtons(context),
           ].vSpacing(10),
           padding: EdgeInsets.all(20)),
@@ -177,78 +182,6 @@ class _GiftPageState extends State<GiftPage> {
         ),
       ],
     ).gap(10);
-  }
-
-  Widget buildMap() {
-    final cameraPosition = CameraPosition(target: location!, zoom: gift.zoom);
-    final marker =
-        Marker(markerId: MarkerId('my-location'), position: location!);
-
-    // This allows the GoogleMap widget to process gestures for
-    // panning and zooming the map even if it is inside a ListView
-    // which would otherwise capture all of those gestures.
-    final gestureRecognizers = {
-      Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
-    };
-
-    return SizedBox(
-      child: Stack(
-        children: [
-          GoogleMap(
-            gestureRecognizers: gestureRecognizers,
-            initialCameraPosition: cameraPosition,
-            onMapCreated: (GoogleMapController controller) {
-              mapControllerCompleter.complete(controller);
-            },
-            //TODO: What do these commented-out options do?
-            //mapToolbarEnabled: true,
-            //mapType: MapType.hybrid,
-            mapType: MapType.normal,
-            //mapType: MapType.satellite,
-            markers: {marker},
-            //myLocationEnabled: true,
-            myLocationButtonEnabled: false, // hides provided lower-right button
-            //scrollGesturesEnabled: true,
-            //zoomControlsEnabled: true,
-            //zoomGesturesEnabled: true,
-          ),
-          Positioned(
-            child: MyButton(
-              icon: CupertinoIcons.clear,
-              onPressed: clearLocation,
-            ),
-            top: 0,
-            right: 0,
-          ),
-          Positioned(
-            child: FloatingActionButton.small(
-              child: Icon(Icons.add),
-              heroTag: 'gift-page-zoom-in',
-              onPressed: () => changeCamera(location!, gift.zoom++),
-            ),
-            bottom: 45,
-            right: 0,
-          ),
-          Positioned(
-            child: FloatingActionButton.small(
-              child: Icon(Icons.remove),
-              heroTag: 'gift-page-zoom-ou',
-              onPressed: () => changeCamera(location!, gift.zoom--),
-            ),
-            bottom: 0,
-            right: 0,
-          ),
-        ],
-      ),
-      height: 200,
-      width: double.infinity,
-    );
-  }
-
-  void changeCamera(LatLng latLng, double zoom) async {
-    final controller = await mapControllerCompleter.future;
-    controller.moveCamera(CameraUpdate.newCameraPosition(
-        CameraPosition(target: latLng, zoom: zoom)));
   }
 
   Widget buildPhotoButton(IconData icon, ImageSource source) {
@@ -284,7 +217,19 @@ class _GiftPageState extends State<GiftPage> {
     );
   }
 
-  void clearLocation() {
+  void changeMapLocation(LatLng location) {
+    print('gift_page.dart changeMapLocation: location = $location');
+    setState(() {
+      gift.latitude = location.latitude;
+      gift.longitude = location.longitude;
+    });
+  }
+
+  void changeMapZoom(double zoom) {
+    setState(() => gift.zoom = zoom);
+  }
+
+  void clearMap() {
     setState(() {
       location = null;
       gift.latitude = null;
@@ -313,19 +258,6 @@ class _GiftPageState extends State<GiftPage> {
     }
   }
 
-  void saveLocation() {
-    getPermission().then((havePermission) async {
-      if (havePermission) {
-        final position = await Geolocator.getCurrentPosition();
-        setState(() {
-          location = LatLng(position.latitude, position.longitude);
-          gift.latitude = position.latitude;
-          gift.longitude = position.longitude;
-        });
-      }
-    });
-  }
-
   void moveGift(BuildContext context) {
     showBottomSheet(
       buttonText: 'Move',
@@ -337,6 +269,18 @@ class _GiftPageState extends State<GiftPage> {
         Navigator.pop(context); // pops gift page
       },
     );
+  }
+
+  void saveLocation() async {
+    final havePermission = await getGeolocationPermission();
+    if (havePermission) {
+      final position = await getGeolocation();
+      setState(() {
+        location = LatLng(position.latitude, position.longitude);
+        gift.latitude = position.latitude;
+        gift.longitude = position.longitude;
+      });
+    }
   }
 
   void showBottomSheet({

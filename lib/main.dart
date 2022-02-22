@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_state.dart';
 import './pages/about_page.dart';
@@ -37,7 +38,6 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.light,
         // This sets the color of the back button icon in the app bar.
         textTheme: CupertinoTextThemeData(
-          //TODO: Get titleColor from appState.
           primaryColor: CupertinoColors.white,
         ),
       ),
@@ -64,16 +64,35 @@ List<PageDescriptor> pages = <PageDescriptor>[
   PageDescriptor('Settings', CupertinoIcons.gear_solid, SettingsPage()),
 ];
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   static const route = '/';
 
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late AppState appState;
+  var tabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // We need to get startPageIndex directly from SharedPreferences
+    // instead of from AppState because the _loadData method in AppState
+    // will not have completed at this point.
+    SharedPreferences.getInstance().then((prefs) {
+      final index = prefs.getInt('startPageIndex');
+      if (index != null) setState(() => tabIndex = index);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
-    final controller =
-        CupertinoTabController(initialIndex: appState.startPageIndex);
+    final controller = CupertinoTabController(initialIndex: tabIndex);
 
     final items = pages
         .map(
@@ -86,7 +105,10 @@ class HomePage extends StatelessWidget {
 
     return CupertinoTabScaffold(
       controller: controller,
-      tabBar: CupertinoTabBar(items: items),
+      tabBar: CupertinoTabBar(
+        items: items,
+        onTap: (index) => tabIndex = index,
+      ),
       tabBuilder: (context, index) => CupertinoTabView(
         builder: (BuildContext context) => pages[index].page,
         routes: {

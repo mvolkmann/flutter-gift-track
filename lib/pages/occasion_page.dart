@@ -80,6 +80,7 @@ class _OccasionPageState extends State<OccasionPage> {
           ? null
           : MyFab(
               backgroundColor: CupertinoColors.destructiveRed,
+              foregroundColor: CupertinoColors.white,
               icon: CupertinoIcons.delete,
               onPressed: delete,
             ),

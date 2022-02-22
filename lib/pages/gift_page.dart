@@ -132,6 +132,7 @@ class _GiftPageState extends State<GiftPage> {
           ? null
           : MyFab(
               backgroundColor: CupertinoColors.destructiveRed,
+              foregroundColor: CupertinoColors.white,
               icon: CupertinoIcons.delete,
               onPressed: delete,
             ),

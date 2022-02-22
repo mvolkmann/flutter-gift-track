@@ -77,6 +77,7 @@ class _PersonPageState extends State<PersonPage> {
           ? null
           : MyFab(
               backgroundColor: CupertinoColors.destructiveRed,
+              foregroundColor: CupertinoColors.white,
               icon: CupertinoIcons.delete,
               onPressed: delete,
             ),

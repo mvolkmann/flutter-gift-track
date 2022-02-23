@@ -10,6 +10,7 @@ import '../models/gift.dart';
 import '../models/occasion.dart';
 import '../models/person.dart';
 import '../widgets/gift_pickers.dart';
+import '../widgets/my_button.dart';
 import '../widgets/my_fab.dart';
 import '../widgets/my_list_tile.dart';
 import '../util.dart' show formatPrice;
@@ -69,8 +70,17 @@ class _GiftsPageState extends State<GiftsPage> {
               Spacer(),
               Text(
                 'Total: ${formatPrice(getTotal())}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ).margin(EdgeInsets.only(bottom: 90)),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              MyButton(
+                filled: true,
+                text: 'Delete These Gifts',
+                onPressed: deleteTheseGifts,
+                padding: EdgeInsets.symmetric(horizontal: 10),
+              ).margin(EdgeInsets.only(bottom: 80, top: 10)),
             ],
           );
         },
@@ -89,6 +99,10 @@ class _GiftsPageState extends State<GiftsPage> {
         title: gift.name,
         trailing: formatPrice(gift.price),
       );
+
+  void deleteTheseGifts() {
+    print('gifts_page.dart deleteTheseGifts: entered');
+  }
 
   int getTotal() =>
       gifts.fold(0, (int acc, Gift gift) => acc + (gift.price ?? 0));

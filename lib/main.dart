@@ -11,7 +11,6 @@ import './pages/people_page.dart';
 import './pages/settings_page.dart';
 import './services/database_service.dart';
 
-//void main() => runApp(const MyApp());
 void main() {
   DatabaseService.setup().then((_) {
     runApp(const MyApp());
@@ -64,36 +63,18 @@ List<PageDescriptor> pages = <PageDescriptor>[
   PageDescriptor('Settings', CupertinoIcons.gear_solid, SettingsPage()),
 ];
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   static const route = '/';
 
   HomePage({Key? key}) : super(key: key);
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  late AppState appState;
-  var tabIndex = 0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // We need to get startPageIndex directly from SharedPreferences
-    // instead of from AppState because the _loadData method in AppState
-    // will not have completed at this point.
-    SharedPreferences.getInstance().then((prefs) {
-      final index = prefs.getInt('startPageIndex');
-      if (index != null) setState(() => tabIndex = index);
-    });
+  Future<int> getStartPageIndex() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('startPageIndex') ?? 0;
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = CupertinoTabController(initialIndex: tabIndex);
-
     final items = pages
         .map(
           (page) => BottomNavigationBarItem(
@@ -103,22 +84,33 @@ class _HomePageState extends State<HomePage> {
         )
         .toList();
 
-    return CupertinoTabScaffold(
-      controller: controller,
-      tabBar: CupertinoTabBar(
-        items: items,
-        //onTap: (index) => tabIndex = index,
-      ),
-      tabBuilder: (context, index) => CupertinoTabView(
-        builder: (BuildContext context) => pages[index].page,
-        routes: {
-          AboutPage.route: (_) => AboutPage(),
-          GiftsPage.route: (_) => GiftsPage(),
-          OccasionsPage.route: (_) => OccasionsPage(),
-          PeoplePage.route: (_) => PeoplePage(),
-          SettingsPage.route: (_) => SettingsPage(),
-        },
-      ),
+    return FutureBuilder<int>(
+      future: getStartPageIndex(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return Container(
+            color: CupertinoColors.white,
+            child: CupertinoActivityIndicator(),
+          );
+        }
+
+        final tabIndex = snapshot.data!;
+        final controller = CupertinoTabController(initialIndex: tabIndex);
+        return CupertinoTabScaffold(
+          controller: controller,
+          tabBar: CupertinoTabBar(items: items),
+          tabBuilder: (context, index) => CupertinoTabView(
+            builder: (BuildContext context) => pages[index].page,
+            routes: {
+              AboutPage.route: (_) => AboutPage(),
+              GiftsPage.route: (_) => GiftsPage(),
+              OccasionsPage.route: (_) => OccasionsPage(),
+              PeoplePage.route: (_) => PeoplePage(),
+              SettingsPage.route: (_) => SettingsPage(),
+            },
+          ),
+        );
+      },
     );
   }
 }

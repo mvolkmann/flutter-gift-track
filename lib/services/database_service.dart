@@ -29,6 +29,22 @@ class DatabaseService {
     await _createTables(db);
   }
 
+  static Future<Gift> _createGift({
+    required Person person,
+    required Occasion occasion,
+    required String name,
+    String? description,
+    int? price,
+  }) async {
+    final gift = Gift(description: description, name: name, price: price);
+    await giftService.create(
+      person: person,
+      occasion: occasion,
+      gift: gift,
+    );
+    return gift;
+  }
+
   static Future<void> _createGifts() async {
     await _createGift(
       person: _firstPerson,
@@ -51,33 +67,6 @@ class DatabaseService {
     );
   }
 
-  static Future<void> _createOccasions() async {
-    _firstOccasion = await _createOccasion(name: 'Birthday');
-    await _createOccasion(name: 'Christmas', date: DateTime(0, 12, 25));
-  }
-
-  static Future<void> _createPeople() async {
-    _firstPerson =
-        await _createPerson(name: 'Mark', birthday: DateTime(1961, 4, 16));
-    await _createPerson(name: 'Tami', birthday: DateTime(1961, 9, 9));
-  }
-
-  static Future<Gift> _createGift({
-    required Person person,
-    required Occasion occasion,
-    required String name,
-    String? description,
-    int? price,
-  }) async {
-    final gift = Gift(description: description, name: name, price: price);
-    await giftService.create(
-      person: person,
-      occasion: occasion,
-      gift: gift,
-    );
-    return gift;
-  }
-
   static Future<Occasion> _createOccasion({
     required String name,
     DateTime? date,
@@ -85,6 +74,21 @@ class DatabaseService {
     final occasion = Occasion(date: date, name: name);
     await occasionService.create(occasion);
     return occasion;
+  }
+
+  static Future<void> _createOccasions() async {
+    _firstOccasion = await _createOccasion(name: 'Birthday');
+    await _createOccasion(name: 'Christmas', date: DateTime(0, 12, 25));
+    await _createOccasion(name: 'Father\'s Day');
+    await _createOccasion(name: 'Mother\'s Day');
+  }
+
+  static Future<void> _createPeople() async {
+    _firstPerson =
+        await _createPerson(name: 'Amanda', birthday: DateTime(1985, 7, 22));
+    await _createPerson(name: 'Mark', birthday: DateTime(1961, 4, 16));
+    await _createPerson(name: 'Tami', birthday: DateTime(1961, 9, 9));
+    await _createPerson(name: 'Jeremy', birthday: DateTime(1987, 4, 30));
   }
 
   static Future<Person> _createPerson({

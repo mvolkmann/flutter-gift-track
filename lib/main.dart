@@ -23,6 +23,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoApp(
+      // This removes the diagonal DEBUG banner from the upper-right
+      // that is displayed by default when running in debug mode.
+      debugShowCheckedModeBanner: false,
       home: ChangeNotifierProvider(
         create: (context) => AppState(context: context),
         child: HomePage(),

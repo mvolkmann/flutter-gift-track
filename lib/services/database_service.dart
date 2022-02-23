@@ -11,27 +11,22 @@ import '../services/occasion_service.dart';
 
 // This should ONLY be used in app_state.dart!
 class DatabaseService {
+  // Set to true to recreate the database with initial data.
+  static var reset = false;
+  //static var reset = true;
+
   static late GiftService giftService;
   static late OccasionService occasionService;
   static late PersonService personService;
   static late Occasion _firstOccasion;
   static late Person _firstPerson;
 
-  // Set to true to recreate the database with initial data.
-  static var reset = false;
-  //static var reset = true;
-
   static Future<void> setup() async {
     final db = await _getDatabase();
     giftService = GiftService(database: db);
     occasionService = OccasionService(database: db);
     personService = PersonService(database: db);
-    if (reset) {
-      await _createTables(db);
-      await _createPeople();
-      await _createOccasions();
-      await _createGifts();
-    }
+    await _createTables(db);
   }
 
   static Future<void> _createGifts() async {
@@ -101,36 +96,34 @@ class DatabaseService {
     return person;
   }
 
-  static Future<Database> _getDatabase() async {
-    WidgetsFlutterBinding.ensureInitialized();
-
-    return openDatabase(
-      join(await getDatabasesPath(), 'dog.db'),
-      onConfigure: (db) async {
-        if (reset) {
-          final tables = ['gifts', 'occasions', 'people'];
-          for (var table in tables) {
-            await db.execute('drop table if exists $table');
-          }
-        }
-      },
-      onCreate: (db, version) async {
-        // This is only called if the database does not yet exist.
-        reset = true;
-        _createTables(db);
-      },
-      // The version can be used to perform database upgrades and downgrades.
-      version: 1,
-    );
-  }
-
   static Future<void> _createTables(Database db) async {
-    final tables = ['gifts', 'occasions', 'people'];
-    for (var table in tables) {
-      await db.execute('drop table if exists $table');
+    if (!await _tableExists(db, 'people')) {
+      print('database_service.dart _createTables: creating people table');
+      await db.execute('''
+          create table if not exists people(
+            id integer primary key autoincrement,
+            birthday numeric,
+            name text
+          )
+        ''');
+      await _createPeople();
     }
 
-    await db.execute('''
+    if (!await _tableExists(db, 'occasions')) {
+      print('database_service.dart _createTables: creating occasions table');
+      await db.execute('''
+          create table if not exists occasions(
+            id integer primary key autoincrement,
+            date numeric,
+            name text
+          )
+        ''');
+      await _createOccasions();
+    }
+
+    if (!await _tableExists(db, 'gifts')) {
+      print('database_service.dart _createTables: creating gifts table');
+      await db.execute('''
           create table if not exists gifts(
             id integer primary key autoincrement,
             date numeric,
@@ -151,19 +144,37 @@ class DatabaseService {
             foreign key(personId) references people(id)
           )
         ''');
-    await db.execute('''
-          create table if not exists occasions(
-            id integer primary key autoincrement,
-            date numeric,
-            name text
-          )
-        ''');
-    await db.execute('''
-          create table if not exists people(
-            id integer primary key autoincrement,
-            birthday numeric,
-            name text
-          )
-        ''');
+      await _createGifts();
+    }
+  }
+
+  static Future<Database> _getDatabase() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    return openDatabase(
+      join(await getDatabasesPath(), 'dog.db'),
+      onConfigure: (db) async {
+        if (reset) {
+          final tables = ['gifts', 'occasions', 'people'];
+          for (var table in tables) {
+            await db.execute('drop table if exists $table');
+          }
+        }
+      },
+      onCreate: (db, version) async {
+        _createTables(db);
+      },
+      // The version can be used to perform database upgrades and downgrades.
+      version: 1,
+    );
+  }
+
+  static Future<bool> _tableExists(Database db, String tableName) async {
+    final result = await db.query(
+      'sqlite_master',
+      where: 'name = ?',
+      whereArgs: [tableName],
+    );
+    return result.isNotEmpty;
   }
 }

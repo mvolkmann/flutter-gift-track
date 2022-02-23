@@ -107,7 +107,7 @@ class _HomePageState extends State<HomePage> {
       controller: controller,
       tabBar: CupertinoTabBar(
         items: items,
-        onTap: (index) => tabIndex = index,
+        //onTap: (index) => tabIndex = index,
       ),
       tabBuilder: (context, index) => CupertinoTabView(
         builder: (BuildContext context) => pages[index].page,

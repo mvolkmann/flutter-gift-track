@@ -13,7 +13,7 @@ import '../widgets/gift_pickers.dart';
 import '../widgets/my_button.dart';
 import '../widgets/my_fab.dart';
 import '../widgets/my_list_tile.dart';
-import '../util.dart' show formatPrice;
+import '../util.dart' show confirm, formatPrice;
 
 class GiftsPage extends StatefulWidget {
   static const route = '/gifts';
@@ -75,12 +75,14 @@ class _GiftsPageState extends State<GiftsPage> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              MyButton(
-                filled: true,
-                text: 'Delete These Gifts',
-                onPressed: deleteTheseGifts,
-                padding: EdgeInsets.symmetric(horizontal: 10),
-              ).margin(EdgeInsets.only(bottom: 80, top: 10)),
+              if (gifts.isNotEmpty)
+                MyButton(
+                  backgroundColor: CupertinoColors.destructiveRed,
+                  filled: true,
+                  text: 'Delete These Gifts',
+                  onPressed: deleteTheseGifts,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                ).margin(EdgeInsets.only(bottom: 80, top: 10)),
             ],
           );
         },
@@ -100,8 +102,13 @@ class _GiftsPageState extends State<GiftsPage> {
         trailing: formatPrice(gift.price),
       );
 
-  void deleteTheseGifts() {
-    print('gifts_page.dart deleteTheseGifts: entered');
+  void deleteTheseGifts() async {
+    const msg = 'Are you sure you want to delete all of these gifts?';
+    if (await confirm(context, msg)) {
+      for (var gift in gifts) {
+        appState.deleteGift(gift);
+      }
+    }
   }
 
   int getTotal() =>

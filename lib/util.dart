@@ -16,15 +16,21 @@ Future<bool> confirm(BuildContext context, String question) {
         children: [
           Row(
             children: [
-              MyButton(
-                text: 'Cancel',
+              //TODO: When MyButton is used instead of Cupertion button,
+              //TODO: I get an error trying to get the appState. Why?
+              //MyButton(
+              //  text: 'Cancel',
+              CupertinoButton(
+                child: Text('Cancel'),
                 onPressed: () {
                   completer.complete(false);
                   Navigator.pop(context);
                 },
               ),
-              MyButton(
-                text: 'OK',
+              //MyButton(
+              //  text: 'OK',
+              CupertinoButton(
+                child: Text('OK'),
                 onPressed: () {
                   completer.complete(true);
                   Navigator.pop(context);
@@ -32,7 +38,7 @@ Future<bool> confirm(BuildContext context, String question) {
               ),
             ],
             mainAxisAlignment: MainAxisAlignment.center,
-          ).gap(10)
+          ).gap(10),
         ],
       ),
     ),

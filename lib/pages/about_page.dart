@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../extensions/widget_extensions.dart';
 
 import '../app_state.dart';
+import '../purchase_api.dart';
 import '../widgets/my_button.dart';
 
 class AboutPage extends StatelessWidget {
@@ -25,6 +27,7 @@ unlimited number of people and occasions.
 
   @override
   Widget build(BuildContext context) {
+    fetchOffers(context);
     final appState = Provider.of<AppState>(context);
 
     return Column(
@@ -60,5 +63,20 @@ unlimited number of people and occasions.
         .padding(20)
         .textColor(CupertinoColors.white)
         .backgroundColor(appState.backgroundColor);
+  }
+
+  void fetchOffers(BuildContext context) async {
+    final offerings = await PurchaseApi.fetchOffers();
+    if (offerings.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('No offerings found.'),
+        ),
+      );
+    } else {
+      final offer = offerings.first;
+      print('about_page.dart fetchOffers: offer = $offer');
+      //TODO: Add a fancier UI to display each offer in a Card and ListTile.
+    }
   }
 }

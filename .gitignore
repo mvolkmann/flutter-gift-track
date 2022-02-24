@@ -12,6 +12,7 @@
 # These files contain API keys.
 android/app/src/main/AndroidManifest.xml
 ios/Runner/AppDelegate.swift
+lib/secrets.dart
 
 # IntelliJ related
 *.iml

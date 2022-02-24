@@ -78,10 +78,10 @@ class _GiftsPageState extends State<GiftsPage> {
               if (gifts.isNotEmpty)
                 MyButton(
                   backgroundColor: CupertinoColors.destructiveRed,
+                  compact: true,
                   filled: true,
                   text: 'Delete These Gifts',
                   onPressed: deleteTheseGifts,
-                  padding: EdgeInsets.symmetric(horizontal: 10),
                 ).margin(EdgeInsets.only(bottom: 80, top: 10)),
             ],
           );

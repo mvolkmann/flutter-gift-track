@@ -82,7 +82,9 @@ class _MyMapState extends State<MyMap> {
           ),
           Positioned(
             child: MyButton(
-                icon: CupertinoIcons.clear, onPressed: widget.onCleared),
+              icon: CupertinoIcons.clear,
+              onPressed: widget.onCleared,
+            ),
             top: 0,
             right: 0,
           ),

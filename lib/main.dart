@@ -22,28 +22,30 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CupertinoApp(
-      // This removes the diagonal DEBUG banner from the upper-right
-      // that is displayed by default when running in debug mode.
-      debugShowCheckedModeBanner: false,
-      home: ChangeNotifierProvider(
-        create: (context) => AppState(context: context),
-        child: HomePage(),
-      ),
-      // This is needed to allow using some Material widgets
-      // such as ColorPicker.
-      localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
-        DefaultMaterialLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-      ],
-      theme: CupertinoThemeData(
-        brightness: Brightness.light,
-        // This sets the color of the back button icon in the app bar.
-        textTheme: CupertinoTextThemeData(
-          primaryColor: CupertinoColors.white,
+    // ChangeNotifierProvider must be wrapped around CupertinoApp
+    // and not just HomePage in order to access AppState in a dialog.
+    return ChangeNotifierProvider<AppState>(
+      create: (context) => AppState(context: context),
+      child: CupertinoApp(
+        // This removes the diagonal DEBUG banner from the upper-right
+        // that is displayed by default when running in debug mode.
+        debugShowCheckedModeBanner: false,
+        home: HomePage(),
+        // This is needed to allow using some Material widgets
+        // such as ColorPicker.
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          DefaultMaterialLocalizations.delegate,
+          DefaultWidgetsLocalizations.delegate,
+        ],
+        theme: CupertinoThemeData(
+          brightness: Brightness.light,
+          // This sets the color of the back button icon in the app bar.
+          textTheme: CupertinoTextThemeData(
+            primaryColor: CupertinoColors.white,
+          ),
         ),
+        title: 'Gift Track',
       ),
-      title: 'Gift Track',
     );
   }
 }

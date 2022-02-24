@@ -12,34 +12,31 @@ Future<bool> confirm(BuildContext context, String question) {
     context: context,
     builder: (context) => CupertinoAlertDialog(
       title: Text(question),
-      content: Column(
-        children: [
-          Row(
-            children: [
-              //TODO: When MyButton is used instead of Cupertion button,
-              //TODO: I get an error trying to get the appState. Why?
-              //MyButton(
-              //  text: 'Cancel',
-              CupertinoButton(
-                child: Text('Cancel'),
-                onPressed: () {
-                  completer.complete(false);
-                  Navigator.pop(context);
-                },
-              ),
-              //MyButton(
-              //  text: 'OK',
-              CupertinoButton(
-                child: Text('OK'),
-                onPressed: () {
-                  completer.complete(true);
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-            mainAxisAlignment: MainAxisAlignment.center,
-          ).gap(10),
-        ],
+      content: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Row(
+          children: [
+            MyButton(
+              compact: true,
+              filled: true,
+              text: 'Cancel',
+              onPressed: () {
+                completer.complete(false);
+                Navigator.pop(context);
+              },
+            ),
+            MyButton(
+              compact: true,
+              filled: true,
+              text: 'OK',
+              onPressed: () {
+                completer.complete(true);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ).gap(10),
       ),
     ),
   );

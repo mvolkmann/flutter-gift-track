@@ -5,6 +5,7 @@ import '../app_state.dart';
 
 class MyButton extends StatelessWidget {
   final Color? backgroundColor;
+  final bool compact;
   final Color? foregroundColor;
   final bool filled;
   final IconData? icon;
@@ -15,6 +16,7 @@ class MyButton extends StatelessWidget {
   const MyButton({
     Key? key,
     this.backgroundColor,
+    this.compact = false,
     this.filled = false,
     this.foregroundColor,
     this.icon,
@@ -26,18 +28,19 @@ class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
-
     final child = icon == null
         ? Text(
             text ?? '',
             style: TextStyle(color: foregroundColor ?? appState.titleColor),
           )
         : Icon(icon);
+    final pad = padding ??
+        (compact ? const EdgeInsets.symmetric(horizontal: 10) : null);
     return CupertinoButton(
       child: child,
       color: filled ? backgroundColor ?? appState.backgroundColor : null,
       onPressed: onPressed,
-      padding: padding,
+      padding: pad,
     );
   }
 }

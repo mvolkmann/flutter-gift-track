@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../extensions/widget_extensions.dart';
 
 import '../app_state.dart';
+import '../widgets/my_button.dart';
 
 class AboutPage extends StatelessWidget {
   static const route = '/about';
@@ -45,6 +46,14 @@ unlimited number of people and occasions.
               'for specific people and occasions.'),
           Text(''),
           Text(inAppPurchase.replaceAll('\n', ' ')),
+          MyButton(
+            backgroundColor: appState.titleColor,
+            compact: true,
+            foregroundColor: appState.backgroundColor,
+            filled: true,
+            text: 'Purchase',
+            onPressed: () {},
+          ).margin(const EdgeInsets.only(top: 20)),
         ]),
       ],
     )

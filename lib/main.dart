@@ -11,11 +11,7 @@ import './pages/people_page.dart';
 import './pages/settings_page.dart';
 import './services/database_service.dart';
 
-void main() {
-  DatabaseService.setup().then((_) {
-    runApp(const MyApp());
-  });
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -74,6 +70,7 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
   Future<int> getStartPageIndex() async {
+    await DatabaseService.setup();
     final prefs = await SharedPreferences.getInstance();
     return prefs.getInt('startPageIndex') ?? 0;
   }

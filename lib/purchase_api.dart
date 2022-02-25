@@ -15,7 +15,7 @@ class PurchaseApi {
       return current == null ? [] : [current];
       //} on PlatformException catch (e) {
     } catch (e) {
-      print('error getting RevenueCat offerings: ${e}');
+      print('error getting RevenueCat offerings: $e');
       return [];
     }
   }

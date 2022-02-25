@@ -164,10 +164,13 @@ class DatabaseService {
             await db.execute('drop table if exists $table');
           }
         }
+        await setup();
       },
+      /*
       onCreate: (db, version) async {
         _createTables(db);
       },
+      */
       // The version can be used to perform database upgrades and downgrades.
       version: 1,
     );

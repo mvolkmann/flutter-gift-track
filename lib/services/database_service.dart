@@ -21,6 +21,7 @@ class DatabaseService {
   static late Occasion _firstOccasion;
   static late Person _firstPerson;
 
+  // This is called in main.dart.
   static Future<void> setup() async {
     final db = await _getDatabase();
     giftService = GiftService(database: db);
@@ -166,11 +167,6 @@ class DatabaseService {
         }
         await setup();
       },
-      /*
-      onCreate: (db, version) async {
-        _createTables(db);
-      },
-      */
       // The version can be used to perform database upgrades and downgrades.
       version: 1,
     );

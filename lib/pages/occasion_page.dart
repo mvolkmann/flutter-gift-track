@@ -118,7 +118,10 @@ class _OccasionPageState extends State<OccasionPage> {
   }
 
   void delete(BuildContext context) async {
-    if (await confirm(context, 'Really delete?')) {
+    if (await confirm(
+        context,
+        'Deleting this occasion will also delete all associated gifts. '
+        'Are you sure?')) {
       appState.deleteOccasion(occasion);
       Navigator.pop(context);
     }

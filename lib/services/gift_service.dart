@@ -44,27 +44,32 @@ class GiftService {
       where: 'personId = ? and occasionId = ?',
       whereArgs: [person.id, occasion.id],
     );
-    return <int, Gift>{
-      for (var map in maps)
-        map['id']: Gift(
-          date: msToDateTime(map['date']),
-          description: map['description'],
-          id: map['id'],
-          imageUrl: map['imageUrl'],
-          latitude: map['latitude'],
-          location: map['location'],
-          longitude: map['longitude'],
-          name: map['name'],
-          occasionId: map['occasionId'],
-          personId: map['personId'],
-          photo: map['photo'],
-          price: map['price'],
-          purchased: map['purchased'] == 1,
-          websiteUrl: map['websiteUrl'],
-          zoom: map['zoom'],
-        )
-    };
+    return <int, Gift>{for (var map in maps) map['id']: mapToGift(map)};
   }
+
+  // This is only used for tesing.
+  Future<List<Gift>> getAll() async {
+    final List<Map<String, dynamic>> maps = await database.query('gifts');
+    return maps.map(mapToGift).toList();
+  }
+
+  Gift mapToGift(map) => Gift(
+        date: msToDateTime(map['date']),
+        description: map['description'],
+        id: map['id'],
+        imageUrl: map['imageUrl'],
+        latitude: map['latitude'],
+        location: map['location'],
+        longitude: map['longitude'],
+        name: map['name'],
+        occasionId: map['occasionId'],
+        personId: map['personId'],
+        photo: map['photo'],
+        price: map['price'],
+        purchased: map['purchased'] == 1,
+        websiteUrl: map['websiteUrl'],
+        zoom: map['zoom'],
+      );
 
   Future<int> update(Gift gift) {
     return database.update(

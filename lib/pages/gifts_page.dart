@@ -42,6 +42,7 @@ class _GiftsPageState extends State<GiftsPage> {
   @override
   Widget build(BuildContext context) {
     appState = Provider.of<AppState>(context);
+    //appState.logGifts(); // for debugging
 
     return MyPage(
       title: 'Gifts',

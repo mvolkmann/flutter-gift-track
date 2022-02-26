@@ -145,8 +145,14 @@ class DatabaseService {
             purchased numeric,
             websiteUrl text,
             zoom real,
-            foreign key(occasionId) references occasions(id),
-            foreign key(personId) references people(id)
+            constraint fk_occasions
+              foreign key(occasionId)
+              references occasions(id)
+              on delete cascade,
+            constraint fk_people
+              foreign key(personId)
+              references people(id)
+              on delete cascade
           )
         ''');
       await _createGifts();
@@ -159,6 +165,7 @@ class DatabaseService {
     return openDatabase(
       join(await getDatabasesPath(), 'dog.db'),
       onConfigure: (db) async {
+        await db.execute('pragma foreign_keys = ON');
         if (reset) {
           final tables = ['gifts', 'occasions', 'people'];
           for (var table in tables) {

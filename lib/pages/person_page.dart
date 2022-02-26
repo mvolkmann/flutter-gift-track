@@ -109,7 +109,10 @@ class _PersonPageState extends State<PersonPage> {
   }
 
   void delete(BuildContext context) async {
-    if (await confirm(context, 'Really delete?')) {
+    if (await confirm(
+        context,
+        'Deleting this person will also delete all of their gifts. '
+        'Are you sure?')) {
       appState.deletePerson(person);
       Navigator.pop(context);
     }

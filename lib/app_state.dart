@@ -147,6 +147,18 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  // This is only used for debugging.
+  void logGifts() async {
+    try {
+      final gifts = await _giftService.getAll();
+      for (var gift in gifts) {
+        print('app_state.dart logGifts: gift = $gift');
+      }
+    } catch (e, s) {
+      showError(e, s);
+    }
+  }
+
   Future<void> _loadData() async {
     try {
       // Get preferences from SharedPreferences.
@@ -248,11 +260,13 @@ class AppState extends ChangeNotifier {
   }
 
   void showError(error, stackTrace) {
+    final msg = '$error\n$stackTrace';
+    //print('app_state.dart showError: msg = $msg');
     showCupertinoDialog(
       context: context,
       builder: (_) => CupertinoAlertDialog(
         title: Text('Data Setup Error'),
-        content: Text('$error\n$stackTrace'),
+        content: Text(msg),
       ),
     );
   }

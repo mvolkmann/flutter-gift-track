@@ -6,6 +6,34 @@ import 'package:intl/intl.dart' show DateFormat, NumberFormat;
 import './extensions/widget_extensions.dart';
 import './widgets/my_button.dart';
 
+Future<void> alert(BuildContext context, String message) {
+  final completer = Completer<void>();
+  showCupertinoDialog(
+    context: context,
+    builder: (context) => CupertinoAlertDialog(
+      title: Text(message),
+      content: Padding(
+        padding: const EdgeInsets.only(top: 20),
+        child: Row(
+          children: [
+            MyButton(
+              compact: true,
+              filled: true,
+              text: 'Close',
+              onPressed: () {
+                completer.complete();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ).gap(10),
+      ),
+    ),
+  );
+  return completer.future;
+}
+
 Future<bool> confirm(BuildContext context, String question) {
   final completer = Completer<bool>();
   showCupertinoDialog(

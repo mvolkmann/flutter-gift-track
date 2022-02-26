@@ -7,7 +7,7 @@ import './my_page.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/person.dart';
 import '../app_state.dart';
-import '../util.dart' show confirm;
+import '../util.dart' show alert, confirm;
 import '../widgets/cancel_button.dart';
 import '../widgets/my_date_picker.dart';
 import '../widgets/my_fab.dart';
@@ -60,11 +60,12 @@ class _PersonPageState extends State<PersonPage> {
   Widget buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: 'Done',
-      onPressed: () {
+      onPressed: () async {
         if (isNew) {
-          appState.addPerson(person);
+          await appState.addPerson(person);
+          alert(context, 'Created a person with id ${person.id}');
         } else {
-          appState.updatePerson(person);
+          await appState.updatePerson(person);
         }
         Navigator.pop(context);
       },

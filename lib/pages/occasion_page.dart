@@ -63,11 +63,11 @@ class _OccasionPageState extends State<OccasionPage> {
   Widget buildAddUpdateButton(BuildContext context) {
     return MyTextButton(
       text: 'Done',
-      onPressed: () {
+      onPressed: () async {
         if (isNew) {
-          appState.addOccasion(occasion);
+          await appState.addOccasion(occasion);
         } else {
-          appState.updateOccasion(occasion);
+          await appState.updateOccasion(occasion);
         }
         Navigator.pop(context);
       },

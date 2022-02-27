@@ -83,6 +83,8 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         MyButton(
+          backgroundColor: CupertinoColors.activeBlue,
+          foregroundColor: CupertinoColors.white,
           filled: true,
           text: 'Reset',
           onPressed: () => appState.resetSettings(),

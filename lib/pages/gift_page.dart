@@ -200,11 +200,9 @@ class _GiftPageState extends State<GiftPage> {
           ],
         ),
         if (photo != null)
-          Image(
-            image: FileImage(File(photo)),
-            height: 135,
-            width: 200,
-          ),
+          InteractiveViewer(
+            child: Image(image: FileImage(File(photo))),
+          ).expanded,
       ],
     );
   }

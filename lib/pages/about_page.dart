@@ -7,6 +7,10 @@ import '../app_state.dart';
 import '../widgets/my_button.dart';
 
 class AboutPage extends StatelessWidget {
+  // This should match the value of
+  // flutter.versionName in android/local.properties.
+  static const version = '1.0.3';
+
   static const route = '/about';
 
   static const intro = 'This app tracks gift ideas and purchased gifts for '
@@ -38,6 +42,7 @@ unlimited number of people and occasions.
               fontSize: 24,
               fontWeight: FontWeight.bold,
             )),
+        const Text('version ${version}'),
         const Text(''),
         const Text(intro),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [

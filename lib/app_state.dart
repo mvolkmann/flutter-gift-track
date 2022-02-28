@@ -17,6 +17,7 @@ class AppState extends ChangeNotifier {
 
   late SharedPreferences prefs;
   var _backgroundColor = defaultBackgroundColor;
+  var _paid = false;
   var _startPageIndex = defaultStartPageIndex;
   var _titleColor = defaultTitleColor;
 
@@ -48,6 +49,7 @@ class AppState extends ChangeNotifier {
   Color get backgroundColor => _backgroundColor;
   Map<int, Gift> get gifts => _gifts;
   Map<int, Occasion> get occasions => _occasions;
+  bool get paid => _paid;
   Map<int, Person> get people => _people;
   Occasion? get selectedOccasion => _selectedOccasion;
   int get selectedOccasionIndex => _selectedOccasionIndex;
@@ -165,6 +167,7 @@ class AppState extends ChangeNotifier {
       prefs = await SharedPreferences.getInstance();
       int? color = prefs.getInt('backgroundColor');
       if (color != null) _backgroundColor = Color(color);
+      _paid = prefs.getBool('paid') ?? false;
       var index = prefs.getInt('startPageIndex');
       if (index != null) _startPageIndex = index;
       color = prefs.getInt('titleColor');
@@ -244,6 +247,12 @@ class AppState extends ChangeNotifier {
   set backgroundColor(Color color) {
     prefs.setInt('backgroundColor', color.value);
     _backgroundColor = color;
+    notifyListeners();
+  }
+
+  set paid(bool p) {
+    prefs.setBool('paid', p);
+    _paid = p;
     notifyListeners();
   }
 

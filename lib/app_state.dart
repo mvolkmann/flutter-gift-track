@@ -273,13 +273,15 @@ class AppState extends ChangeNotifier {
 
   List<Occasion> get sortedOccasions {
     final list = _occasions.values.toList();
-    list.sort((p1, p2) => p1.name.compareTo(p2.name));
+    list.sort(
+        (o1, o2) => o1.name.toLowerCase().compareTo(o2.name.toLowerCase()));
     return list;
   }
 
   List<Person> get sortedPeople {
     final list = _people.values.toList();
-    list.sort((p1, p2) => p1.name.compareTo(p2.name));
+    list.sort(
+        (p1, p2) => p1.name.toLowerCase().compareTo(p2.name.toLowerCase()));
     return list;
   }
 

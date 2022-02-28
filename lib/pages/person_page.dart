@@ -30,7 +30,6 @@ class _PersonPageState extends State<PersonPage> {
   late AppState appState;
   late bool isNew;
   late Person person;
-  late TextEditingController nameController;
   var includeBirthday = false;
 
   @override
@@ -38,10 +37,6 @@ class _PersonPageState extends State<PersonPage> {
     super.initState();
     isNew = widget.person.id == 0;
     person = isNew ? Person(name: '') : widget.person.clone;
-    nameController = TextEditingController(text: person.name);
-    nameController.addListener(() {
-      setState(() => person.name = nameController.text);
-    });
     includeBirthday = isNew ? false : person.birthday != null;
   }
 
@@ -63,7 +58,6 @@ class _PersonPageState extends State<PersonPage> {
       onPressed: () async {
         if (isNew) {
           await appState.addPerson(person);
-          alert(context, 'Created a person with id ${person.id}');
         } else {
           await appState.updatePerson(person);
         }
@@ -85,7 +79,13 @@ class _PersonPageState extends State<PersonPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          MyTextField(controller: nameController, placeholder: 'Name'),
+          MyTextField(
+            initialText: person.name,
+            listener: (text) {
+              setState(() => person.name = text);
+            },
+            placeholder: 'Name',
+          ),
           MySwitch(
               label: 'Include Birthday',
               value: includeBirthday,

@@ -36,14 +36,10 @@ class GiftPage extends StatefulWidget {
 
 class _GiftPageState extends State<GiftPage> {
   late AppState appState;
-  late TextEditingController descriptionController;
   late Gift gift;
   late bool isNew;
   LatLng? location;
-  late TextEditingController locationController;
   final mapControllerCompleter = Completer<GoogleMapController>();
-  late TextEditingController nameController;
-  late TextEditingController priceController;
   late bool purchased;
 
   @override
@@ -57,40 +53,12 @@ class _GiftPageState extends State<GiftPage> {
       location = LatLng(gift.latitude!, gift.longitude!);
     }
 
-    descriptionController = TextEditingController(text: gift.description);
-    descriptionController.addListener(() {
-      setState(() => gift.description = descriptionController.text);
-    });
-
-    locationController = TextEditingController(text: gift.location);
-    locationController.addListener(() {
-      setState(() => gift.location = locationController.text);
-    });
-
-    nameController = TextEditingController(text: gift.name);
-    nameController.addListener(() {
-      setState(() => gift.name = nameController.text);
-    });
-
-    priceController = TextEditingController(
-      text: (gift.price ?? 0).toString(),
-    );
-    priceController.addListener(() {
-      final text = priceController.text;
-      final price = text.isEmpty ? 0 : int.parse(text);
-      setState(() => gift.price = price);
-    });
-
     purchased = gift.purchased;
   }
 
   @override
   void dispose() {
-    descriptionController.dispose();
-    locationController.dispose();
     mapControllerCompleter.future.then((controller) => controller.dispose());
-    nameController.dispose();
-    priceController.dispose();
     super.dispose();
   }
 
@@ -99,13 +67,12 @@ class _GiftPageState extends State<GiftPage> {
     appState = Provider.of<AppState>(context);
     final occasion = appState.selectedOccasion!;
     final person = appState.selectedPerson!;
-    final name = nameController.text;
 
     return MyPage(
       leading: CancelButton(),
       title: '${occasion.name} Gift\nfor ${person.name}',
       titleSize: 18,
-      trailing: name.isEmpty ? null : buildAddUpdateButton(context),
+      trailing: person.name.isEmpty ? null : buildAddUpdateButton(context),
       child: buildBody(context),
     );
   }
@@ -136,11 +103,29 @@ class _GiftPageState extends State<GiftPage> {
             ),
       body: ListView(
           children: [
-            MyTextField(controller: nameController, placeholder: 'Name'),
             MyTextField(
-                controller: descriptionController, placeholder: 'Description'),
+              initialText: gift.name,
+              listener: (text) {
+                setState(() => gift.name = text);
+              },
+              placeholder: 'Name',
+            ),
             MyTextField(
-                controller: priceController, placeholder: 'Price', isInt: true),
+              initialText: gift.description ?? '',
+              listener: (text) {
+                setState(() => gift.description = text);
+              },
+              placeholder: 'Description',
+            ),
+            MyTextField(
+              initialText: (gift.price ?? 0).toString(),
+              isInt: true,
+              listener: (text) {
+                final price = text.isEmpty ? 0 : int.parse(text);
+                setState(() => gift.price = price);
+              },
+              placeholder: 'Price',
+            ),
             MySwitch(
               label: 'Purchased?',
               value: purchased,
@@ -149,8 +134,15 @@ class _GiftPageState extends State<GiftPage> {
               },
             ),
             buildPhotoRow(),
+            //TODO: Pick a different name for gift.location because this
+            //TODO: can be confused with the map "location" which is a LatLng.
             MyTextField(
-                controller: locationController, placeholder: 'Location'),
+              initialText: gift.location ?? '',
+              listener: (text) {
+                setState(() => gift.location = text);
+              },
+              placeholder: 'Location',
+            ),
             if (location == null)
               MyButton(filled: true, text: 'Save Map', onPressed: saveLocation),
             if (location != null)

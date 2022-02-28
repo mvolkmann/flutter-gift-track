@@ -33,7 +33,6 @@ class _OccasionPageState extends State<OccasionPage> {
   late AppState appState;
   late bool isNew;
   late Occasion occasion;
-  late TextEditingController nameController;
   var includeDate = false;
 
   @override
@@ -41,10 +40,6 @@ class _OccasionPageState extends State<OccasionPage> {
     super.initState();
     isNew = widget.occasion.id == 0;
     occasion = isNew ? Occasion(name: '') : widget.occasion.clone;
-    nameController = TextEditingController(text: occasion.name);
-    nameController.addListener(() {
-      setState(() => occasion.name = nameController.text);
-    });
     includeDate = isNew ? false : occasion.date != null;
   }
 
@@ -87,7 +82,13 @@ class _OccasionPageState extends State<OccasionPage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          MyTextField(controller: nameController, placeholder: 'Name'),
+          MyTextField(
+            initialText: occasion.name,
+            listener: (text) {
+              setState(() => occasion.name = text);
+            },
+            placeholder: 'Name',
+          ),
           MySwitch(
             label: 'Include date',
             value: includeDate,

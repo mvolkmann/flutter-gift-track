@@ -7,7 +7,7 @@ import './occasion_page.dart';
 import '../app_state.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/occasion.dart';
-import '../util.dart' show formatDate;
+import '../util.dart' show confirm, formatDate;
 import '../widgets/my_fab.dart';
 import '../widgets/my_list_tile.dart';
 
@@ -16,13 +16,19 @@ class OccasionsPage extends StatelessWidget {
 
   OccasionsPage({Key? key}) : super(key: key);
 
-  void _add(BuildContext context) {
-    Navigator.push(
-      context,
-      CupertinoPageRoute(
-        builder: (context) => OccasionPage(occasion: Occasion(name: '')),
-      ),
-    );
+  void _add(BuildContext context, bool canAdd) async {
+    if (canAdd) {
+      Navigator.push(
+        context,
+        CupertinoPageRoute(
+          builder: (context) => OccasionPage(occasion: Occasion(name: '')),
+        ),
+      );
+    } else {
+      const question = 'Pay \$1.99 to unlock features?';
+      bool purchase = await confirm(context, question);
+      print('people_page.dart _add: purchase = $purchase');
+    }
   }
 
   @override
@@ -36,6 +42,7 @@ class OccasionsPage extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     final appState = Provider.of<AppState>(context);
     final occasions = appState.sortedOccasions;
+    final canAdd = appState.paid || occasions.length < 2;
 
     final body = appState.isLoaded
         ? ListView.builder(
@@ -52,7 +59,10 @@ class OccasionsPage extends StatelessWidget {
         : CupertinoActivityIndicator();
 
     return Scaffold(
-      floatingActionButton: MyFab(icon: CupertinoIcons.add, onPressed: _add),
+      floatingActionButton: MyFab(
+        icon: CupertinoIcons.add,
+        onPressed: (_) => _add(context, canAdd),
+      ),
       body: body.center.padding(20),
     );
   }

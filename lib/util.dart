@@ -88,7 +88,7 @@ String formatPrice(int? price) {
 DateTime? msToDateTime(int? ms) =>
     ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
 
-void offerPurchase(BuildContext context) async {
+Future<bool> offerPurchase(BuildContext context) async {
   try {
     final offers = await PurchaseApi.fetchOffers();
     print('util.dart offerPurchase: offers = $offers');
@@ -96,7 +96,9 @@ void offerPurchase(BuildContext context) async {
     const question = 'Pay \$1.99 to unlock features?';
     bool purchase = await confirm(context, question);
     appState.paid = purchase;
+    return purchase;
   } catch (e) {
     print('util.dart offerPurchase: e = $e');
+    return false;
   }
 }

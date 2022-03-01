@@ -17,16 +17,17 @@ class PeoplePage extends StatelessWidget {
   const PeoplePage({Key? key}) : super(key: key);
 
   void _add(BuildContext context, bool canAdd) async {
-    if (canAdd) {
-      Navigator.push(
-        context,
-        CupertinoPageRoute(
-          builder: (context) => PersonPage(person: Person(name: '')),
-        ),
-      );
-    } else {
-      offerPurchase(context);
+    if (!canAdd) {
+      final purchased = await offerPurchase(context);
+      if (!purchased) return;
     }
+
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => PersonPage(person: Person(name: '')),
+      ),
+    );
   }
 
   @override

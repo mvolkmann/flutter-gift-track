@@ -54,14 +54,15 @@ unlimited number of people and occasions.
               'for specific people and occasions.'),
           Text(''),
           if (!appState.paid) Text(inAppPurchase.replaceAll('\n', ' ')),
-          if (!appState.paid) MyButton(
-            backgroundColor: appState.titleColor,
-            compact: true,
-            foregroundColor: appState.backgroundColor,
-            filled: true,
-            text: 'Purchase',
-            onPressed: () => offerPurchase(context),
-          ).margin(const EdgeInsets.only(top: 20)),
+          if (!appState.paid)
+            MyButton(
+              backgroundColor: appState.titleColor,
+              compact: true,
+              foregroundColor: appState.backgroundColor,
+              filled: true,
+              text: 'Purchase',
+              onPressed: () => offerPurchase(context),
+            ).margin(const EdgeInsets.only(top: 20)),
         ]),
       ],
     )

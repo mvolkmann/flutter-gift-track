@@ -2,7 +2,9 @@ import 'dart:async' show Completer;
 import 'package:flutter/cupertino.dart';
 // See https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
+import 'package:provider/provider.dart';
 
+import './app_state.dart';
 import './extensions/widget_extensions.dart';
 import './widgets/my_button.dart';
 
@@ -85,9 +87,9 @@ String formatPrice(int? price) {
 DateTime? msToDateTime(int? ms) =>
     ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
 
-
 void offerPurchase(BuildContext context) async {
+  final appState = Provider.of<AppState>(context, listen: false);
   const question = 'Pay \$1.99 to unlock features?';
   bool purchase = await confirm(context, question);
-  print('util.dart _add: purchase = $purchase');
+  appState.paid = purchase;
 }

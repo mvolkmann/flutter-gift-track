@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import '../extensions/widget_extensions.dart';
 
 import '../app_state.dart';
-//import '../purchase_api.dart';
 import '../util.dart' show offerPurchase;
 import '../widgets/my_button.dart';
 
@@ -53,13 +52,22 @@ unlimited number of people and occasions.
           Text('3. Tap \'Gifts\' and add gifts '
               'for specific people and occasions.'),
           Text(''),
+          if (appState.paid)
+            MyButton(
+              backgroundColor: appState.titleColor,
+              compact: true,
+              filled: true,
+              foregroundColor: appState.backgroundColor,
+              text: 'Unpurchase',
+              onPressed: () => appState.paid = false,
+            ),
           if (!appState.paid) Text(inAppPurchase.replaceAll('\n', ' ')),
           if (!appState.paid)
             MyButton(
               backgroundColor: appState.titleColor,
               compact: true,
-              foregroundColor: appState.backgroundColor,
               filled: true,
+              foregroundColor: appState.backgroundColor,
               text: 'Purchase',
               onPressed: () => offerPurchase(context),
             ).margin(const EdgeInsets.only(top: 20)),

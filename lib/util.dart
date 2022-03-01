@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import './app_state.dart';
 import './extensions/widget_extensions.dart';
+import './purchase_api.dart';
 import './widgets/my_button.dart';
 
 Future<void> alert(BuildContext context, String message) {
@@ -88,8 +89,14 @@ DateTime? msToDateTime(int? ms) =>
     ms == null ? null : DateTime.fromMillisecondsSinceEpoch(ms);
 
 void offerPurchase(BuildContext context) async {
-  final appState = Provider.of<AppState>(context, listen: false);
-  const question = 'Pay \$1.99 to unlock features?';
-  bool purchase = await confirm(context, question);
-  appState.paid = purchase;
+  try {
+    final offers = await PurchaseApi.fetchOffers();
+    print('util.dart offerPurchase: offers = $offers');
+    final appState = Provider.of<AppState>(context, listen: false);
+    const question = 'Pay \$1.99 to unlock features?';
+    bool purchase = await confirm(context, question);
+    appState.paid = purchase;
+  } catch (e) {
+    print('util.dart offerPurchase: e = $e');
+  }
 }

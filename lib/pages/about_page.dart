@@ -4,12 +4,13 @@ import '../extensions/widget_extensions.dart';
 
 import '../app_state.dart';
 //import '../purchase_api.dart';
+import '../util.dart' show offerPurchase;
 import '../widgets/my_button.dart';
 
 class AboutPage extends StatelessWidget {
   // This should match the value of
   // flutter.versionName in android/local.properties.
-  static const version = '1.0.3';
+  static const version = '1.0.4';
 
   static const route = '/about';
 
@@ -52,14 +53,14 @@ unlimited number of people and occasions.
           Text('3. Tap \'Gifts\' and add gifts '
               'for specific people and occasions.'),
           Text(''),
-          Text(inAppPurchase.replaceAll('\n', ' ')),
-          MyButton(
+          if (!appState.paid) Text(inAppPurchase.replaceAll('\n', ' ')),
+          if (!appState.paid) MyButton(
             backgroundColor: appState.titleColor,
             compact: true,
             foregroundColor: appState.backgroundColor,
             filled: true,
             text: 'Purchase',
-            onPressed: () {},
+            onPressed: () => offerPurchase(context),
           ).margin(const EdgeInsets.only(top: 20)),
         ]),
       ],

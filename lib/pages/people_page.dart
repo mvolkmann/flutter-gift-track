@@ -7,7 +7,7 @@ import './person_page.dart';
 import '../app_state.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/person.dart';
-import '../util.dart' show confirm, formatDate;
+import '../util.dart' show formatDate, offerPurchase;
 import '../widgets/my_fab.dart';
 import '../widgets/my_list_tile.dart';
 
@@ -25,9 +25,7 @@ class PeoplePage extends StatelessWidget {
         ),
       );
     } else {
-      const question = 'Pay \$1.99 to unlock features?';
-      bool purchase = await confirm(context, question);
-      print('people_page.dart _add: purchase = $purchase');
+      offerPurchase(context);
     }
   }
 

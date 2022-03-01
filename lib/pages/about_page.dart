@@ -10,7 +10,7 @@ import '../widgets/my_button.dart';
 class AboutPage extends StatelessWidget {
   // This should match the value of
   // flutter.versionName in android/local.properties.
-  static const version = '1.0.4';
+  static const version = '1.0.5';
 
   static const route = '/about';
 

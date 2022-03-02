@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../extensions/widget_extensions.dart';
 
 import '../app_state.dart';
+import '../purchase_api.dart';
 import '../util.dart' show offerPurchase;
 import '../widgets/my_button.dart';
 
@@ -80,19 +81,21 @@ unlimited number of people and occasions.
   }
 
   void fetchOffers(BuildContext context) async {
-    /*
+    await PurchaseApi.init();
     final offerings = await PurchaseApi.fetchOffers();
     if (offerings.isEmpty) {
+      print('no offers found');
+      /*
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('No offerings found.'),
         ),
       );
+      */
     } else {
       final offer = offerings.first;
       print('about_page.dart fetchOffers: offer = $offer');
       //TODO: Add a fancier UI to display each offer in a Card and ListTile.
     }
-    */
   }
 }

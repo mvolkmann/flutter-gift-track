@@ -1,8 +1,11 @@
 import 'dart:async' show Completer;
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart' show PlatformException;
 // See https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 import 'package:intl/intl.dart' show DateFormat, NumberFormat;
 import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 
 import './app_state.dart';
 import './extensions/widget_extensions.dart';
@@ -90,14 +93,41 @@ DateTime? msToDateTime(int? ms) =>
 
 Future<bool> offerPurchase(BuildContext context) async {
   try {
-    final offers = await PurchaseApi.fetchOffers();
-    print('util.dart offerPurchase: offers = $offers');
-    final appState = Provider.of<AppState>(context, listen: false);
-    const question = 'Pay \$1.99 to unlock features?';
-    bool purchase = await confirm(context, question);
-    appState.paid = purchase;
+    final offerings = await PurchaseApi.fetchOffers();
+    final offer = offerings.firstOrNull;
+    print('util.dart offerPurchase: offer = $offer');
+    final package = offer?.availablePackages.firstOrNull;
+    final product = package?.product;
+    //final entitlement = ?;
+    print('util.dart offerPurchase: product = $product');
+
+    var purchase = false;
+    if (product == null) {
+      await alert(context, 'No in-app purchase offerings were found.');
+    } else {
+      final question = product.description +
+          ' Pay ${product.priceString} ${product.currencyCode} for this?';
+      purchase = await confirm(context, question);
+      if (purchase) {
+        print('util.dart offerPurchase: purchasing');
+        final purchaserInfo = await Purchases.purchasePackage(package!);
+        final entitlement = purchaserInfo.entitlements.all[product.identifier];
+        if (entitlement != null && entitlement.isActive) {
+          final appState = Provider.of<AppState>(context, listen: false);
+          appState.paid = purchase;
+        }
+      }
+    }
     return purchase;
+  } on PlatformException catch (e) {
+    var errorCode = PurchasesErrorHelper.getErrorCode(e);
+    if (errorCode != PurchasesErrorCode.purchaseCancelledError) {
+      //TODO: Find a better way to display errors.
+      print('util.dart offerPurchase: errorCode = $errorCode');
+    }
+    return false;
   } catch (e) {
+    //TODO: Find a better way to display errors.
     print('util.dart offerPurchase: e = $e');
     return false;
   }

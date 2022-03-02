@@ -1,11 +1,14 @@
 import 'dart:io' show Platform;
+import 'package:google_api_availability/google_api_availability.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 
 import './secrets.dart';
 
 class PurchaseApi {
   static Future<void> init() async {
-    print('purchase_api.dart init: entered');
+    final availability = await GoogleApiAvailability.instance
+        .checkGooglePlayServicesAvailability(true);
+    print('purchase_api.dart init: availability = $availability');
     await Purchases.setDebugLogsEnabled(true);
     if (Platform.isAndroid) {
       await Purchases.setup(revenueCatApiKey);
@@ -17,6 +20,7 @@ class PurchaseApi {
 
   static Future<List<Offering>> fetchOffers() async {
     try {
+      await init();
       final offerings = await Purchases.getOfferings();
       final current = offerings.current;
       return current == null ? [] : [current];

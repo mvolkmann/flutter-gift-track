@@ -7,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart' show launch;
 
 import './my_page.dart';
 import '../models/gift.dart';
@@ -142,6 +143,22 @@ class _GiftPageState extends State<GiftPage> {
                 setState(() => gift.location = text);
               },
               placeholder: 'Location',
+            ),
+            Row(
+              children: [
+                MyTextField(
+                  initialText: gift.websiteUrl ?? '',
+                  listener: (text) {
+                    setState(() => gift.websiteUrl = text);
+                  },
+                  placeholder: 'URL',
+                ).expanded,
+                if (gift.websiteUrl != null)
+                  IconButton(
+                    icon: Icon(Icons.open_in_browser),
+                    onPressed: () => launch(gift.websiteUrl!),
+                  ),
+              ],
             ),
             if (location == null)
               MyButton(filled: true, text: 'Save Map', onPressed: saveLocation),

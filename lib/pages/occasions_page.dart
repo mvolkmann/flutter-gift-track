@@ -7,7 +7,8 @@ import './occasion_page.dart';
 import '../app_state.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/occasion.dart';
-import '../util.dart' show formatDate, offerPurchase;
+import '../purchase_api.dart' show offerPurchase;
+import '../util.dart' show formatDate;
 import '../widgets/my_fab.dart';
 import '../widgets/my_list_tile.dart';
 

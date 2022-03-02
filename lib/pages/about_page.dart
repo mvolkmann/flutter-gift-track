@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../extensions/widget_extensions.dart';
 
 import '../app_state.dart';
-import '../util.dart' show offerPurchase;
+import '../purchase_api.dart' show offerPurchase;
 import '../widgets/my_button.dart';
 
 class AboutPage extends StatelessWidget {

@@ -7,7 +7,7 @@ import './my_page.dart';
 import '../extensions/widget_extensions.dart';
 import '../models/person.dart';
 import '../app_state.dart';
-import '../util.dart' show alert, confirm;
+import '../util.dart' show confirm;
 import '../widgets/cancel_button.dart';
 import '../widgets/my_date_picker.dart';
 import '../widgets/my_fab.dart';
